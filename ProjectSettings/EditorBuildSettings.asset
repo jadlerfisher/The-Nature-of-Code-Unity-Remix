@@ -1,0 +1,164 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Chapter 1/Scenes/Chapter 1 Figure 11.unity
+    guid: 336d913dbf1ca0646b0ae1a8cd1f38b0
+  - enabled: 0
+    path: Assets/Chapter 1/Scenes/Chapter 1 Figure 1.unity
+    guid: bfc489660b36c0c4ea388e20260f1a02
+  - enabled: 0
+    path: Assets/Chapter 1/Scenes/Chapter 1 Figure 2.unity
+    guid: 68d9afac40089d747807eded7263ac86
+  - enabled: 0
+    path: Assets/Chapter 1/Scenes/Chapter 1 Figure 3.unity
+    guid: dba4f9d1de6a9614987f5ee36aabf3a4
+  - enabled: 0
+    path: Assets/Chapter 1/Scenes/Chapter 1 Figure 4.unity
+    guid: f10d81a28bd70af488f7abab08ebf311
+  - enabled: 0
+    path: Assets/Chapter 1/Scenes/Chapter 1 Figure 5.unity
+    guid: 5032925b60b48f0489e0ca657e30b7d3
+  - enabled: 0
+    path: Assets/Chapter 1/Scenes/Chapter 1 Figure 6.unity
+    guid: e84755a0875c5e845affa6ca9d892f5d
+  - enabled: 0
+    path: Assets/Chapter 1/Scenes/Chapter 1 Figure 7.unity
+    guid: 1d9ae7a54dfa4b14bb87e6e5398294bc
+  - enabled: 0
+    path: Assets/Chapter 1/Scenes/Chapter 1 Figure 8.unity
+    guid: 8f90a267d4b139b4b9ebc2b499805a5a
+  - enabled: 0
+    path: Assets/Chapter 1/Scenes/Chapter 1 Figure 9.unity
+    guid: 5e1a1c9b3965fe546887eba084b03b77
+  - enabled: 0
+    path: Assets/Chapter 1/Scenes/Chapter 1 Figure 10.unity
+    guid: bfb063f69d273d347b90c2ae1605b6f2
+  - enabled: 0
+    path: Assets/Chapter 2/Scenes/Chapter 2 Figure 5a.unity
+    guid: f4e7cdf3c043e4d46be99853b5d36839
+  - enabled: 0
+    path: Assets/Introduction/Scenes/IntroductionFig4.unity
+    guid: fe28cf2e48a1d134495323a9f8990014
+  - enabled: 0
+    path: Assets/Introduction/Scenes/IntroductionFig3.unity
+    guid: e78ee6a464188f54688f9de5227fc007
+  - enabled: 0
+    path: Assets/Introduction/Scenes/IntroductionFig2.unity
+    guid: d49ccce556ec79540a0e7281f88f3aa4
+  - enabled: 0
+    path: Assets/Introduction/Scenes/IntroductionFig1.unity
+    guid: 2827fa81dfbcb9846b978f3766f37092
+  - enabled: 0
+    path: Assets/Chapter 6/Scenes/Chapter 6 Exercise 4.unity
+    guid: 3478af591f1be62479182aa7712e32f6
+  - enabled: 0
+    path: Assets/Chapter 6/Scenes/Chapter 6 Figure 1.unity
+    guid: 6945f96a1eab28c47a01b6b9ceb7e84a
+  - enabled: 0
+    path: Assets/Chapter 6/Scenes/Chapter 6 Figure 2.unity
+    guid: c682da3168c83424f92f4399dae8e115
+  - enabled: 0
+    path: Assets/Chapter 6/Scenes/Chapter 6 Figure 3.unity
+    guid: ae4b95e5f30d892469a48cb7b452a279
+  - enabled: 0
+    path: Assets/Chapter 6/Scenes/Chapter 6 Figure 4.unity
+    guid: 4e276e65ed9a9b94c85e7227b25c9a67
+  - enabled: 0
+    path: Assets/Chapter 6/Scenes/Chapter 6 Figure 5.unity
+    guid: 13d6dcacae51a8044b0a6e01d66ff891
+  - enabled: 0
+    path: Assets/Chapter 6/Scenes/Chapter 6 Figure 6.unity
+    guid: fb2bf9b35ce36944e9123d2724645d96
+  - enabled: 0
+    path: Assets/Chapter 6/Scenes/Chapter 6 Figure 7.unity
+    guid: ac4a2a4103e9757479dc75a8bbed9afa
+  - enabled: 0
+    path: Assets/Chapter 6/Scenes/Chapter 6 Figure 8.unity
+    guid: bac1ddc6be7b22c4fafffc27045b4cb2
+  - enabled: 1
+    path: Assets/Chapter 6/Scenes/Chapter 6 Figure 9.unity
+    guid: fc5f26c09dcba7c419eea6c505081cfd
+  - enabled: 0
+    path: Assets/Chapter 2/Scenes/Chapter 2 Figure 1.unity
+    guid: 89a419facded46447a994c71ec2db175
+  - enabled: 0
+    path: Assets/Chapter 2/Scenes/Chapter 2 Figure 2.unity
+    guid: f4a6b0765124de741b25850c5c0ea49b
+  - enabled: 0
+    path: Assets/Chapter 2/Scenes/Chapter 2 Figure 3.unity
+    guid: 2f25ef0efd3654041a33a12d6f52d710
+  - enabled: 0
+    path: Assets/Chapter 2/Scenes/Chapter 2 Figure 4.unity
+    guid: 6c7c2a0fb6ec4f547b13ccf3ae08b455
+  - enabled: 0
+    path: Assets/Chapter 3/Scenes/Chapter 3 Figure 1.unity
+    guid: 7e801292b04a024479149a0d6c317732
+  - enabled: 0
+    path: Assets/Chapter 3/Scenes/Chapter 3 Figure 1-basic.unity
+    guid: d12b9146b22c4774eb0190995981845f
+  - enabled: 0
+    path: Assets/Chapter 3/Scenes/Chapter 3 Figure 2.unity
+    guid: 10a21539ab3814d41be3df5def6cd526
+  - enabled: 0
+    path: Assets/Chapter 3/Scenes/Chapter 3 Figure 3.unity
+    guid: 23e7ff51e3b746742a6c77ee1fb8a356
+  - enabled: 0
+    path: Assets/Chapter 3/Scenes/Chapter 3 Figure 4.unity
+    guid: 68a1f3a66b565d144847ebc476feafed
+  - enabled: 0
+    path: Assets/Chapter 3/Scenes/Chapter 3 Figure 5.unity
+    guid: 4893d60f93d91274baa71f55f45e73ab
+  - enabled: 0
+    path: Assets/Chapter 3/Scenes/Chapter 3 Figure 6.unity
+    guid: 0b3551343d75d614ab86ab3960c074ea
+  - enabled: 0
+    path: Assets/Chapter 3/Scenes/Chapter 3 Figure 7.unity
+    guid: 9e353ed1cbe87fb409e47e52f0364fe6
+  - enabled: 0
+    path: Assets/Chapter 3/Scenes/Chapter 3 Figure 8.unity
+    guid: 55e9141d78c91df40866d069a1a70348
+  - enabled: 0
+    path: Assets/Chapter 3/Scenes/Chapter 3 Figure 9.unity
+    guid: 7bc3ac3d073b6a2469fda7738d0c6b8d
+  - enabled: 0
+    path: Assets/Chapter 3/Scenes/Chapter 3 Figure 10.unity
+    guid: 4ef9dcf2750689e46930eeb66caf43ff
+  - enabled: 0
+    path: Assets/Chapter 3/Scenes/Chapter 3 Figure 11.unity
+    guid: 049cbe60df434a74799fa138cf1cffc0
+  - enabled: 0
+    path: Assets/Chapter 2/Scenes/Chapter 2 Figure 6.unity
+    guid: d7d1382af52272b43ba781fe4c11c244
+  - enabled: 0
+    path: Assets/Chapter 4/Scenes/Chapter 4 Figure 1.unity
+    guid: 2ff898121a9bba544a1f47bcb03b93d5
+  - enabled: 0
+    path: Assets/Chapter 4/Scenes/Chapter 4 Figure 2.unity
+    guid: 74fc390439a59734fb3f65a2d6acafcf
+  - enabled: 0
+    path: Assets/Chapter 4/Scenes/Chapter 4 Figure 3.unity
+    guid: fa069d471d2d63f4aa1cd229c683c73b
+  - enabled: 0
+    path: Assets/Chapter 4/Scenes/Chapter 4 Figure 4.unity
+    guid: b36e7ca2eb62a1a46a338784760822d3
+  - enabled: 0
+    path: Assets/Chapter 4/Scenes/Chapter 4 Figure 5.unity
+    guid: 690fee534a5a84343b67c128727e5521
+  - enabled: 0
+    path: Assets/Chapter 4/Scenes/Chapter 4 Figure 6.unity
+    guid: a94ffa52ff37c354bbfa7bb3ec76a3e3
+  - enabled: 1
+    path: Assets/Chapter 4/Scenes/Chapter 4 Figure 7.unity
+    guid: e6e0e73bce45f0f4db1f786c72796987
+  - enabled: 0
+    path: Assets/Chapter 2/Scenes/Chapter 2 Figure 7.unity
+    guid: b84a11c40c645ec4391d450f4e4c83f4
+  - enabled: 0
+    path: Assets/Chapter 2/Scenes/Chapter 2 Figure 8.unity
+    guid: d6a4f02f0a569e74881efede2a1ecdfb
+  m_configObjects: {}
