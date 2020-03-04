@@ -9,6 +9,7 @@ public class IntroductionFig2 : MonoBehaviour
 
    public List<int> randomCount = new List<int>();
    public List<GameObject> cubes = new List<GameObject>();
+   public GameObject cubeGo;
 
 // Set a fake creeen height for Unity
    int height = 10;
@@ -33,15 +34,15 @@ public class IntroductionFig2 : MonoBehaviour
             //Create a fake width to maintain our cubes in a reasonable 3D space
             int w = 30 / randomCount.Count;
 
-        //For each of the random values, up until 10000 (for memory) create a cube and place it at a new Vector
+        //For each of the random values, up until 100 (for memory) create a cube and place it at a new Vector
             for (int x = 0; x < randomCount.Count; x++)
             {
-                if (randomCount.Count < 100000)
+                if (randomCount.Count < 100)
                 {
-                    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        //This new vector is created by multiplying the cube's index (an int) and multiplying it by the fake width of the screen. 
-        //The Y coordinate is chosen by subtracting the cube's randomly chosen int and subtracting it from the height. In this case 0.
-                    cube.transform.position = new Vector3(w * x, (height-randomCount[x])/10, 0F);
+                GameObject cube = Instantiate(cubeGo);
+                //This new vector is created by multiplying the cube's index (an int) and multiplying it by the fake width of the screen. 
+                //The Y coordinate is chosen by subtracting the cube's randomly chosen int and subtracting it from the height. In this case 0.
+                cube.transform.position = new Vector3(w * x, (height-randomCount[x])/10, 0F);
         //We then add the cube to our other list so we can deal with the scale.
                     cubes.Add(cube);
                 }

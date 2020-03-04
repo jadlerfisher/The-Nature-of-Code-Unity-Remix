@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d7a05d1a33e7d14983b387b5d917d00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WalkerPrefab: {fileID: 216915637803877635, guid: e100c6bb3c62f9c4094477b0b38ab87e,
+  WalkerPrefab: {fileID: 2529839568607926285, guid: 4970c9aec0abd3f4faa72ea629d420e0,
     type: 3}
 --- !u!4 &1455587289
 Transform:
@@ -291,7 +291,7 @@ Camera:
   m_GameObject: {fileID: 1764221169}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -308,8 +308,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -333,7 +333,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1764221169}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -50}
+  m_LocalPosition: {x: 3.4, y: 1, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

@@ -23,6 +23,8 @@ public class IntroductionFig4 : MonoBehaviour
 
         //This creates a sphere GameObject
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        Destroy(sphere.GetComponent<SphereCollider>());
+
         //This sets our ink "sphere game objects" at the position of the Walker GameObject (walkerGO) at the current frame
         //to draw the path
         sphere.transform.position = new Vector3(x, 0F, 0F);

@@ -45,6 +45,7 @@ public class walker : MonoBehaviour
     {
 
     walkerGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+    Destroy(walkerGO.GetComponent<SphereCollider>());
 
         x = 0;
         y = 0;
@@ -85,6 +86,7 @@ public class walker : MonoBehaviour
     {
         //This creates a sphere GameObject
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        Destroy(sphere.GetComponent<SphereCollider>());
         //This sets our ink "sphere game objects" at the position of the Walker GameObject (walkerGO) at the current frame
         //to draw the path
         sphere.transform.position = new Vector3(walkerGO.transform.position.x, walkerGO.transform.position.y, 0F);

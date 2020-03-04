@@ -52,8 +52,6 @@ public class WalkerIntro3 : MonoBehaviour
     void Update()
     {
         num = Random.Range(0f, 1f);
-        Debug.Log(num);
-
     }
 
     public void step()
@@ -83,7 +81,7 @@ public class WalkerIntro3 : MonoBehaviour
     public void draw()
     {
         //This creates a sphere GameObject
-        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        GameObject sphere = Instantiate(walkerGO);
         //This sets our ink "sphere game objects" at the position of the Walker GameObject (walkerGO) at the current frame
         //to draw the path
         sphere.transform.position = new Vector3(walkerGO.transform.position.x, walkerGO.transform.position.y, 0F);

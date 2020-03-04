@@ -246,7 +246,7 @@ Camera:
   m_GameObject: {fileID: 1689846154}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -263,7 +263,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 23.5
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -325,6 +325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   randomCount: 
   cubes: []
+  cubeGo: {fileID: 8789242142508499225, guid: 8d437e2dc5d69c548b7af7e828d28ed1, type: 3}
 --- !u!4 &1719030415
 Transform:
   m_ObjectHideFlags: 0
