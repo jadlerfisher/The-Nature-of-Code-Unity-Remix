@@ -11,7 +11,7 @@ public class particleSystemChapter4Fig7 : MonoBehaviour
     private float particleChange;
 
     public float mass = 1f;
-    public Vector3 gravity = new Vector3(0f, -.000001f, 0f);
+    public Vector3 gravity = new Vector3(0f, -100f, 0f);
     public GameObject repeller;
     private repellerChapter4Fig7 rC4F7;
 
@@ -34,16 +34,13 @@ public class particleSystemChapter4Fig7 : MonoBehaviour
             applyForce(particles[i], gravity);
             applyRepeller(particles[i], rC4F7);
 
-
             if (particles[i].isDead())
             {
                 particles.Remove(particles[i]);
             }
             else
             {
-                applyRepeller(particles[i], rC4F7);
 
-                //applyForce(particles[i], particles[i].velocity); 
             }
 
             for (int p = particles.Count; p >= 30; p--)
@@ -78,7 +75,6 @@ public class particleSystemChapter4Fig7 : MonoBehaviour
     {
         Vector3 force = r.repel(p);
         applyForce(p, force);
-        Debug.Log(force);
 
     }
 }

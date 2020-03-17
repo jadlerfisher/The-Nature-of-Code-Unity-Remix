@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class repellerChapter4Fig7 : MonoBehaviour
 {
-    float G = 657f;
+    float strength = 100f;
     float mass;
     Vector3 location;
 
@@ -25,15 +25,16 @@ public class repellerChapter4Fig7 : MonoBehaviour
 
     public Vector3 repel(particleChapter4_6 mover)
     {
-        Vector3 difference = location - mover.location;
-        Debug.Log("difference" + difference);
+        Vector3 dir = location - mover.location;
 
-        float dist = difference.magnitude;
-        Vector3 gravityDirection = difference.normalized;
-        float gravity = 6.7f * (mass * mover.mass) / (dist * dist);
-
-        Vector3 gravityVector = (gravityDirection * gravity);
-        return gravityVector;
+        float d = dir.magnitude;
+        Vector3 gravityDirection = dir.normalized;
+        gravityDirection.x = Mathf.Clamp(gravityDirection.x, 5, 100);
+        gravityDirection.y = Mathf.Clamp(gravityDirection.y, 5, 100);
+        gravityDirection.z = Mathf.Clamp(gravityDirection.z, 5, 100);
+        float force = -1 * strength / (d * d);
+        gravityDirection *= force;
+        return gravityDirection;
     }
 
 }

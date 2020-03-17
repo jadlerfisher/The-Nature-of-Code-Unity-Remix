@@ -49,19 +49,15 @@ public class particleChapter4_3 : MonoBehaviour
 
     public bool isDead()
     {
-
         if (lifespan < 0.0)
         {
             Destroy(gameObject);
             Destroy(this);
-
             return true;
         }
         else
         {
             return false;
         }
-
-
     }
 }

@@ -19,27 +19,22 @@ public class Chapter4Fig2 : MonoBehaviour
     void Update()
     {
         StartCoroutine(createParticle());
-        for(int i = 0; i < particles.Count; i++)
+        IEnumerator<particleChapter4_2> it = particles.GetEnumerator();
+
+        while (it.MoveNext())
         {
-            if (particles[i].isDead())
+            particleChapter4_2 p = it.Current;
+        if (p.isDead())
             {
-                particles.Remove(particles[i]);
+               particles.Remove(p);
             }
-
-            for (int p = particles.Count; p >= 30; p--)
-            {
-
-                particles.Clear();
-            }
-       }
+        }
     }
 
     IEnumerator createParticle()
     {
         yield return new WaitForSeconds(2.0f);
         Instantiate(ps);
-
         particles.Add(ps);
     }
-
 }

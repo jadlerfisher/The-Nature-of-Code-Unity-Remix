@@ -29,41 +29,31 @@ public class particleChapter4_1 : MonoBehaviour
 
         if (!isDead())
         {
-
             velocity += acceleration;
             location += velocity;
             this.transform.position = location;
 
             lifespan = lifespan - .02f;
 
-
             Color col = particleMeshRenderer.material.GetColor("_Color");
 
             particleMeshRenderer.material.color = new Color(col.r, col.g, col.b, lifespan);
-            Debug.Log(particleMeshRenderer.material.color);
         } else
         {
-            Debug.Log("le mort");
+            //Do nothing
         }
-
-
-
     }
 
     public bool isDead()
     {
-
         if (lifespan < 0.0)
         {
             Destroy(gameObject);
-
             return true;
         }
         else
         {
             return false;
         }
-
-
     }
 }
