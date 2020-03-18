@@ -5,13 +5,9 @@ using UnityEngine;
 public class particleSystemChapter4Fig6 : MonoBehaviour
 {
 
-    public particleChapter4_6 particle;
-    public List<particleChapter4_6> particles = new List<particleChapter4_6>();
-    public Vector3 origin;
-    private float particleChange;
 
-    public float mass = 1f;
-    public Vector3 gravity = new Vector3(0f, -1f, 0f);
+    public GameObject ps;
+    public List<particleChapter4_6> particles = new List<particleChapter4_6>();
 
     // Start is called before the first frame update
     void Start()
@@ -23,25 +19,14 @@ public class particleSystemChapter4Fig6 : MonoBehaviour
     void Update()
     {
         StartCoroutine(createParticle());
+        IEnumerator<particleChapter4_6> it = particles.GetEnumerator();
 
-        for (int i = 1; i < particles.Count; i++)
+        while (it.MoveNext())
         {
-
-            applyForce(particles[i], gravity);
-
-            if (particles[i].isDead())
+            particleChapter4_6 p = it.Current;
+            if (p.isDead())
             {
-                particles.Remove(particles[i]);
-            }
-            else 
-            {
-                applyForce(particles[i], particles[i].velocity);
-        
-            }
-
-            for (int p = particles.Count; p >= 30; p--)
-            {
-                particles.Clear();
+                particles.Remove(p);
             }
         }
     }
@@ -49,23 +34,16 @@ public class particleSystemChapter4Fig6 : MonoBehaviour
     IEnumerator createParticle()
     {
         yield return new WaitForSeconds(2.0f);
-        particleChapter4_6 p = Instantiate(particle, origin, Quaternion.identity);
-        if (p.gameObject.activeInHierarchy)
-        {
-            particles.Add(p);
-        }
-        else 
-        {
-            Debug.Log("error");
-        }
+        Instantiate(ps, new Vector3(0f, 6f,0f), Quaternion.identity);
+        particles.Add(ps.GetComponent<particleChapter4_6>());
     }
 
-    public void applyForce(particleChapter4_6 pC46, Vector3 force)
+    public void applyForce(Vector3 force)
     {
-        Vector3 f = force;
-        Debug.Log(f);
-        f /= mass;
-        pC46.acceleration += f;
+        foreach (particleChapter4_6 particle in particles)
+        {
+            particle.applyForce(force);
+        }
     }
 }
 

@@ -30,7 +30,8 @@ public class particleChapter4_3 : MonoBehaviour
         {
             velocity += acceleration;
             location += velocity;
-            this.transform.position = location;
+            this.gameObject.transform.Translate(location * Time.deltaTime, Space.World);
+
 
             // Move our position a step closer to the target.
             float step = speed * Time.deltaTime; // calculate distance to move

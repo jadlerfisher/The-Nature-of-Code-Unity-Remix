@@ -1,44 +1,54 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 
-public class particleChapter4_2 : MonoBehaviour
+public class particleChapter4_Base : MonoBehaviour
 {
-    public Vector3 location = new Vector3(0f, 6f, 0f);
-    public Vector3 velocity = new Vector3(0f, 0f, 0f);
-    public Vector3 acceleration = new Vector3(0f, -.05f, 0f);
-    public float lifespan = 1;
+    public Vector3 location;
+    public Vector3 velocity;
+    public Vector3 acceleration;
+    public float lifespan;
 
-    MeshRenderer particleMeshRenderer;
+    public MeshRenderer particleMeshRenderer;
 
-    // Start is called before the first frame update
+    public particleChapter4_Base()
+    {
+        location = new Vector3(0f, 6f, 0f);
+        velocity = new Vector3(0f, 0f, 0f);
+        acceleration = new Vector3(0f, 0f, 0f);
+        lifespan = 1;
+    }
+
+        public particleChapter4_Base(Vector3 location)
+    {
+        acceleration = new Vector3(Random.Range(-.1f, .1f), Random.Range(-.2f, 0f), 0f);
+        lifespan = 1;
+    }
+
     void Start()
     {
-        particleMeshRenderer = this.GetComponent<MeshRenderer>();
-        velocity = new Vector3(Random.Range(-1f, 1f), Random.Range(-.02f, 0f), 0f);
-        float lifespan = 1;
         location = new Vector3(0f, 6f, 0f);
-        this.gameObject.transform.position = location;
-
+        acceleration = new Vector3(Random.Range(-.1f, .1f), Random.Range(-.2f, 0f), 0f);
     }
 
     // Update is called once per frame
     void Update()
     {
+
         if (!isDead())
         {
             velocity += acceleration;
             location += velocity;
             this.gameObject.transform.Translate(location * Time.deltaTime, Space.World);
-
             lifespan = lifespan - .02f;
+
             Color col = particleMeshRenderer.material.GetColor("_Color");
 
             particleMeshRenderer.material.color = new Color(col.r, col.g, col.b, lifespan);
-        } else
+        }
+        else
         {
-            //Dead and do nothing
+            //Do nothing
         }
     }
 
@@ -55,4 +65,11 @@ public class particleChapter4_2 : MonoBehaviour
             return false;
         }
     }
+
+
+
+
+
+
+
 }

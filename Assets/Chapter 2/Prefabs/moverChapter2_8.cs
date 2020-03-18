@@ -58,6 +58,7 @@ public class moverChapter2_8 : MonoBehaviour
                 velocity += new Vector3(acceleration.x, acceleration.y, acceleration.z);
                 //add that velocity value to the transform of the mover's position
                 location += new Vector3(velocity.x, velocity.y, velocity.z);
+                mover.transform.Translate(location * Time.deltaTime, Space.World);
                 multiplyVector(acceleration, 0);
 
             

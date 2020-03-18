@@ -28,10 +28,8 @@ public class repellerChapter4Fig7 : MonoBehaviour
         Vector3 dir = location - mover.location;
 
         float d = dir.magnitude;
+        d = Mathf.Clamp(d, 5, 100);
         Vector3 gravityDirection = dir.normalized;
-        gravityDirection.x = Mathf.Clamp(gravityDirection.x, 5, 100);
-        gravityDirection.y = Mathf.Clamp(gravityDirection.y, 5, 100);
-        gravityDirection.z = Mathf.Clamp(gravityDirection.z, 5, 100);
         float force = -1 * strength / (d * d);
         gravityDirection *= force;
         return gravityDirection;

@@ -46,13 +46,13 @@ public class littleMover : MonoBehaviour
                 // Add that velocity value to the transform of the mover's position
                 location += new Vector3(velocity.x, velocity.y, velocity.z);
                 //Assign that value to the mover's gameobject
-                mover.transform.position = location;
+                mover.transform.Translate(location * Time.deltaTime, Space.World);
             }
             else
             {
                 velocity += new Vector3(acceleration.x, acceleration.y, acceleration.z);
                 location += new Vector3(velocity.x, velocity.y, velocity.z);
-                mover.transform.position = location;
+                mover.transform.Translate(location * Time.deltaTime, Space.World);
             }
         }
         else

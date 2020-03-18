@@ -7,20 +7,17 @@ public class particleSystemChapter4Fig7 : MonoBehaviour
 
     public particleChapter4_6 particle;
     public List<particleChapter4_6> particles = new List<particleChapter4_6>();
-    public Vector3 origin;
+    public Vector3 origin = new Vector3(0f, 6f, 0f);
     private float particleChange;
 
     public float mass = 1f;
     public Vector3 gravity = new Vector3(0f, -100f, 0f);
-    public GameObject repeller;
-    private repellerChapter4Fig7 rC4F7;
+   
 
     // Start is called before the first frame update
     void Start()
     {
-        repeller = Instantiate(repeller);
-        repeller.transform.position = new Vector3(0f, -4f, 0f);
-        rC4F7 = repeller.GetComponent<repellerChapter4Fig7>();
+
     }
 
     // Update is called once per frame
@@ -28,26 +25,7 @@ public class particleSystemChapter4Fig7 : MonoBehaviour
     {
 
         StartCoroutine(createParticle());
-
-        for (int i = 0; i < particles.Count; i++)
-        {
-            applyForce(particles[i], gravity);
-            applyRepeller(particles[i], rC4F7);
-
-            if (particles[i].isDead())
-            {
-                particles.Remove(particles[i]);
-            }
-            else
-            {
-
-            }
-
-            for (int p = particles.Count; p >= 30; p--)
-            {
-                particles.Clear();
-            }
-        }
+        particles.Clear();
     }
 
     IEnumerator createParticle()
@@ -64,17 +42,23 @@ public class particleSystemChapter4Fig7 : MonoBehaviour
         }
     }
 
-    public void applyForce(particleChapter4_6 pC46, Vector3 force)
+    public void applyForce(Vector3 force)
     {
-        Vector3 f = force;
-        f /= mass;
-        pC46.acceleration += f;
+        foreach (particleChapter4_6 p in particles)
+        {
+            Vector3 f = force;
+            f /= mass;
+            p.acceleration += f;
+        }
     }
 
-    public void applyRepeller(particleChapter4_6 p, repellerChapter4Fig7 r)
+    public void applyRepeller(repellerChapter4Fig7 r)
     {
-        Vector3 force = r.repel(p);
-        applyForce(p, force);
+        foreach (particleChapter4_6 p in particles)
+        {
+            Vector3 force = r.repel(p);
+            p.applyForce(force);
+        }
 
     }
 }

@@ -40,8 +40,8 @@ public class mover1_7 : MonoBehaviour
         {
         // Add the velocity value to the transform of the mover's position
         location += new Vector3(velocity.x, velocity.y, velocity.z);
-        //Assign that value to the mover's gameobject
-        mover.transform.position = location;     
+            //Assign that value to the mover's gameobject
+            mover.transform.Translate(location * Time.deltaTime, Space.World);
         }
         else
         //Check the border and push the Little Mover back

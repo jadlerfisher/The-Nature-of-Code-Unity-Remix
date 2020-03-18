@@ -48,7 +48,7 @@ public class moverChapter2_6 : MonoBehaviour
         velocity += new Vector3(acceleration.x, acceleration.y, acceleration.z);
         //add that velocity value to the transform of the mover's position
         location += new Vector3(velocity.x, velocity.y, velocity.z);
-
+        //mover.transform.Translate(location * Time.deltaTime, Space.World);
     }
 
     public void subtractVector(Vector3 originalV3, Vector3 v3)

@@ -43,8 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8d25ddc66a5a3e48af8c0108567680d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particle: {fileID: 7176109180365135189, guid: 8346eab92b9ffe34b9ed0af23c83385a,
-    type: 3}
+  ps: {fileID: 8426725409996113488, guid: 8346eab92b9ffe34b9ed0af23c83385a, type: 3}
   particles: []
-  origin: {x: 0, y: 0, z: 0}
-  mass: 200
+  gravity: {x: 0, y: -0.01, z: 0}

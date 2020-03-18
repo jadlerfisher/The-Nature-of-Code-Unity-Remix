@@ -1,57 +1,80 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class particleSystemChapter4Fig5 : MonoBehaviour
 {
 
-    public particleChapter4_5 psOriginal;
-    public particleChapter4_5 psConfetti;
-    public List<particleChapter4_5> particles = new List<particleChapter4_5>();
+    public List<GameObject> particles = new List<GameObject>();
     public Vector3 origin;
-    private float particleChange;
+    public GameObject particle;
+    public GameObject confetti;
 
-    // Start is called before the first frame update
-    void Start()
+    public particleSystemChapter4Fig5(Vector3 location)
     {
+        origin = location;
+        particles = new List<GameObject>();
 
     }
 
-    // Update is called once per frame
+    void Start() {
+
+    }
+
+    public void addParticle()
+    {
+        origin = new Vector3(0f, 6f, 0f);
+        float r = Random.Range(0f, 1f);
+        if (r < 0.5f)
+        {
+            GameObject newP = Instantiate(particle, origin, Quaternion.identity);
+            particles.Add(newP);
+        }
+        else
+        {
+            GameObject newC = Instantiate(confetti, origin, Quaternion.identity);
+            particles.Add(newC);
+        }
+    }
+
     void Update()
     {
         StartCoroutine(createParticle());
 
-        for (int i = 0; i < particles.Count; i++)
-        {
-            if (particles[i].isDead())
-            {
-                particles.Remove(particles[i]);
-            }
+        IEnumerator<GameObject> it = particles.GetEnumerator();
 
-            for (int p = particles.Count; p >= 30; p--)
+  
+
+        while (it.MoveNext())
+        {
+            GameObject p = it.Current;
+            if (p)
             {
-                particles.Clear();
+                particleChapter4_Base pClass = p.GetComponent<particleChapter4_Base>();
+
+                if (p.GetComponent<particleChapter4_5_confetti>())
+                {
+                    particleChapter4_5_confetti cClass = p.GetComponent<particleChapter4_5_confetti>();
+                    cClass.rotate();
+                }
+
+                if (pClass.isDead())
+                {
+                    
+                }
             }
         }
+
+       particles.Clear();
     }
 
     IEnumerator createParticle()
     {
         yield return new WaitForSeconds(2.0f);
-        particleChange = Random.Range(0f, 1f);
-        if (particleChange < .5f)
-        {
-            particleChapter4_5 p = Instantiate(psOriginal, origin, Quaternion.identity);
-            particles.Add(p);
-        }
-        else 
-        {
-            particleChapter4_5 p = Instantiate(psConfetti, origin, Quaternion.identity);
-            particles.Add(p);
-        }
+        addParticle();
     }
-
-}
+} 
+   
 
 

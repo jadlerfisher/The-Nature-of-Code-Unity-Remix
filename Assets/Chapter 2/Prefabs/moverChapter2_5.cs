@@ -61,9 +61,9 @@ public class moverChapter2_5 : MonoBehaviour
             velocity += new Vector3(acceleration.x, acceleration.y, acceleration.z);
             //        add that velocity value to the transform of the mover's position
             location += new Vector3(velocity.x, velocity.y, velocity.z);
-           // multiplyVector(acceleration, 0);
+            multiplyVector(acceleration, 0);
 
-       //Friction
+        //Friction
 
         friction = velocity;
         Vector3.Normalize(friction);

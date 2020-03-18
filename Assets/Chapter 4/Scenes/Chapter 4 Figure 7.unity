@@ -155,7 +155,7 @@ Camera:
   m_GameObject: {fileID: 115484729}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -197,7 +197,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 115484729}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.74, z: -13.47}
+  m_LocalPosition: {x: 0, y: -3.74, z: -29.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -313,6 +313,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particleSystemCh4F7: {fileID: 7038765254652730077, guid: 3e09112e8d0df1542b5a8576618d9c7b,
+    type: 3}
+  repeller: {fileID: 4280998180539501511, guid: 51e36ec6d80907f40b7d0dfe4bf45bb5,
     type: 3}
 --- !u!1 &1501880265
 GameObject:

@@ -17,7 +17,7 @@ public class particleChapter4_1 : MonoBehaviour
     void Start()
     {
         particleMeshRenderer = this.GetComponent<MeshRenderer>();
-        velocity = new Vector3(Random.Range(-.1f, .1f), Random.Range(-.2f, 0f), 0f);
+        velocity = new Vector3(Random.Range(-.1f, .1f), Random.Range(-1f, 0f), 0f);
         float lifespan = 1;
         location = new Vector3(0f, 6f, 0f);
         this.transform.position = location;
@@ -31,7 +31,8 @@ public class particleChapter4_1 : MonoBehaviour
         {
             velocity += acceleration;
             location += velocity;
-            this.transform.position = location;
+            this.gameObject.transform.Translate(location * Time.deltaTime, Space.World);
+
 
             lifespan = lifespan - .02f;
 
