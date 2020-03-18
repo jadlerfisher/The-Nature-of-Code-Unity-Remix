@@ -7,7 +7,7 @@ public class antAnimal : MonoBehaviour
     Vector3 location;
     Vector3 velocity;
     Vector3 acceleration;
-    Vector3 topSpeed = new Vector3(3f, 3f, 3f);
+    Vector3 topSpeed = new Vector3(1f, 1f, 1f);
 
 
         // Start is called before the first frame update
@@ -29,9 +29,9 @@ public class antAnimal : MonoBehaviour
 
             if (velocity.magnitude <= topSpeed.magnitude)
             {
-                acceleration = new Vector3(Random.Range(-.041F, .041F), Random.Range(-.031F, .031F), Random.Range(-.021F, .021F));
+                acceleration = new Vector3(Random.Range(-.0041F, .0041F), Random.Range(-.0031F, .0031F), Random.Range(-.0021F, .0021F));
                 acceleration.Normalize();
-                acceleration *= .03f;
+                acceleration *= .003f;
 
 
             // Add the value of acceleration each frame to the mover's velocity
@@ -82,7 +82,6 @@ public class antAnimal : MonoBehaviour
 
         if (location.z >= 110f || location.x >= 110f)
         {
-            location = new Vector3(Random.Range(1f, 100f), Random.Range(3f, 5f), Random.Range(1f, 100f));
             location = new Vector3(Random.Range(1f, 100f), Random.Range(3f, 5f), Random.Range(1f, 100f));
             velocity = new Vector3(0f, 0f, 0f);
             acceleration = new Vector3(Random.Range(-.041F, .041F), Random.Range(-.031F, .031F), Random.Range(-.021F, .021F));

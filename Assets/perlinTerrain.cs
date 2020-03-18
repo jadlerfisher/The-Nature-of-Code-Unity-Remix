@@ -12,6 +12,8 @@ public class perlinTerrain : MonoBehaviour
     public Color color3;
     public Color color4;
     public Color color5;
+    public Color color6;
+
 
 
 
@@ -52,29 +54,29 @@ public class perlinTerrain : MonoBehaviour
     public Color colorTerrain (Vector3 terrainCubePosition)
     {
         Color terrainColor = new Vector4(1f, 1f, 1f);
-        if (terrainCubePosition.y >= 0f && terrainCubePosition.y <= 1f)
+        if (terrainCubePosition.y >= 0f && terrainCubePosition.y <= 2f)
         {
             terrainColor = color1;
         }
-        else if (terrainCubePosition.y >= 1f && terrainCubePosition.y <= 2.5f)
+        else if (terrainCubePosition.y >= 2f && terrainCubePosition.y <= 3.5f)
         {
             terrainColor = color2;
         }
-        else if (terrainCubePosition.y >= 2.5f && terrainCubePosition.y <= 3f)
+        else if (terrainCubePosition.y >= 3.5f && terrainCubePosition.y <= 4.5f)
         {
             terrainColor = color3;
         }
-        else if (terrainCubePosition.y >= 3f && terrainCubePosition.y <= 4f)
+        else if (terrainCubePosition.y >= 4.5f && terrainCubePosition.y <= 5f)
         {
             terrainColor = color4;
         }
-        else if (terrainCubePosition.y >= 4f && terrainCubePosition.y <= 5f)
+        else if (terrainCubePosition.y >= 5f && terrainCubePosition.y <= 6f)
         {
             terrainColor = color5;
         }
-        else
+        else if (terrainCubePosition.y >= 6f)
         {
-           // Do nothing
+            terrainColor = color6;
         }
 
         return terrainColor;
