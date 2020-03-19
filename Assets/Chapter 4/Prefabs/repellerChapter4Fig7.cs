@@ -10,18 +10,9 @@ public class repellerChapter4Fig7 : MonoBehaviour
 
     void Start()
     {
-
         mass = .02f;
         location = this.gameObject.transform.position;
     }
-
-    void FixedUpdate()
-    {
-
-
-
-    }
-
 
     public Vector3 repel(particleChapter4_6 mover)
     {
@@ -34,5 +25,4 @@ public class repellerChapter4Fig7 : MonoBehaviour
         gravityDirection *= force;
         return gravityDirection;
     }
-
 }
