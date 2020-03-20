@@ -286,8 +286,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6837061601441502665}
   - component: {fileID: 8157814519318368340}
-  - component: {fileID: -3428973412767124993}
-  - component: {fileID: 6423599887523629159}
   m_Layer: 0
   m_Name: ant
   m_TagString: Untagged
@@ -324,32 +322,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6de4526b36630b4cb66942eb02616c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &-3428973412767124993
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6837061601441502663}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!65 &6423599887523629159
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6837061601441502663}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}

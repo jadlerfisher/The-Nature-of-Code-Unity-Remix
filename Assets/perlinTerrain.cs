@@ -33,14 +33,20 @@ public class perlinTerrain : MonoBehaviour
                 
                 float theta = ExtensionMethods.Remap(Mathf.PerlinNoise(xoff, yoff), 0f, 1f, 0f, 10f);
 
-                terrainCube = Instantiate(terrainCube, new Vector3(i, theta, j), Quaternion.identity);
+                float theta2 = ExtensionMethods.Remap(Mathf.PerlinNoise(xoff, yoff), 0f, 1f, 0f, 6.2831855f);
+
+                Quaternion perlinRotation = new Quaternion();
+                Vector3 perlinVectors = new Vector3(Mathf.Cos(theta2), Mathf.Sin(theta2), 0);
+                perlinRotation.eulerAngles = perlinVectors * 100f;
+
+                terrainCube = Instantiate(terrainCube, new Vector3(i, theta, j), perlinRotation);
                 terrainCube.transform.SetParent(terrain.transform);
                 Renderer terrainRenderer = terrainCube.GetComponent<Renderer>();
                 terrainRenderer.material.SetColor("_Color", colorTerrain(terrainCube.transform.position));
                 
-                yoff += 0.08f;
+                yoff += 0.06f;
             }
-            xoff += 0.08f;
+            xoff += 0.06f;
         }
     }
 

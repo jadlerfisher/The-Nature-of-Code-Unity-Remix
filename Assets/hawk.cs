@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class bluebirdAnimal : MonoBehaviour
+public class hawk : MonoBehaviour
 {
     Vector3 location;
     Vector3 velocity;
     Vector3 acceleration;
-    Vector3 topSpeed = new Vector3(4f, 4f, 4f);
+    Vector3 topSpeed = new Vector3(6f, 6f, 6f);
 
-    // Start is called before the first frame update
+
     void Start()
     {
         location = this.gameObject.transform.position;
@@ -18,14 +18,12 @@ public class bluebirdAnimal : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
+        location = this.gameObject.transform.position;
 
         if (velocity.magnitude <= topSpeed.magnitude)
         {
-            acceleration = new Vector3(Random.Range(-.01F, .01F), Random.Range(-.01F, .01F), Random.Range(-.01F, .01F));
-            acceleration.Normalize();
-            acceleration *= .007f;
             // Add the value of acceleration each frame to the mover's velocity
             velocity += new Vector3(acceleration.x, acceleration.y, acceleration.z);
             // Add that velocity value to the transform of the mover's position
@@ -39,7 +37,7 @@ public class bluebirdAnimal : MonoBehaviour
         {
             velocity += new Vector3(acceleration.x, acceleration.y, acceleration.z);
             location += new Vector3(velocity.x, velocity.y, velocity.z);
-            //this.gameObject.transform.LookAt(location);
+            this.gameObject.transform.LookAt(location);
             this.gameObject.transform.position = location;
             acceleration *= 0f;
 
@@ -52,9 +50,9 @@ public class bluebirdAnimal : MonoBehaviour
         }
         else if (location.x <= 0)
         {
-            velocity.x *= -1f; 
+            velocity.x *= -1f;
         }
-        else if (location.y >= 30f)
+        else if (location.y >= 40f)
         {
             velocity.y *= -1f;
         }
@@ -66,25 +64,26 @@ public class bluebirdAnimal : MonoBehaviour
         {
             velocity.z *= -1f;
         }
-        else if (location.z >= 100f && location.z < 110f)
+        else if (location.z >= 100f)
         {
             velocity.z *= -1f;
         }
 
         if (location.z >= 110f || location.x >= 110f || location.y >= 30f)
         {
-            location = new Vector3(Random.Range(1f, 100f), Random.Range(6.0f, 15.0f), Random.Range(1f, 100f));
+            this.gameObject.transform.position = new Vector3(Random.Range(1f, 100f), Random.Range(10.0f, 30.0f), Random.Range(1f, 100f));
             velocity = new Vector3(0f, 0f, 0f);
             acceleration = new Vector3(Random.Range(-.01F, .01F), Random.Range(-.01F, .01F), Random.Range(-.01F, .01F));
 
         }
-        else if (location.z <= 0f || location.x <= 0f)
+        else if (location.z <= 0f || location.x <= 0f || location.y <= 30f)
         {
-            location = new Vector3(Random.Range(1f, 100f), Random.Range(6.0f, 15.0f), Random.Range(1f, 100f));
+            this.gameObject.transform.position = new Vector3(Random.Range(1f, 100f), Random.Range(10.0f, 30.0f), Random.Range(1f, 100f));
             velocity = new Vector3(0f, 0f, 0f);
             acceleration = new Vector3(Random.Range(-.01F, .01F), Random.Range(-.01F, .01F), Random.Range(-.01F, .01F));
         }
-
     }
 
+
+   
 }

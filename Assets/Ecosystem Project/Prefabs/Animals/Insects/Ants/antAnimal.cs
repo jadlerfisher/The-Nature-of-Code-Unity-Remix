@@ -17,12 +17,11 @@ public class antAnimal : MonoBehaviour
             velocity = new Vector3(0F, 0F, 0F);
             acceleration = new Vector3(.0F, .0F, .0F);
 
-            Debug.Log("ok");
 
         }
 
         // Update is called once per frame
-        void Update()
+        void FixedUpdate()
         {
 
 
@@ -38,12 +37,13 @@ public class antAnimal : MonoBehaviour
             velocity += new Vector3(acceleration.x, acceleration.y, acceleration.z);
                 // Add that velocity value to the transform of the mover's position
                 location += new Vector3(velocity.x, velocity.y, velocity.z);
-                //Assign that value to the mover's gameobject
-                this.gameObject.transform.LookAt(location);
-                this.gameObject.transform.position = location;
+            //Assign that value to the mover's gameobject
+            this.gameObject.transform.LookAt(location);
 
-            }
-            else
+            this.gameObject.transform.position = location;
+
+        }
+        else
             {
                 velocity += new Vector3(acceleration.x, acceleration.y, acceleration.z);
                 location += new Vector3(velocity.x, velocity.y, velocity.z);

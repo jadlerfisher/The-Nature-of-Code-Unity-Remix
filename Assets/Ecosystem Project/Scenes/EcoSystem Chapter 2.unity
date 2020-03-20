@@ -120,6 +120,97 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &60518631
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 60518633}
+  - component: {fileID: 60518632}
+  m_Layer: 0
+  m_Name: Directional Light (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!108 &60518632
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 60518631}
+  m_Enabled: 1
+  serializedVersion: 9
+  m_Type: 1
+  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!4 &60518633
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 60518631}
+  m_LocalRotation: {x: -0.41568416, y: 0.1809549, z: -0.47919732, w: -0.751553}
+  m_LocalPosition: {x: 0, y: 58.2, z: -0.03}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 127.037, y: 552.11304, z: -468.905}
 --- !u!1001 &751341542
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -177,11 +268,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: far clip plane
-      value: 80
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_ClearFlags
-      value: 1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.49750802
+      objectReference: {fileID: 0}
+    - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.6195463
+      objectReference: {fileID: 0}
+    - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.8113208
       objectReference: {fileID: 0}
     - target: {fileID: 5400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_IsKinematic
@@ -273,13 +376,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1055878162}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0.23941338, y: 0.7521448, z: -0.58745605, w: -0.17847888}
+  m_LocalPosition: {x: 0, y: 58.2, z: -0.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 127.037, y: 425.886, z: -468.905}
 --- !u!1 &1886539393
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,8 +416,8 @@ MonoBehaviour:
   terrainArray: []
   terrainCube: {fileID: 8078380826437460610, guid: 7a53861cc6409af45ba4e658459bdc00,
     type: 3}
-  cols: 100
-  rows: 100
+  cols: 120
+  rows: 120
   color1: {r: 0.048949797, g: 0.43895066, b: 0.5188679, a: 1}
   color2: {r: 0.054823764, g: 0.5852477, b: 0.8301887, a: 1}
   color3: {r: 0.03818085, g: 0.3679245, b: 0.061349206, a: 0.9019608}
@@ -349,11 +452,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Insects: []
   fly: {fileID: 1907220204383741982, guid: ad90fa2fe79cb714da480ac588d9b4bc, type: 3}
-  flyTotal: 300
+  flyTotal: 30
   ant: {fileID: 6837061601441502663, guid: 68ec1d54a2924514ead0ca0f0e2079df, type: 3}
-  antTotal: 150
+  antTotal: 30
   Birds: []
   blueBird: {fileID: 3874548089328421425, guid: a77d1f6cf84798a45b8362502bb7dc29,
     type: 3}
-  blueBirdTotal: 25
+  blueBirdTotal: 10
+  hawk: {fileID: 2044596522712116988, guid: 0d5d171668baece4ba8e2b375ff8e359, type: 3}
+  hawkTotal: 4
+  bear: {fileID: 3887646857004349117, guid: dc8aaa5c74a0bd34194f292ed1d44081, type: 3}
+  bearTotal: 10
   terrain: {fileID: 1886539394}
+  redBirdList: []
+  redBird: {fileID: 3874548089328421425, guid: 313a41d7017d1d5418d66597e1007287, type: 3}
+  redBirdTotal: 40
+  food: []
+  seed: {fileID: 6106050306018664447, guid: ec3f8a08a8f8aa84f99be6599ca2fe69, type: 3}
+  seedTotal: 30
+  berryList: []
+  berry: {fileID: 1528719886615985514, guid: 72ab594dc2e95df48ba204106002f3df, type: 3}
+  berryTotal: 50

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - wall
   - cell
+  - hawk
+  - bear
   layers:
   - Default
   - TransparentFX
