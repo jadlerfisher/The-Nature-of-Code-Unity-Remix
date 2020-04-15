@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 // In this example, we will be subtracting Vector3's from one another
 //The following example demonstrates vector subtraction by taking the difference between two points—the mouse location and the center sphere
@@ -9,6 +7,7 @@ public class Chapter1Fig4 : MonoBehaviour
 {
 
     //Create variables to mark the origin of our line
+    public Camera camera;
     public GameObject centerSphere;
     private Vector3 centerSpherePosition;
 
@@ -19,12 +18,6 @@ public class Chapter1Fig4 : MonoBehaviour
     //Create variables for rendering the line between two vectors
     private GameObject lineDrawing;
     private LineRenderer lineRender;
-
-    //Float coordinates for our new vector3 we create via  "void subtractVector"
-    private float x, y, z;
-
-    //Float coordinates for our new vector3 we create via  "void subtractVector"
-    private Vector3 subtractedVector;
 
 
     // Start is called before the first frame update
@@ -49,46 +42,40 @@ public class Chapter1Fig4 : MonoBehaviour
     void Update()
     {
         //Track the Vector3 of the mouse's position
-        mousePos = Input.mousePosition;
+        Vector2 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 centerSpherePos = centerSphere.transform.position;
 
         //Get the center of the transform
         centerSpherePosition = centerSphere.transform.position;
 
         //Subtract the vector of the center from that of the mice position via "void subtractVector"
-        subtractVector(mousePos,centerSpherePosition);
+        Vector2 sub = subtractVectors(mousePos,centerSpherePosition);
         
         //Begin rendering the line between the two objects. Set the first point (0) at the centerSphere Position
         //Make sure the end of the line (1) appears at the new Vector3 we are creating via the "void subtractVector" 
         lineRender.SetPosition(0, centerSpherePosition);
-        lineRender.SetPosition(1, new Vector3(x, y, z));
+        lineRender.SetPosition(1, sub);
 
         //Move the cursor to that same Vector3 we are creating via the "void subtractVector" 
-        mouseCursor.transform.position = new Vector3(x, y, z);
+        mouseCursor.transform.position = sub;
 
     }
 
-
-    void subtractVector(Vector3 originalV3, Vector3 v3)
+    // This method calculates A - B component wise
+    // subtractVectors(vecA, vecB) will yield the same output as Unity's built in operator: vecA - vecB
+    Vector2 subtractVectors(Vector2 vectorA, Vector2 vectorB)
     {
-
-        // Dividing the subtraction by 100 to keep the cursor on the screen in this example
-        x = (originalV3.x - v3.x) / 100;
-        y = (originalV3.y - v3.y) / 100;
-        z = (originalV3.z - v3.z) / 100;
-
-        subtractedVector = new Vector3(x, y, z);
-
-        multiplyVector(subtractedVector, 0.5F);
-
+        float newX = vectorA.x - vectorB.x;
+        float newY = vectorA.y - vectorB.y;
+        return new Vector2(newX, newY);
     }
 
-
-    //Adding the multiplying vector function for Figure 1.4;
-    void multiplyVector(Vector3 transformPosition, float n)
+    // This method calculates A * b component wise
+    // multiplyVector(vector, factor) will yield the same output as Unity's built in operator: vector * factor
+    Vector2 multiplyVector(Vector2 toMultiply, float scaleFactor)
     {
-        x = transformPosition.x * n;
-        y = transformPosition.y * n;
-        z = transformPosition.z * n;
-
+        float x = toMultiply.x * scaleFactor;
+        float y = toMultiply.y * scaleFactor;
+        return new Vector2(x, y);
     }
 }
