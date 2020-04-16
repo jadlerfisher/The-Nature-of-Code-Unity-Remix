@@ -9,7 +9,7 @@ public class Chapter1Fig3 : MonoBehaviour
     // These objects are brought in from the unity scene
     public Camera camera;
     public GameObject cursorSphere;
-    public GameObject centerSphere;
+    public GameObject followerSphere;
 
     // A LineRenderer component will draw a line along our vector
     private LineRenderer lineRenderer;
@@ -17,10 +17,6 @@ public class Chapter1Fig3 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Instantiate a cursor GameObject to track the location of the mouse
-        // This is a clone of the 'mover' prefab
-        cursorSphere = Instantiate(cursorSphere, new Vector3(0, 0, 0), Quaternion.identity);
-
         // Add the Unity Component "LineRenderer" to the GameObject this script is attached to
         lineRenderer = gameObject.AddComponent<LineRenderer>();
     }
@@ -30,18 +26,20 @@ public class Chapter1Fig3 : MonoBehaviour
     {
         // Track the Vector2 of the mouse's position and the center sphere's position
         Vector2 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 centerSpherePos = centerSphere.transform.position;
+        // Define a set distance that the follower will be offset by
+        Vector2 toSubtract = new Vector2(2, 3);
 
-        // Subtract the two vectors 
-        Vector2 difference = subtractVectors(mousePos, centerSpherePos);
+        // Subtract the two vectors to get the follower's position
+        Vector2 followerPosition = subtractVectors(mousePos, toSubtract);
 
         // Begin rendering the line between the two objects. Set the first point (0) at the centerSphere Position
         // Make sure the end of the line (1) appears at the new Vector3 we are creating via the method "subtractVector" 
-        lineRenderer.SetPosition(0, centerSpherePos);
-        lineRenderer.SetPosition(1, difference);
+        lineRenderer.SetPosition(0, mousePos);
+        lineRenderer.SetPosition(1, followerPosition);
 
-        //Move the cursor to that same Vector3 we are creating via the "void subtractVector" 
+        // Update the positions of the spheres in the scene to our vectors
         cursorSphere.transform.position = mousePos;
+        followerSphere.transform.position = followerPosition;
     }
     
     // This method calculates A - B component wise
