@@ -22,8 +22,8 @@ public class Chapter1Fig2 : MonoBehaviour
         Camera.main.orthographic = true;
 
         // Next we grab the minimum and maximum position for the screen
-        minimumPos = Camera.main.ScreenToWorldPoint(Vector3.zero);
-        maximumPos = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
 
         // We now can set the mover as a primitive sphere in unity
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
