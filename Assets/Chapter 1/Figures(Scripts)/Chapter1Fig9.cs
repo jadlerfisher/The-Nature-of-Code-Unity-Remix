@@ -94,8 +94,8 @@ public class Mover
         // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
         // Next we grab the minimum and maximum position for the screen
-        minimumPos = Camera.main.ScreenToWorldPoint(Vector3.zero);
-        maximumPos = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
 
