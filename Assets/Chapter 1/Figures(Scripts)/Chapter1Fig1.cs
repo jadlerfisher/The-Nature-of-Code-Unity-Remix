@@ -4,88 +4,66 @@ using UnityEngine;
 
 public class Chapter1Fig1 : MonoBehaviour
 {
+    // Variables for the location and speed of mover
+    private float x = 0F;
+    private float y = 0F;
+    private float xSpeed = 0.1F;
+    private float ySpeed = 0.1F;
 
-    //variables for the speed of mover
-    private float xspeed = .03F;
-    private float yspeed = .03F;
-    private float zspeed = .03F;
+    // Variables to limit the mover within the screen space
+    private float xMin, yMin, xMax, yMax;
 
-    // Set the borders of our exercise so we keep the mover bouncing in a single space
-    private float xMin = -10, xMax = 10, yMin = -10, yMax = 10, zMin = -10, zMax = 10;
-    public bool xHit, yHit, zHit = true;
-
-    // Variables for the mover and its location coordinates
-    public GameObject mover;
-    private float x;
-    private float y;
-    private float z;
+    // A Variable to represent our mover in the scene
+    private GameObject mover;
 
     // Start is called before the first frame update
     void Start()
     {
-        // Instantiate our mover
-        mover = Instantiate(mover, new Vector3(0, 0, 0), Quaternion.identity);
+        // We want to start by setting the camera's projection to Orthographic mode
+        Camera.main.orthographic = true;
+
+        // We now find the Width and Height of the camera screen
+        float width = Camera.main.pixelWidth;
+        float height = Camera.main.pixelHeight;
+
+        // Next we grab the minimum and maximum position for the screen
+        Vector3 minimumPosition = Camera.main.ScreenToWorldPoint(Vector3.zero);
+        Vector3 maximumPosition = Camera.main.ScreenToWorldPoint(new Vector3(width, height, 0));
+
+        // We can now properly assign the Min and Max for out scene
+        xMin = minimumPosition.x;
+        xMax = maximumPosition.x;
+        yMin = minimumPosition.y;
+        yMax = maximumPosition.y;
+
+        // We now can set the mover as a primitive sphere in unity
+        mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
     }
 
-    // Update is called once per frame
+    // Update is called once per frame forever and ever (until you quit).
     void Update()
     {
-
-        //Grab the transform variables of the mover so we can see when the its hits the borders of our exercise
+        // First, we want to update our x and y positions of the mover
         x = mover.transform.position.x;
         y = mover.transform.position.y;
-        z = mover.transform.position.z;
 
-        //Each frame, check to see whether the mover's x,y, or z position coordinates have HIT a border 
-        //and if so, to either add a value (+=) or substract a valur (-=) from the vector
-        if (xHit)
-        {
-            mover.transform.position += new Vector3(xspeed, 0, 0);
-            if (x > xMax)
-            {
-                xHit = false;
-            }
+        // Each frame, we will check to see if the mover has touched a boarder
+        // We check if the X/Y position is greater than the max position OR if it's less than the minimum position
+        bool xHitBoarder = x > xMax || x < xMin;
+        bool yHitBoarder = y > yMax || y < yMin;
+
+        // If the mover has hit at all, we will mirror it's speed with the corrisponding boarder
+
+        if (xHitBoarder) {
+            xSpeed = -xSpeed;
         }
-        else
-        {
-            mover.transform.position -= new Vector3(xspeed, 0, 0);
-            if (x < xMin)
-            {
-                xHit = true;
-            }
+
+        if (yHitBoarder) {
+            ySpeed = -ySpeed;
         }
-        if (yHit)
-        {
-            mover.transform.position += new Vector3(0, yspeed, 0);
-            if (y > yMax)
-            {
-                yHit = false;
-            }
-        }
-        else
-        {
-            mover.transform.position -= new Vector3(0, yspeed, 0);
-            if (y < yMin)
-            {
-                yHit = true;
-            }
-        }
-        if (zHit)
-        {
-            mover.transform.position += new Vector3(0, 0, zspeed);
-            if (z > zMax)
-            {
-                zHit = false;
-            }
-        }
-        else
-        {
-            mover.transform.position -= new Vector3(0, 0, zspeed);
-            if (z < zMin)
-            {
-                zHit = true;
-            }
-        }
+
+        // After we do the checks, we then move the mover by it's x and y speed.
+        mover.transform.Translate(xSpeed, ySpeed, 0);
     }
 }

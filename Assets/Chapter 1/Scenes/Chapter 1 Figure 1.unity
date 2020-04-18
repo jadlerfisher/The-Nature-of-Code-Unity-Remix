@@ -240,10 +240,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4f04fe43650f4c408b496184d58029c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xHit: 0
-  yHit: 0
-  zHit: 0
-  mover: {fileID: 8588129483639602931, guid: 8c7dfa3e95a6c0a41b753f1635fc972f, type: 3}
 --- !u!4 &1366103472
 Transform:
   m_ObjectHideFlags: 0
