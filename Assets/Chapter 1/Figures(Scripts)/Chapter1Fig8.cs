@@ -25,10 +25,12 @@ public class Chapter1Fig8 : MonoBehaviour
 public class Mover
 {
     // The basic properties of a mover class
-    private Vector2 location, velocity;
+    private Vector2 location, velocity, acceleration;
+    private float topSpeed;
 
     // The window limits
     private Vector2 minimumPos, maximumPos;
+
 
     // Gives the class a GameObject to draw on the screen
     private GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -36,14 +38,23 @@ public class Mover
     public Mover()
     {
         findWindowLimits();
-        location = new Vector2(Random.Range(minimumPos.x, maximumPos.x), Random.Range(minimumPos.y, maximumPos.y));
-        velocity = new Vector2(Random.Range(-2, 2), Random.Range(-2, 2));
+        location = Vector2.zero; // Vector2.zero is a (0, 0) vector
+        velocity = Vector2.zero;
+        acceleration = new Vector2(-0.1F, -1F);
+        topSpeed = 10F;
     }
 
     public void Update()
     {
+        // Speeds up the mover
+        velocity += acceleration * Time.deltaTime; // Time.deltaTime is the time passed since the last frame.
+
+        // Limit Velocity to the top speed
+        velocity = Vector2.ClampMagnitude(velocity, topSpeed);
+
         // Moves the mover
-        location += velocity * Time.deltaTime; // Time.deltaTime is the time passed since the last frame.
+        location += velocity * Time.deltaTime;
+
 
         // Updates the GameObject of this movement
         mover.transform.position = new Vector3(location.x, location.y, 0);
