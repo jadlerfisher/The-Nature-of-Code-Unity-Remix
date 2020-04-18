@@ -22,8 +22,8 @@ public class Chapter1Fig2 : MonoBehaviour
         Camera.main.orthographic = true;
 
         // Next we grab the minimum and maximum position for the screen
-        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
-        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        minimumPos = Camera.main.ScreenToWorldPoint(Vector3.zero);
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
 
         // We now can set the mover as a primitive sphere in unity
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -35,8 +35,8 @@ public class Chapter1Fig2 : MonoBehaviour
     {
         // Each frame, we will check to see if the mover has touched a boarder
         // We check if the X/Y position is greater than the max position OR if it's less than the minimum position
-        bool xHitBorder = location.x > minimumPos.x || location.x < minimumPos.x;
-        bool yHitBorder = location.y > maximumPos.y || location.y < maximumPos.y;
+        bool xHitBorder = location.x > maximumPos.x || location.x < minimumPos.x;
+        bool yHitBorder = location.y > maximumPos.y || location.y < minimumPos.y;
 
         // If the mover has hit at all, we will mirror it's speed with the corrisponding boarder
 
