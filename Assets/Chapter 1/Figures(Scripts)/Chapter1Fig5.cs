@@ -1,101 +1,68 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
+// In this example, we will be scaling vector2's via multiplication.
+// The following example draws a vector from a central location to the mouse, the length
+// of the vector between the two spheres is used to draw another vector of the same length.
 
 public class Chapter1Fig5 : MonoBehaviour
 {
-    //Create variables to mark the origin of our line
+    // These objects are brought in from the unity scene
+    public Camera camera;
     public GameObject centerSphere;
-    private Vector3 centerSpherePosition;
+    public GameObject cursorSphere;
 
-    //Create variables to mark the origin of our line
-    public GameObject magLineOrigin;
-    private Vector3   magLineOriginPosition;
-
-    //Create variables to track the mouse gameObject and position
-    private Vector3 mousePos;
-    public GameObject mouseCursor;
-
-    //Create variables for rendering the line between two vectors
-    private GameObject lineDrawing;
-    private LineRenderer lineRender;
-
-    //Create variables for rendering the magnitude line between two vectors
-    private GameObject magLineDrawing;
-    private LineRenderer magLineRender;
-
-
-
-    //Float coordinates for our new vector3 we create via  "void subtractVector"
-    private float x, y, z;
-
-    //Float coordinates for our new vector3 we create via  "void subtractVector"
-    private Vector3 subtractedVector;
-
-    //Float to record the Magntiude of the line
-    private float vectorMagnitude;
+    // Create variables for rendering the line between two vectors
+    private LineRenderer lineRenderer;
+    private LineRenderer magLineRenderer;
 
     // Start is called before the first frame update
     void Start()
     {
-
-        // Get the Vector3 (x,y,z) float coordinates of the center transform
-        centerSpherePosition = centerSphere.transform.position;
-        magLineOriginPosition = magLineOrigin.transform.position;
-
-        //Instantiate a cursor GameObject to track the location of the mouse
-        mouseCursor = Instantiate(mouseCursor, new Vector3(0, 0, 0), Quaternion.identity);
-
-        // Create a GameObject that will be the line
-        lineDrawing = new GameObject();
-        magLineDrawing = new GameObject();
-
-        //Add the Unity Component "LineRenderer" to the GameObject lineDrawing. We will see a bright pink line.
-        lineRender = lineDrawing.AddComponent<LineRenderer>();
-        magLineRender = magLineDrawing.AddComponent<LineRenderer>();
-
+        // Create two new line renderers. We must create new GameObjects since one
+        // object cannot accept more than one of this component
+        GameObject newA = new GameObject();
+        GameObject newB = new GameObject();
+        lineRenderer = newA.AddComponent<LineRenderer>();
+        magLineRenderer = newB.AddComponent<LineRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Track the Vector3 of the mouse's position
-        mousePos = Input.mousePosition;
+        // Track the Vector2 of the mouse's position and the center sphere's position
+        Vector2 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 centerPos = centerSphere.transform.position;
+        // Move the cursor sphere directly to the mouse
+        cursorSphere.transform.position = mousePos;
 
-        //Get the center of the transform
-        centerSpherePosition = centerSphere.transform.position;
+        // Calculate the magnitude(the distance between the two spheres)
+        Vector2 differenceVector = subtractVectors(mousePos, centerPos);
+        float magnitude = magnitudeOf(differenceVector);
 
-        //Subtract the vector of the center from that of the mice position via "void subtractVector"
-        subtractVector(mousePos, centerSpherePosition);
+        // Render the line between the spheres directly 
+        lineRenderer.SetPosition(0, centerPos);
+        lineRenderer.SetPosition(1, mousePos);
 
-        //Begin rendering the line between the two objects. Set the first point (0) at the centerSphere Position
-        //Make sure the end of the line (1) appears at the new Vector3 we are creating via the "void subtractVector" 
-        lineRender.SetPosition(0, centerSpherePosition);
-        lineRender.SetPosition(1, subtractedVector);
-
-        //Move the cursor to that same Vector3 we are creating via the "void subtractVector" 
-        mouseCursor.transform.position = new Vector3(x, y, z);
-
-        //Let's create another line to parallel the magnitude of our original line
-        //Begin rendering the line between the two objects. Set the first point (0) at magLineOriginPosition
-        //Make sure the end of the line (1) appears at the new Vector3 we are creating via the "void subtractVector" 
-        magLineRender.SetPosition(0, magLineOriginPosition);
-        magLineRender.SetPosition(1, new Vector3 (vectorMagnitude, vectorMagnitude, vectorMagnitude));
-
+        // Render a bar in the top left of the screen with the same length as the vector
+        Vector2 cameraTopLeft = camera.ScreenToWorldPoint(new Vector2(0, Screen.height));
+        magLineRenderer.SetPosition(0, cameraTopLeft);
+        // Use of Unity's built in Vector2 operators:
+        magLineRenderer.SetPosition(1, cameraTopLeft + magnitude * Vector2.right);
     }
 
-    void subtractVector(Vector3 originalV3, Vector3 v3)
+    // This method finds the length of a vector using pythagoras theorem
+    // magnitudeOf(vec) will yield the same output as Unity's built in property vect.magnitude
+    float magnitudeOf(Vector2 vector)
     {
+        return Mathf.Sqrt(vector.x * vector.x + vector.y * vector.y);
+    }
 
-        // Dividing the subtraction by 100 to keep the cursor on the screen in this example
-        x = (originalV3.x - v3.x) / 100;
-        y = (originalV3.y - v3.y) / 100;
-        z = (originalV3.z - v3.z) / 100;
-
-        subtractedVector = new Vector3(x, y, z);
-
-        //Returns the length of this vector (Read Only).
-        //The length of the vector is square root of(x * x + y * y + z * z).       
-        vectorMagnitude = Vector3.Magnitude(subtractedVector);
+    // This method calculates A - B component wise
+    // subtractVectors(vecA, vecB) will yield the same output as Unity's built in operator: vecA - vecB
+    Vector2 subtractVectors(Vector2 vectorA, Vector2 vectorB)
+    {
+        float newX = vectorA.x - vectorB.x;
+        float newY = vectorA.y - vectorB.y;
+        return new Vector2(newX, newY);
     }
 }
