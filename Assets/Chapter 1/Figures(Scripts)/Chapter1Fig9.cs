@@ -40,12 +40,19 @@ public class Mover
         findWindowLimits();
         location = Vector2.zero; // Vector2.zero is a (0, 0) vector
         velocity = Vector2.zero;
-        acceleration = new Vector2(-0.1F, -1F);
-        topSpeed = 10F;
+        acceleration = Vector2.zero;
+        topSpeed = 2F;
     }
 
     public void Update()
     {
+        // Random acceleration but it's not normalized!
+        acceleration = new Vector2(Random.Range(-1f,1f), Random.Range(-1f, 1f));
+        // Normilize the acceletation
+        acceleration.Normalize();
+        // Now we can scale the magnitude as we wish!
+        acceleration *= Random.Range(5f,10f);
+
         // Speeds up the mover
         velocity += acceleration * Time.deltaTime; // Time.deltaTime is the time passed since the last frame.
 
