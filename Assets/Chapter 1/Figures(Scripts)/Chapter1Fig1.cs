@@ -23,8 +23,8 @@ public class Chapter1Fig1 : MonoBehaviour
         Camera.main.orthographic = true;
 
         // Next we grab the minimum and maximum position for the screen
-        Vector2 minimumPosition = Camera.main.ScreenToWorldPoint(Vector3.zero);
-        Vector2 maximumPosition = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+        Vector2 minimumPosition = Camera.main.ScreenToWorldPoint(Vector2.zero);
+        Vector2 maximumPosition = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
 
         // We can now properly assign the Min and Max for out scene
         xMin = minimumPosition.x;
@@ -60,6 +60,6 @@ public class Chapter1Fig1 : MonoBehaviour
         y += ySpeed;
 
         // Now we apply the positions to the mover to put it in it's place
-        mover.transform.position = new Vector3(x, y, 0);
+        mover.transform.position = new Vector2(x, y);
     }
 }
