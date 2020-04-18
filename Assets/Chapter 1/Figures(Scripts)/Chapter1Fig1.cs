@@ -44,10 +44,6 @@ public class Chapter1Fig1 : MonoBehaviour
     // Update is called once per frame forever and ever (until you quit).
     void Update()
     {
-        // First, we want to update our x and y positions of the mover
-        x = mover.transform.position.x;
-        y = mover.transform.position.y;
-
         // Each frame, we will check to see if the mover has touched a boarder
         // We check if the X/Y position is greater than the max position OR if it's less than the minimum position
         bool xHitBoarder = x > xMax || x < xMin;
@@ -63,7 +59,11 @@ public class Chapter1Fig1 : MonoBehaviour
             ySpeed = -ySpeed;
         }
 
-        // After we do the checks, we then move the mover by it's x and y speed.
-        mover.transform.Translate(xSpeed, ySpeed, 0);
+        // Lets now update the location of the mover
+        x += xSpeed;
+        y += ySpeed;
+
+        // Now we apply the positions to the mover to put it in it's place
+        mover.transform.position = new Vector3(x, y, 0);
     }
 }
