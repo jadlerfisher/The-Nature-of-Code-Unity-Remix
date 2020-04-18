@@ -22,13 +22,9 @@ public class Chapter1Fig1 : MonoBehaviour
         // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
 
-        // We now find the Width and Height of the camera screen
-        float width = Camera.main.pixelWidth;
-        float height = Camera.main.pixelHeight;
-
         // Next we grab the minimum and maximum position for the screen
-        Vector3 minimumPosition = Camera.main.ScreenToWorldPoint(Vector3.zero);
-        Vector3 maximumPosition = Camera.main.ScreenToWorldPoint(new Vector3(width, height, 0));
+        Vector2 minimumPosition = Camera.main.ScreenToWorldPoint(Vector3.zero);
+        Vector2 maximumPosition = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
 
         // We can now properly assign the Min and Max for out scene
         xMin = minimumPosition.x;
