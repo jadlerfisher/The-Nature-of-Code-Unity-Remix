@@ -6,18 +6,17 @@ public class littleMover : MonoBehaviour
 {
 
     // Create your speed variables for the mover class
-    public Vector3 location;
-    public Vector3 velocity;
-    public Vector3 acceleration;
-    public Vector3 topSpeed;
+    public Vector2 location = Vector2.zero;
+    public Vector2 velocity = Vector2.zero;
+    public Vector2 acceleration = Vector2.zero;
+    public float topSpeed = 1f;
 
     //Create a variable to access the Mover's information
     private GameObject mover;
     //Float coordinates for our Little Mover
-    private float x, y, z;
 
-    private float xMin = -10, xMax = 10, yMin = -10, yMax = 10, zMin = -10, zMax = 10;
-    private bool xHit = true, yHit = true, zHit = true;
+    // The window limits
+    private Vector2 minimumPos, maximumPos;
 
     // Start is called before the first frame update
     void Awake()
@@ -31,136 +30,127 @@ public class littleMover : MonoBehaviour
 
         //Assign that spawn location to the mover
         mover.transform.position = location;
-
-    }
-        // Update is called once per frame
-        void Update()
-    {
-
-        if ((location.x >= xMin) && (location.x <= xMax) && (location.y >= yMin) && (location.y <= yMax) && (location.z >= zMin) && (location.z <= zMax))
-        {
-            if (velocity.magnitude <= topSpeed.magnitude)
-            {
-                // Add the value of acceleration each frame to the mover's velocity
-                velocity += new Vector3(acceleration.x, acceleration.y, acceleration.z);
-                // Add that velocity value to the transform of the mover's position
-                location += new Vector3(velocity.x, velocity.y, velocity.z);
-                //Assign that value to the mover's gameobject
-                mover.transform.Translate(location * Time.deltaTime, Space.World);
-            }
-            else
-            {
-                velocity += new Vector3(acceleration.x, acceleration.y, acceleration.z);
-                location += new Vector3(velocity.x, velocity.y, velocity.z);
-                mover.transform.Translate(location * Time.deltaTime, Space.World);
-            }
-        }
-        else
-//Check the border and push the Little Mover back
-        {
-            checkEdges();
-        }
+        findWindowLimits();
 
 
 
     }
-
-    void checkEdges()
+    // Update is called once per frame
+    void Update()
     {
-        //Get the coordinates of the moving sphere to see when it hits a border
-        x = location.x;
-        y = location.y;
-        z = location.z;
+        CheckEdges();
+        if (velocity.magnitude <= topSpeed)
+        {
+            // Speeds up the mover
+            velocity += acceleration * Time.deltaTime; // Time.deltaTime is the time passed since the last frame.
 
+            // Limit Velocity to the top speed
+            velocity = Vector2.ClampMagnitude(velocity, topSpeed);
+
+            // Moves the mover
+            location += velocity * Time.deltaTime;
+
+            // Updates the GameObject of this movement
+            mover.transform.position = new Vector3(location.x, location.y, 0);
+
+        } else
+        {
+            // Vector3 velocity3 = transform.InverseTransformPoint(velocity);
+            // velocity = new Vector2(velocity3.x, velocity3.y);
+            velocity -= acceleration * Time.deltaTime;
+            location += velocity * Time.deltaTime;
+            mover.transform.position = new Vector3(location.x, location.y, 0);
+        }
+
+    }
+
+    // This method calculates A - B component wise
+    // subtractVectors(vecA, vecB) will yield the same output as Unity's built in operator: vecA - vecB
+    public Vector2 subtractVectors(Vector2 vectorA, Vector2 vectorB)
+    {
+        float newX = vectorA.x - vectorB.x;
+        float newY = vectorA.y - vectorB.y;
+        return new Vector2(newX, newY);
+    }
+
+    // This method calculates A * b component wise
+    // multiplyVector(vector, factor) will yield the same output as Unity's built in operator: vector * factor
+   public Vector2 multiplyVector(Vector2 toMultiply, float scaleFactor)
+    {
+        float x = toMultiply.x * scaleFactor;
+        float y = toMultiply.y * scaleFactor;
+        return new Vector2(x, y);
+    }
+
+    void CheckEdges()
+    {
         //Each frame, check to see whether the ball's x,y, or z position coordinates have HIT a border and if so, to either add a value (+=) or substract a value (-=) from the vector. 
         //Then we need to bounce off the wall along a particular vector.
-        if (xHit)
+        if (location.x > maximumPos.x)
         {
+            velocity = Vector2.zero;
+            acceleration = Vector2.zero;
             location.x += velocity.x;
-            if (x > xMax)
+
+            if (location.x > maximumPos.x)
             {
                 location.x -= velocity.x + 1f;
-                xHit = false;
 
             }
         }
-        else
+        else if (location.x < minimumPos.x)
         {
+            velocity = Vector2.zero;
+            acceleration = Vector2.zero;
+            location.x += velocity.x;
+
             location.x -= velocity.x;
-            if (x < xMin)
+            if (location.x < minimumPos.x)
             {
                 location.x += velocity.x + 1f;
-                xHit = true;
 
             }
         }
-        if (yHit)
+        if (location.y > maximumPos.y)
         {
+            velocity = Vector2.zero;
+            acceleration = Vector2.zero;
             location.y += velocity.y;
-            if (y > yMax)
+
+            if (location.y > maximumPos.y)
             {
                 location.y -= velocity.y + 1f;
-                yHit = false;
 
             }
         }
-        else
+        else if (location.y < minimumPos.y)
         {
+            velocity = Vector2.zero;
+            acceleration = Vector2.zero;
             location.y -= velocity.y;
-            if (y < yMin)
+
+            if (location.y < minimumPos.y)
             {
                 location.y += velocity.y + 1f;
-                yHit = true;
-
-            }
-        }
-
-        if (zHit)
-        {
-            location.z += velocity.z;
-
-            if (z > zMax)
-            {
-                location.y += velocity.y + 1f;
-                zHit = false;
-
-            }
-        }
-        else
-        {
-            location.z -= velocity.z;
-            if (z < zMin)
-            {
-                location.y += velocity.y + 1f;
-                zHit = true;
 
             }
         }
     }
-
-    public void subtractVector(Vector3 originalV3, Vector3 v3)
+     void findWindowLimits()
     {
-        // Dividing the subtraction by 100 to keep the cursor on the screen in this example
-        x = originalV3.x - v3.x;
-        y = originalV3.y - v3.y;
-        z = originalV3.z - v3.z;
+        // The code to find the information on the camera as seen in Figure 1.2
 
-        Vector3 subtractedVector = new Vector3(x, y, z);
-        subtractedVector.Normalize();
-
-        multiplyVector(subtractedVector, .0003f);
-
-    }
-
-
-    //Adding the multiplying vector function to manage the speed
-    void multiplyVector(Vector3 transformPosition, float n)
-    {
-        x = transformPosition.x * n;
-        y = transformPosition.y * n;
-        z = transformPosition.z * n;
-
-        acceleration = new Vector3(x, y, z);
+        // We want to start by setting the camera's projection to Orthographic mode
+        Camera.main.orthographic = true;
+        // We now find the Width and Height of the camera screen
+        float width = Camera.main.pixelWidth;
+        float height = Camera.main.pixelHeight;
+        // Next we grab the minimum and maximum position for the screen
+        Vector3 minimumPosition = Camera.main.ScreenToWorldPoint(Vector3.zero);
+        Vector3 maximumPosition = Camera.main.ScreenToWorldPoint(new Vector3(width, height, 0));
+        // We can now properly assign the Min and Max for out scene
+        minimumPos = new Vector2(minimumPosition.x, minimumPosition.y);
+        maximumPos = new Vector2(maximumPosition.x, maximumPosition.y);
     }
 
 
