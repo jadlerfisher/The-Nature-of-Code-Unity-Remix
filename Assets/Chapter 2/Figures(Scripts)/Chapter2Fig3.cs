@@ -30,16 +30,55 @@ public class Chapter2Fig3 : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+public class Mover2_3
+{
+    public Rigidbody body;
+    private GameObject gameObject;
+    private float radius;
+
+    public Mover2_3(Vector3 position)
     {
+        // Create the components required for the mover
+        gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        body = gameObject.AddComponent<Rigidbody>();
+        // Remove functionality that come with the primitive that we don't want
+        gameObject.GetComponent<SphereCollider>().enabled = false;
+        Object.Destroy(gameObject.GetComponent<SphereCollider>());
+        body.useGravity = false;
 
-        //Apply the forces to each of the GameObjects
-        for (int i = 0; i < Movers.Count; i++)
+        // Generate random properties for this mover
+        radius = Random.Range(0.2f, 0.6f);
+
+        // Place our mover at the specified spawn position relative
+        // to the bottom of the sphere
+        gameObject.transform.position = position + Vector3.up * radius;
+
+        // The default diameter of the sphere is one unit
+        // This means we have to multiple the radius by two when scaling it up
+        gameObject.transform.localScale = 2 * radius * Vector3.one;
+
+        // We need to calculate the mass of the sphere.
+        // Assuming the sphere is of even density throughout,
+        // the mass will be proportional to the volume.
+        body.mass = (4f / 3f) * Mathf.PI * radius * radius * radius;
+    }
+
+    // Checks to ensure the body stays within the boundaries
+    public void CheckBoundaries()
+    {
+        Vector3 restrainedVelocity = body.velocity;
+        if (body.position.y - radius < -4.5f)
         {
-            gravity = new Vector3(0, .0001f * Movers[i].GetComponent<moverChapter2>().mass, 0f);
-
-            Movers[i].GetComponent<moverChapter2>().applyForce(wind);
-            Movers[i].GetComponent<moverChapter2>().applyForce(gravity);
-
+            restrainedVelocity.y = Mathf.Abs(restrainedVelocity.y);
         }
+        if (body.position.x - radius < -8f)
+        {
+            restrainedVelocity.x = Mathf.Abs(restrainedVelocity.x);
+        }
+        else if(body.position.x + radius > 8f)
+        {
+            restrainedVelocity.x = -Mathf.Abs(restrainedVelocity.x);
+        }
+        body.velocity = restrainedVelocity;
     }
 }
