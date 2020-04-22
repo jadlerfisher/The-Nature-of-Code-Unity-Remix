@@ -4,26 +4,21 @@ using UnityEngine;
 
 public class Chapter2Fig3 : MonoBehaviour
 {
-    public List<GameObject> Movers = new List<GameObject>();
-    public GameObject Mover;
-    public int amountMovers;
-
-    private Vector3 wind;
-    private Vector3 gravity;
+    private List<Mover2_3> Movers = new List<Mover2_3>();
+    // Define constant forces in our environment
+    private Vector3 wind = new Vector3(0.004f, 0f, 0f);
+    private Vector3 gravity = Vector3.down * 9;
 
     // Start is called before the first frame update
     void Start()
     {
-        wind = new Vector3(0.00001f, 0f, 0f);
-
-        // We need to instantiate our Little Movers before we can put them in a List. 
-        for (int i = 0; i < amountMovers; i++)
+        Vector3 moverSpawnPosition = new Vector3(-7, 3, 0);
+        // Create copys of our mover and add them to our list
+        while(Movers.Count < 30)
         {
-            Mover = Instantiate(Mover);
-            Mover.GetComponent<moverChapter2>().location = new Vector3(Random.Range(-5f, 5f), Random.Range(0f, 1f), 0f);
-            Movers.Add(Mover);
-
+            Movers.Add(new Mover2_3(moverSpawnPosition));
         }
+    }
 
         //Now let us alter the mass of each based on its location
         foreach (GameObject mover in Movers)
