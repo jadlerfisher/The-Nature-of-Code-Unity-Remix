@@ -20,16 +20,22 @@ public class Chapter2Fig3 : MonoBehaviour
         }
     }
 
-        //Now let us alter the mass of each based on its location
-        foreach (GameObject mover in Movers)
-        {
-            mover.GetComponent<moverChapter2>().alterMass();
-        }
-
-    }
-
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
+    {
+        // Apply the forces to each of the Movers
+        foreach(Mover2_3 mover in Movers)
+        {
+            // ForceMode.Acceleration ignores mass
+            mover.body.AddForce(gravity, ForceMode.Acceleration);
+            // ForceMode.Impulse takes mass into account
+            mover.body.AddForce(wind, ForceMode.Impulse);
+
+            mover.CheckBoundaries();
+        }
+    }
+}
+
 public class Mover2_3
 {
     public Rigidbody body;
