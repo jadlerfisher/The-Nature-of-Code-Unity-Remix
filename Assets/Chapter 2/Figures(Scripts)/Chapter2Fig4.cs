@@ -8,6 +8,7 @@ public class Chapter2Fig4 : MonoBehaviour
     // Define constant forces in our environment
     private Vector3 wind = new Vector3(0.002f, 0f, 0f);
     private Vector3 gravity = Vector3.down * 9;
+    private float frictionStrength = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +32,11 @@ public class Chapter2Fig4 : MonoBehaviour
             // ForceMode.Impulse takes mass into account
             mover.body.AddForce(wind, ForceMode.Impulse);
 
+            // Apply a friction force that directly opposes the current motion
+            Vector3 friction = mover.body.velocity;
+            friction.Normalize();
+            friction *= -frictionStrength;
+            mover.body.AddForce(friction, ForceMode.Acceleration);
 
             mover.CheckBoundaries();
         }
