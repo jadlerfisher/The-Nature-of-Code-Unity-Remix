@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class Chapter2Fig5 : MonoBehaviour
 {
-    // Expose the water material to be selected in the scene
+    // Geometry defined in the inspector
+    public float floorY;
+    public Transform moverSpawnTransform;
+    // Expose the components required to create the water
+    public Transform fluidCornerA;
+    public Transform fluidCornerB;
     public Material waterMaterial;
+    public float fluidDrag;
 
     private List<Mover2_5> Movers = new List<Mover2_5>();
     private List<Fluid2_5> Fluids = new List<Fluid2_5>();
-    // Define constant forces in our environment
-    private Vector3 gravity = Vector3.down * 9;
 
     // Start is called before the first frame update
     void Start()
@@ -18,14 +22,17 @@ public class Chapter2Fig5 : MonoBehaviour
         // Create copys of our mover and add them to our list
         while (Movers.Count < 30)
         {
-            Vector3 moverSpawnPosition = new Vector3(Random.Range(-7,7), 3, 0);
-            Movers.Add(new Mover2_5(moverSpawnPosition));
+            Vector3 moverSpawnPosition = moverSpawnTransform.position + Vector3.right * Random.Range(-7,7);
+            Movers.Add(new Mover2_5(
+                moverSpawnPosition,
+                floorY
+            ));
         }
-
+        // Add the fluid to our scene
         Fluids.Add(new Fluid2_5(
-            new Vector3(-8, -4.5f, -1),
-            new Vector3(0, 0, 1),
-            3.5f,
+            fluidCornerA.position,
+            fluidCornerB.position,
+            fluidDrag,
             waterMaterial
         ));
     }
@@ -36,9 +43,6 @@ public class Chapter2Fig5 : MonoBehaviour
         // Apply the forces to each of the Movers
         foreach (Mover2_5 mover in Movers)
         {
-            // ForceMode.Acceleration ignores mass
-            mover.body.AddForce(gravity, ForceMode.Acceleration);
-
             // Check for interaction with any of our fluids
             foreach(Fluid2_5 fluid in Fluids)
             {
@@ -63,15 +67,18 @@ public class Mover2_5
     private GameObject gameObject;
     private float radius;
 
-    public Mover2_5(Vector3 position)
+    private float yMin;
+
+    public Mover2_5(Vector3 position, float yMin)
     {
+        this.yMin = yMin;
+
         // Create the components required for the mover
         gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         body = gameObject.AddComponent<Rigidbody>();
         // Remove functionality that come with the primitive that we don't want
         gameObject.GetComponent<SphereCollider>().enabled = false;
         Object.Destroy(gameObject.GetComponent<SphereCollider>());
-        body.useGravity = false;
 
         // Generate random properties for this mover
         radius = Random.Range(0.2f, 0.6f);
@@ -94,23 +101,16 @@ public class Mover2_5
     public void CheckBoundaries()
     {
         Vector3 restrainedVelocity = body.velocity;
-        if (body.position.y - radius < -4.5f)
+        if (body.position.y - radius < yMin)
         {
             restrainedVelocity.y = Mathf.Abs(restrainedVelocity.y);
-        }
-        if (body.position.x - radius < -8f)
-        {
-            restrainedVelocity.x = Mathf.Abs(restrainedVelocity.x);
-        }
-        else if (body.position.x + radius > 8f)
-        {
-            restrainedVelocity.x = -Mathf.Abs(restrainedVelocity.x);
         }
         body.velocity = restrainedVelocity;
     }
 
     public bool IsInside(Fluid2_5 fluid)
     {
+        // Check to see if the mover is inside the range on each axis.
         if (body.position.x > fluid.minBoundary.x &&
             body.position.x < fluid.maxBoundary.x &&
             body.position.y > fluid.minBoundary.y &&
@@ -136,6 +136,8 @@ public class Fluid2_5
     public Fluid2_5(Vector3 corner1, Vector3 corner2, float dragCoefficient, Material material)
     {
         // Get the minimum and maximum corners of the rectangular prism
+        // This code allows the designer to place the volume corners at
+        // any of the eight possible diagonals of a rectangular prism.
         minBoundary = new Vector3(
             Mathf.Min(corner1.x, corner2.x),
             Mathf.Min(corner1.y, corner2.y),
@@ -162,6 +164,4 @@ public class Fluid2_5
             Mathf.Abs(corner2.z - corner1.z)
         );
     }
-
-
 }
