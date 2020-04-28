@@ -18,15 +18,17 @@ public class Chapter2Fig3 : MonoBehaviour
     void Start()
     {
         // Create copys of our mover and add them to our list
-        while(Movers.Count < 30)
+        while (Movers.Count < 30)
         {
+
             Movers.Add(new Mover2_3(
-                moverSpawnTransform.position,
-                leftWallX,
-                rightWallX,
-                floorY
-            ));
+                        moverSpawnTransform.position,
+                        leftWallX,
+                        rightWallX,
+                        floorY
+                    ));
         }
+
     }
 
     // Update is called once per frame
