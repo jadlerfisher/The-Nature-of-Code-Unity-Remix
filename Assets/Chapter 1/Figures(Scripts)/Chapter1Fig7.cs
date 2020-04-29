@@ -5,13 +5,13 @@ using UnityEngine;
 public class Chapter1Fig7 : MonoBehaviour
 {
     // Declare a mover object
-    private Mover mover;
+    private Mover1_7 mover;
 
     // Start is called before the first frame update
     void Start()
     {
         // Create a Mover object
-        mover = new Mover();
+        mover = new Mover1_7();
     }
 
     // Update is called once per frame forever and ever (until you quit).
@@ -22,7 +22,7 @@ public class Chapter1Fig7 : MonoBehaviour
     }
 }
 
-public class Mover
+public class Mover1_7
 {
     // The basic properties of a mover class
     private Vector2 location, velocity;
@@ -33,7 +33,7 @@ public class Mover
     // Gives the class a GameObject to draw on the screen
     private GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-    public Mover()
+    public Mover1_7()
     {
         findWindowLimits();
         location = new Vector2(Random.Range(minimumPos.x, maximumPos.x), Random.Range(minimumPos.y, maximumPos.y));

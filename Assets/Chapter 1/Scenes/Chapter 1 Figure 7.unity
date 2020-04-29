@@ -246,7 +246,7 @@ Camera:
   m_GameObject: {fileID: 398476401}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -263,7 +263,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -323,7 +323,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 747df80f03634e940b2ba8b39a1a4924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Mover: {fileID: 2968330397991671393, guid: 4e0b7e6da97a7ab499808ae5bdc978d4, type: 3}
 --- !u!4 &1206234809
 Transform:
   m_ObjectHideFlags: 0
