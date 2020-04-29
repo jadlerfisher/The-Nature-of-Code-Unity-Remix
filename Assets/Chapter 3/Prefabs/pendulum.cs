@@ -29,6 +29,9 @@ public class Pendulum : MonoBehaviour
         GameObject newObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         newObject.GetComponent<SphereCollider>().enabled = false;
         Destroy(newObject.GetComponent<SphereCollider>());
+        // Support for WebGL
+        Renderer r = newObject.GetComponent<Renderer>();
+        r.material = new Material(Shader.Find("Diffuse"));
         bobTransform = newObject.transform;
     }
 
