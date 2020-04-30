@@ -68,7 +68,7 @@ public class Mover1_9
 
 
         // Updates the GameObject of this movement
-        mover.transform.position = new Vector3(location.x, location.y, 0);
+        mover.transform.position = new Vector2(location.x, location.y);
     }
 
     public void CheckEdges()
@@ -97,15 +97,9 @@ public class Mover1_9
 
         // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
-        // We now find the Width and Height of the camera screen
-        float width = Camera.main.pixelWidth;
-        float height = Camera.main.pixelHeight;
         // Next we grab the minimum and maximum position for the screen
-        Vector3 minimumPosition = Camera.main.ScreenToWorldPoint(Vector3.zero);
-        Vector3 maximumPosition = Camera.main.ScreenToWorldPoint(new Vector3(width, height, 0));
-        // We can now properly assign the Min and Max for out scene
-        minimumPos = new Vector2(minimumPosition.x, minimumPosition.y);
-        maximumPos = new Vector2(maximumPosition.x, maximumPosition.y);
+        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
 
