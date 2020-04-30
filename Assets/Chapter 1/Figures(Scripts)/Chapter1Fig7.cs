@@ -33,11 +33,15 @@ public class Mover1_7
     // Gives the class a GameObject to draw on the screen
     private GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
+
     public Mover1_7()
     {
         findWindowLimits();
         location = new Vector2(Random.Range(minimumPos.x, maximumPos.x), Random.Range(minimumPos.y, maximumPos.y));
         velocity = new Vector2(Random.Range(-2, 2), Random.Range(-2, 2));
+        //We need to create a new material for WebGL
+        Renderer r = mover.GetComponent<Renderer>();
+        r.material = new Material(Shader.Find("Diffuse"));
     }
 
     public void Update()

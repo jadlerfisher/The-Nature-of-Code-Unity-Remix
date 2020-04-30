@@ -12,8 +12,8 @@ public class Chapter1Fig5 : MonoBehaviour
     public GameObject cursorSphere;
 
     // Create variables for rendering the line between two vectors
-    private LineRenderer lineRenderer;
-    private LineRenderer magLineRenderer;
+    private LineRenderer lineRender;
+    private LineRenderer magLineRender;
 
     // Start is called before the first frame update
     void Start()
@@ -22,8 +22,12 @@ public class Chapter1Fig5 : MonoBehaviour
         // object cannot accept more than one of this component
         GameObject newA = new GameObject();
         GameObject newB = new GameObject();
-        lineRenderer = newA.AddComponent<LineRenderer>();
-        magLineRenderer = newB.AddComponent<LineRenderer>();
+        lineRender = newA.AddComponent<LineRenderer>();
+        magLineRender = newB.AddComponent<LineRenderer>();
+        //We need to create a new material for WebGL
+        lineRender.material = new Material(Shader.Find("Diffuse"));
+        //We need to create a new material for WebGL
+        magLineRender.material = new Material(Shader.Find("Diffuse"));
     }
 
     // Update is called once per frame
@@ -40,14 +44,14 @@ public class Chapter1Fig5 : MonoBehaviour
         float magnitude = magnitudeOf(differenceVector);
 
         // Render the line between the spheres directly 
-        lineRenderer.SetPosition(0, centerPos);
-        lineRenderer.SetPosition(1, mousePos);
+        lineRender.SetPosition(0, centerPos);
+        lineRender.SetPosition(1, mousePos);
 
         // Render a bar in the top left of the screen with the same length as the vector
         Vector2 cameraTopLeft = camera.ScreenToWorldPoint(new Vector2(0, Screen.height));
-        magLineRenderer.SetPosition(0, cameraTopLeft);
+        magLineRender.SetPosition(0, cameraTopLeft);
         // Use of Unity's built in Vector2 operators:
-        magLineRenderer.SetPosition(1, cameraTopLeft + magnitude * Vector2.right);
+        magLineRender.SetPosition(1, cameraTopLeft + magnitude * Vector2.right);
     }
 
     // This method finds the length of a vector using pythagoras theorem

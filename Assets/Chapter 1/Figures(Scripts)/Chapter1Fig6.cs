@@ -12,13 +12,15 @@ public class Chapter1Fig6 : MonoBehaviour
     public GameObject cursorSphere;
 
     // Create variables for rendering the line between two vectors
-    private LineRenderer lineRenderer;
+    private LineRenderer lineRender;
 
     // Start is called before the first frame update
     void Start()
     {
         // Create the line renderer component on this script's GameObject
-        lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRender = gameObject.AddComponent<LineRenderer>();
+        //We need to create a new material for WebGL
+        lineRender.material = new Material(Shader.Find("Diffuse"));
     }
 
     // Update is called once per frame
@@ -35,8 +37,8 @@ public class Chapter1Fig6 : MonoBehaviour
 
         cursorSphere.transform.position = unitVector;
         // Render the line between the spheres directly 
-        lineRenderer.SetPosition(0, centerPos);
-        lineRenderer.SetPosition(1, unitVector);
+        lineRender.SetPosition(0, centerPos);
+        lineRender.SetPosition(1, unitVector);
     }
 
     // This method scales the length(magnitude) of a vector to be 1

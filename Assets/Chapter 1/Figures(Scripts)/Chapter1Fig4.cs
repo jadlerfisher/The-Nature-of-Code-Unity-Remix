@@ -19,6 +19,8 @@ public class Chapter1Fig4 : MonoBehaviour
     {
         // Add the Unity Component "LineRenderer" to the GameObject this script is attached to
         lineRender = gameObject.AddComponent<LineRenderer>();
+        //We need to create a new material for WebGL
+        lineRender.material = new Material(Shader.Find("Diffuse"));
     }
 
     // Update is called once per frame
@@ -41,7 +43,6 @@ public class Chapter1Fig4 : MonoBehaviour
         // Make sure the end of the line (1) appears at the new Vector3 we are creating
         lineRender.SetPosition(0, centerSphere.transform.position);
         lineRender.SetPosition(1, scaledMousePos);
-
         // Move the cursor to that same Vector3 we created
         cursorSphere.transform.position = scaledMousePos;
     }

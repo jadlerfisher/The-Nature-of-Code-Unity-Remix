@@ -48,6 +48,10 @@ public class Mover_10
         velocity = Vector2.zero;
         acceleration = new Vector2(-0.1F, -1F);
         topSpeed = 2;
+
+        //We need to create a new material for WebGL
+        Renderer r = mover.GetComponent<Renderer>();
+        r.material = new Material(Shader.Find("Diffuse"));
     }
 
     public void Update()

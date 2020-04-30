@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Chapter1Fig1 : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class Chapter1Fig1 : MonoBehaviour
 
     // A Variable to represent our mover in the scene
     private GameObject mover;
+
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +36,9 @@ public class Chapter1Fig1 : MonoBehaviour
 
         // We now can set the mover as a primitive sphere in unity
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-
+        //We need to create a new material for WebGL
+        Renderer r = mover.GetComponent<Renderer>();
+        r.material = new Material(Shader.Find("Diffuse"));
     }
 
     // Update is called once per frame forever and ever (until you quit).

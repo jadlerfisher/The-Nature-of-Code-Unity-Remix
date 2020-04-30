@@ -27,7 +27,9 @@ public class Chapter1Fig2 : MonoBehaviour
 
         // We now can set the mover as a primitive sphere in unity
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-
+        //We need to create a new material for WebGL
+        Renderer r = mover.GetComponent<Renderer>();
+        r.material = new Material(Shader.Find("Diffuse"));
     }
 
     // Update is called once per frame forever and ever (until you quit).
