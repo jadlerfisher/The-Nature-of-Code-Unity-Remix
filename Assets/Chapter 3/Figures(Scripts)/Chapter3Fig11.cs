@@ -4,62 +4,112 @@ using UnityEngine;
 
 public class Chapter3Fig11 : MonoBehaviour
 {
-
-    float k = 0.1f;
-    float restLength;
-
-    public GameObject bob;
-    public GameObject anchor;
-
-    float springLength = 5f;
-
-    Vector3 acceleration = new Vector3(0f, 0f, 0f);
-    float mass = 10f;
-
-    //Create variables for rendering the line between two vectors
-    private GameObject lineDrawing;
-    private LineRenderer lineRender;
+    // Get spring values from the inspector
+    public float springConstantK = 3.5f;
+    public float restLength = 3f;
+    public Transform anchorTransform;
+    public Rigidbody bobBody;
 
     // Start is called before the first frame update
     void Start()
     {
-        // Create a GameObject that will be the line
-        lineDrawing = new GameObject();
+        // Add a new spring at the start of runtime
+        Spring3_11 spring = gameObject.AddComponent<Spring3_11>();
+        spring.anchor = anchorTransform;
+        spring.connectedBody = bobBody;
+        spring.restLength = restLength;
+        spring.springConstantK = springConstantK;
 
-        //Add the Unity Component "LineRenderer" to the GameObject lineDrawing. We will see a bright pink line.
-        lineRender = lineDrawing.AddComponent<LineRenderer>();
+        // Add the click-drag behavior
+        ClickDragBody3_11 mouseDrag = bobBody.gameObject.AddComponent<ClickDragBody3_11>();
+        mouseDrag.body = bobBody;
+        mouseDrag.radius = 1;
+    }
+}
 
+public class Spring3_11 : MonoBehaviour
+{
+    // Properties that need to be assigned by the inspector or other scripts
+    public Transform anchor;
+    public Rigidbody connectedBody;
+    public float restLength = 1;
+    public float springConstantK = 0.1f;
+
+    LineRenderer lineRenderer;
+
+    void Start()
+    {
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.widthMultiplier = 0.5f;
     }
 
-    // Update is called once per frame
+    void FixedUpdate()
+    {
+        // Get the difference Vector3 between the anchor and the body
+        Vector3 force = connectedBody.position - anchor.position;
+
+        float currentLength = force.magnitude;
+        float stretchLength = currentLength - restLength;
+
+        // Reverse the direction of the force arrow and set its length
+        // based on the spring constant and stretch
+        force = -force.normalized * springConstantK * stretchLength;
+
+        // Apply the force to the connected body relative to time
+        connectedBody.AddForce(force * Time.fixedDeltaTime, ForceMode.Impulse);
+        // Draw the line along the spring
+        lineRenderer.SetPosition(0, anchor.position);
+        lineRenderer.SetPosition(1, connectedBody.position);
+    }
+}
+
+public class ClickDragBody3_11 : MonoBehaviour
+{
+    public Rigidbody body;
+    public float radius;
+
+    bool isDragging = false;
+    Material defaultMaterial;
+    Material mouseOverMaterial;
+    Renderer bodyRenderer;
+
+    void Start()
+    {
+        bodyRenderer = body.gameObject.GetComponent<Renderer>();
+        defaultMaterial = bodyRenderer.material;
+        // WebGL Support
+        mouseOverMaterial = new Material(Shader.Find("Diffuse"));
+        mouseOverMaterial.color = Color.green;
+    }
+
     void Update()
     {
+        Vector2 mouseLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        connect(bob);
-        lineRender.SetPosition(0, anchor.transform.position);
-        lineRender.SetPosition(1, bob.transform.position);
-    }
-
-    public void connect (GameObject bob)
-    {
-        Vector3 force = bob.transform.position - anchor.transform.position;
-        float d = force.magnitude;
-        float stretch = d - springLength;
-
-        Vector3.Normalize(force);
-        force *= (-1 * k * stretch);
-        applyForce(force);
-
-
-    }
-
-
-    //Newton's second law
-    //Receive a force, divide by mass, and add to acceleration
-    public void applyForce(Vector3 force)
-    {
-        Vector3 f = force / mass;
-        acceleration = acceleration + f;
-        bob.transform.position += acceleration;
+        if(isDragging)
+        {
+            body.position = mouseLocation;
+            if(Input.GetMouseButtonUp(0))
+            {
+                body.position = mouseLocation;
+                body.velocity = Vector3.zero;
+                isDragging = false;
+            }
+        }
+        else
+        {
+            if(Vector2.Distance(mouseLocation, body.position) < radius)
+            {
+                if(Input.GetMouseButtonDown(0))
+                {
+                    isDragging = true;
+                }
+                bodyRenderer.material = mouseOverMaterial;
+            }
+            else
+            {
+                bodyRenderer.material = defaultMaterial;
+            }
+        }
     }
 }
