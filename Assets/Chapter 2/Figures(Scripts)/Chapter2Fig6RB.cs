@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Chapter2Fig6RB : MonoBehaviour
 {
-    Mover m;
+    Mover m; // A Mover and an Attractor
     Attractor a;
 
     // Start is called before the first frame update
@@ -17,7 +17,7 @@ public class Chapter2Fig6RB : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 force = a.Attract(m);
+        Vector2 force = a.Attract(m); // Apply the attraction from the Attractor on the Mover
         m.ApplyForce(force);
         m.Update();
         a.Update();
@@ -48,6 +48,8 @@ public class Attractor
     public Vector2 Attract(Mover m) {
         Vector2 force = location - m.location;
         float distance = force.magnitude;
+
+        // Remember we need to constrain the distance so that our circle doesn't spin out of control
         distance = Mathf.Clamp(distance, 5f, 25f);
 
         force.Normalize();
@@ -79,8 +81,8 @@ public class Mover
         renderer.material.color = Color.white;
 
         mass = 1;
-        location = new Vector2(8, 0);
-        velocity = new Vector2(0, -5);
+        location = new Vector2(5, 0); // Default location
+        velocity = new Vector2(0, -4); // The extra velocity makes the mover orbit
         acceleration = Vector2.zero;
         findWindowLimits();
     }
