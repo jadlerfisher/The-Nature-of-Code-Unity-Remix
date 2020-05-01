@@ -4,45 +4,117 @@ using UnityEngine;
 
 public class Chapter2Fig2 : MonoBehaviour
 {
-    public List<GameObject> Movers = new List<GameObject>();
-    public GameObject Mover;
-    public int amountMovers;
+    // Geometry defined in the inspector.
+    public float floorY;
+    public float leftWallX;
+    public float rightWallX;
+    public Transform moverSpawnTransform;
 
-    private Vector3 wind;
-    private Vector3 gravity;
+    private List<Mover2_2> Movers = new List<Mover2_2>();
+    // Define constant forces in our environment
+    private Vector3 wind = new Vector3(0.004f, 0f, 0f);
+    private Vector3 gravity = new Vector3(0, -0.01f, 0f);
 
     // Start is called before the first frame update
     void Start()
     {
-        gravity = new Vector3(0f, 0.0001f, 0f);
-        wind = new Vector3(0.00001f, 0f, 0f);
-
-        // We need to instantiate our Little Movers before we can put them in a List. 
-        for (int i = 0; i < amountMovers; i++)
+        // Create copys of our mover and add them to our list
+        while (Movers.Count < 30)
         {
-            Mover = Instantiate(Mover);
-            Mover.GetComponent<moverChapter2>().location = new Vector3 (Random.Range(-5f,5f), Random.Range(0f,1f), 0f);
-            Movers.Add(Mover);  
 
-        }
-
-        //Now let us alter the mass of each based on its location
-        foreach(GameObject mover in Movers)
-        {
-            mover.GetComponent<moverChapter2>().alterMass();
+            Movers.Add(new Mover2_2(
+                        moverSpawnTransform.position,
+                        leftWallX,
+                        rightWallX,
+                        floorY
+                    ));
         }
 
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-
-        //Apply the forces to each of the GameObjects
-        for (int i = 0; i < Movers.Count; i++)
+        // Apply the forces to each of the Movers
+        foreach (Mover2_2 mover in Movers)
         {
-            Movers[i].GetComponent<moverChapter2>().applyForce(wind);
-            Movers[i].GetComponent<moverChapter2>().applyForce(gravity);
+            // ForceMode.Impulse takes mass into account
+            mover.body.AddForce(wind, ForceMode.Impulse);
+            mover.body.AddForce(gravity, ForceMode.Impulse);
+
+            mover.CheckBoundaries();
         }
+    }
+}
+
+public class Mover2_2
+{
+    public Rigidbody body;
+    private GameObject gameObject;
+    private float radius;
+
+    private float xMin;
+    private float xMax;
+    private float yMin;
+
+    public Mover2_2(Vector3 position, float xMin, float xMax, float yMin)
+    {
+        this.xMin = xMin;
+        this.xMax = xMax;
+        this.yMin = yMin;
+
+        // Create the components required for the mover
+        gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        body = gameObject.AddComponent<Rigidbody>();
+        // Remove functionality that come with the primitive that we don't want
+        gameObject.GetComponent<SphereCollider>().enabled = false;
+        Object.Destroy(gameObject.GetComponent<SphereCollider>());
+        
+        //using our own version of gravity
+        body.useGravity = false;
+
+        // Generate random properties for this mover
+        radius = Random.Range(0.1f, 0.4f);
+
+        // Place our mover at the specified spawn position relative
+        // to the bottom of the sphere
+        gameObject.transform.position = position + Vector3.up * radius;
+
+        // The default diameter of the sphere is one unit
+        // This means we have to multiple the radius by two when scaling it up
+        gameObject.transform.localScale = 2 * radius * Vector3.one;
+
+        // We need to calculate the mass of the sphere.
+        // Assuming the sphere is of even density throughout,
+        // the mass will be proportional to the volume.
+        body.mass = (4f / 3f) * Mathf.PI * radius * radius * radius;
+    }
+
+    // Checks to ensure the body stays within the boundaries
+    public void CheckBoundaries()
+    {
+        Vector3 restrainedVelocity = body.velocity;
+        if (body.position.y - radius < yMin)
+        {
+            // Using the absolute value here is an important safe
+            // guard for the scenario that it takes multiple ticks
+            // of FixedUpdate for the mover to return to its boundaries.
+            // The intuitive solution of flipping the velocity may result
+            // in the mover not returning to the boundaries and flipping
+            // direction on every tick.
+            restrainedVelocity.y = Mathf.Abs(restrainedVelocity.y);
+        }
+        if (body.position.x - radius < xMin)
+        {
+            restrainedVelocity.x = Mathf.Abs(restrainedVelocity.x);
+        }
+        else if (body.position.x + radius > xMax)
+        {
+            restrainedVelocity.x = -Mathf.Abs(restrainedVelocity.x);
+
+            Debug.Log("hello" + restrainedVelocity);
+
+        }
+        body.velocity = restrainedVelocity;
     }
 }
