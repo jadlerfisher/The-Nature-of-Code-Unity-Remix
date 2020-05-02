@@ -23,6 +23,8 @@ public class Chapter3Fig4 : MonoBehaviour
 
         //Add the Unity Component "LineRenderer" to the GameObject lineDrawing. We will see a bright pink line.
         lineRender = lineDrawing.AddComponent<LineRenderer>();
+        //We need to create a new material for WebGL
+        lineRender.material = new Material(Shader.Find("Diffuse"));
     }
 
     // Update is called once per frame

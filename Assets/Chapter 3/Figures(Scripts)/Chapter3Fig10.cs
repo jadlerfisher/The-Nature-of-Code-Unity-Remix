@@ -24,5 +24,7 @@ public class Chapter3Fig10 : MonoBehaviour
         pendulum.radius = radius;
         // Adjust the angle since 0 degrees should point down, not up
         pendulum.angle = (180 - startingAngleDegrees) * Mathf.Deg2Rad;
+
+
     }
 }

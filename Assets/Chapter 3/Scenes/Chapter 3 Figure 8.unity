@@ -149,12 +149,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8592d1c176e558544b825555b7eb7360, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angle: 0
-  angleVel: 0.2
+  waveSpeed: 5
+  period: 10
+  amplitude: 10
   waverPrefab: {fileID: 2174462357296961444, guid: 19945421656e96144a7fc710985c843d,
     type: 3}
-  amountWavers: 91
-  TheWave: []
+  amountWavers: 200
 --- !u!4 &241808473
 Transform:
   m_ObjectHideFlags: 0
@@ -310,10 +310,10 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 20
   field of view: 60
   orthographic: 1
-  orthographic size: 60
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -337,7 +337,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1942339739}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 41.66, y: 49.8, z: -200}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

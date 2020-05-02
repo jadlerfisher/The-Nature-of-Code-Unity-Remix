@@ -25,6 +25,7 @@ public class Pendulum : MonoBehaviour
 
         // Add the Unity Component "LineRenderer" to the GameObject lineDrawing. We will see a bright pink line.
         lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.material = new Material(Shader.Find("Diffuse"));
         // Create a sphere for the bob of the pendulum
         GameObject newObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         newObject.GetComponent<SphereCollider>().enabled = false;

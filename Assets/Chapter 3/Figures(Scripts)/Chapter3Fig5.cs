@@ -25,6 +25,8 @@ public class Chapter3Fig5 : MonoBehaviour
 
         //Add the Unity Component "LineRenderer" to the GameObject lineDrawing. We will see a bright pink line.
         lineRender = lineDrawing.AddComponent<LineRenderer>();
+        //We need to create a new material for WebGL
+        lineRender.material = new Material(Shader.Find("Diffuse"));
         lineRender.GetComponent<LineRenderer>().startWidth = 0.1f;
         lineRender.GetComponent<LineRenderer>().endWidth = 0.1f;
     }
@@ -33,15 +35,11 @@ public class Chapter3Fig5 : MonoBehaviour
     void Update()
     {
         float x = amplitude * Mathf.Cos((2*Mathf.PI)* Time.time/period);
-
         sphere.transform.position = new Vector2(x, 0f);
-
-
         //Begin rendering the line between the two objects. Set the first point (0) at the centerSphere Position
         //Make sure the end of the line (1) appears at the new Vector3
         Vector2 center = Vector2.zero;
         lineRender.SetPosition(0, center);
         lineRender.SetPosition(1, sphere.transform.position);
-
     }
 }
