@@ -49,20 +49,12 @@ public class Chapter3Fig9 : MonoBehaviour
             currentAngle += 1 / period;
 
             // Remap the sin function so that y(-1, 1) corresponds to y(bottom, top)
-            float currentY = map(
-                Mathf.Sin(currentAngle) * amplitude,
-                -1, 1,
-                bottom, top
-            );
+
+            float currentY =  Mathf.Lerp(bottom, top, Mathf.InverseLerp(-1f, 1f, Mathf.Sin(currentAngle)));
 
             waveT.position = new Vector2(currentX, currentY);
             // Step along the screen width such that every waver is on screen
             currentX += (right - left) / amountWavers;
         }
-    }
-
-    public float map(float value, float from1, float to1, float from2, float to2)
-    {
-        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 }
