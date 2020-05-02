@@ -40,6 +40,7 @@ public class Spring3_11 : MonoBehaviour
     void Start()
     {
         lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.material = new Material(Shader.Find("Diffuse"));
         lineRenderer.widthMultiplier = 0.5f;
     }
 
