@@ -27,13 +27,13 @@ public class Pendulum : MonoBehaviour
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Diffuse"));
         // Create a sphere for the bob of the pendulum
-        GameObject newObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        newObject.GetComponent<SphereCollider>().enabled = false;
-        Destroy(newObject.GetComponent<SphereCollider>());
+        GameObject pendulumBob = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        pendulumBob.GetComponent<SphereCollider>().enabled = false;
+        Destroy(pendulumBob.GetComponent<SphereCollider>());
         // Support for WebGL
-        Renderer r = newObject.GetComponent<Renderer>();
+        Renderer r = pendulumBob.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
-        bobTransform = newObject.transform;
+        bobTransform = pendulumBob.transform;
     }
 
     // Update is called once per frame
