@@ -26,13 +26,13 @@ public class Pendulum : MonoBehaviour
         // Add the Unity Component "LineRenderer" to the GameObject lineDrawing. We will see a bright pink line.
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         // Create a sphere for the bob of the pendulum
-        GameObject newObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        newObject.GetComponent<SphereCollider>().enabled = false;
-        Destroy(newObject.GetComponent<SphereCollider>());
+        GameObject pendulumBob = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        pendulumBob.GetComponent<SphereCollider>().enabled = false;
+        Destroy(pendulumBob.GetComponent<SphereCollider>());
         // Support for WebGL
-        Renderer r = newObject.GetComponent<Renderer>();
+        Renderer r = pendulumBob.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
-        bobTransform = newObject.transform;
+        bobTransform = pendulumBob.transform;
     }
 
     // Update is called once per frame
