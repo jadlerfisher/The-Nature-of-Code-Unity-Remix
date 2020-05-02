@@ -4,37 +4,117 @@ using UnityEngine;
 
 public class Chapter3Fig3 : MonoBehaviour
 {
-    public GameObject Mover;
+    Mover mover;
     //Mouse coordinates
-    Vector3 mousePosition;
-    moverChapter3_3 LM;
-    Vector3 fixedMousePositionVector;
+    Vector2 inWorldMousePosition;
+
+    float turnSpeed = 10f;
+    float moveSpeed = 10f;
 
     // Start is called before the first frame update
     void Start()
     {
-        Mover = Instantiate(Mover);
-        LM = Mover.GetComponent<moverChapter3_3>();
+        mover = new Mover();
+        inWorldMousePosition = Vector2.zero;
     }
 
     // Update is called once per frame
     void Update()
     {
-        fixedMousePosition();
+        
+        inWorldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        float gotoX = inWorldMousePosition.x - mover.location.x;
+        float gotoY = inWorldMousePosition.y - mover.location.y;
+
+        float angle = Mathf.Atan2(gotoX, gotoY);
+
+        mover.Translate(moveSpeed);
+        mover.Rotate(angle, turnSpeed);
+        mover.Update();
+    }
+}
+
+public class Mover
+{
+    // The basic properties of a mover class
+    public Vector2 location, velocity, acceleration;
+    public float mass;
+
+    private Vector2 minimumPos, maximumPos;
+
+    private GameObject mover;
+
+    public Mover()
+    {
+        mover = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        Renderer renderer = mover.GetComponent<Renderer>();
+        renderer.material = new Material(Shader.Find("Diffuse"));
+        renderer.material.color = Color.black;
+
+        mover.transform.localScale = new Vector3(0.5f, 1, 0.5f);
+
+        mass = 1;
+        location = Vector2.zero;
+        velocity = Vector2.zero;
+        acceleration = Vector2.zero;
+        findWindowLimits();
     }
 
-    // Since we are going to be following the mouse, we need to make the coordinates we receive from our vector are independent of our screen resolution. For example, on a 5K monitor, that mouse is moving across thousands of more pixels than a 2K monitor.
-
-    void fixedMousePosition()
+    public void Translate(float speed)
     {
-        Vector3 pos = Camera.main.WorldToScreenPoint(Mover.transform.position);
-        Vector3 dir = Input.mousePosition;
-        Vector3 needlessDir = dir - pos;
-        //Because the mouse position is in 2D spac 
-        LM.angleFloat = Mathf.Atan2(needlessDir.y, needlessDir.x) * Mathf.Rad2Deg;
+        velocity = (Vector2) mover.transform.up * speed;
+    }
 
-        Vector3 dirMove = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        LM.subtractVector(dirMove*10, LM.location);
+    public void Rotate(float radiansAngle, float turnSpeed) {
+        float eularAngle = (-radiansAngle * Mathf.Rad2Deg) + 180;
+        float toSpin = eularAngle - ((mover.transform.eulerAngles.z + 180) % 360);
+        if (toSpin > 180 || toSpin < -180) {
+            toSpin %= 180;
+            toSpin *= -1;
+        }
+        
+        toSpin = Mathf.Clamp(toSpin, -turnSpeed, turnSpeed);
+        mover.transform.Rotate(new Vector3(0, 0, toSpin));
+    }
 
+    public void Update()
+    {
+        velocity += acceleration * Time.deltaTime;
+        location += velocity * Time.deltaTime;
+
+        acceleration = Vector2.zero;
+
+
+        mover.transform.position = location;
+        CheckEdges();
+    }
+
+    public void CheckEdges()
+    {
+        if (location.x > maximumPos.x)
+        {
+            location.x = minimumPos.x;
+        }
+        else if(location.x < minimumPos.x)
+        {
+            location.x = maximumPos.x;
+        }
+        if (location.y > maximumPos.y)
+        {
+            location.y = minimumPos.y;
+        } 
+        else if (location.y < minimumPos.y) 
+        {
+            location.y = maximumPos.y;
+        }
+    }
+
+    private void findWindowLimits()
+    {
+        Camera.main.orthographic = true;
+        Camera.main.orthographicSize = 8;
+        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
