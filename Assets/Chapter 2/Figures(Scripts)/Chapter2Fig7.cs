@@ -13,19 +13,18 @@ public class Chapter2Fig7 : MonoBehaviour
         int numberOfMovers = 10;
         for (int i = 0; i < numberOfMovers; i++) {
             Vector2 randomLocation = new Vector2(Random.Range(-7f, 7f), Random.Range(-7f, 7f));
-            Mover m = new Mover(Random.Range(0.2f, 2f), Random.Range(1f,5f), randomLocation); //Each Mover is initialized randomly.
+            Vector2 randomVelocity = new Vector2(Random.Range(0f, 5f), Random.Range(0f, 5f));
+            Mover m = new Mover(Random.Range(0.2f, 1f), randomVelocity, randomLocation); //Each Mover is initialized randomly.
             movers.Add(m);
         }
         a = new Attractor();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         foreach (Mover m in movers) {
             Vector2 force = a.Attract(m); // Apply the attraction from the Attractor on each Mover object
-
-            Debug.Log(force);
 
             m.ApplyForce(force);
             m.Update();
@@ -45,6 +44,7 @@ public class Attractor
     public Attractor()
     {
         attractor = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        GameObject.Destroy(attractor.GetComponent<SphereCollider>());
         Renderer renderer = attractor.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Diffuse"));
         renderer.material.color = Color.red;
@@ -57,14 +57,14 @@ public class Attractor
 
     public Vector2 Attract(Mover m)
     {
-        Vector2 force = location - m.location;
+        Vector2 force = location - (Vector2)m.transform.position;
         float distance = force.magnitude;
 
         // Remember we need to constrain the distance so that our circle doesn't spin out of control
         distance = Mathf.Clamp(distance, 5f, 25f);
 
         force.Normalize();
-        float strength = (G * mass * m.mass) / (distance * distance);
+        float strength = (G * mass * m.rigidbody.mass) / (distance * distance);
         force *= strength;
         return force;
     }
@@ -73,55 +73,54 @@ public class Attractor
 public class Mover
 {
     // The basic properties of a mover class
-    public Vector2 location, velocity, acceleration;
-    public float mass;
+    public Transform transform;
+    public Rigidbody rigidbody;
 
     private Vector2 minimumPos, maximumPos;
 
     private GameObject mover;
 
-    public Mover(float randomMass, float initialVelocity, Vector2 initialPosition)
+    public Mover(float randomMass, Vector2 initialVelocity, Vector2 initialPosition)
     {
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        GameObject.Destroy(mover.GetComponent<SphereCollider>());
+        transform = mover.transform;
+        mover.AddComponent<Rigidbody>();
+        rigidbody = mover.GetComponent<Rigidbody>();
+        rigidbody.useGravity = false;
         Renderer renderer = mover.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Transparent/Diffuse"));
         renderer.material.color = Color.white;
         mover.transform.localScale = new Vector3(randomMass, randomMass, randomMass);
 
-        mass = randomMass;
-        location = initialPosition;
-        velocity = new Vector2(0, initialVelocity);
-        acceleration = Vector2.zero;
+        rigidbody.mass = 1;
+        transform.position = initialPosition; // Default location
+        rigidbody.velocity = initialVelocity; // The extra velocity makes the mover orbit
         findWindowLimits();
     }
 
     public void ApplyForce(Vector2 force)
     {
-        Vector2 f = force / mass;
-        acceleration += f;
+        rigidbody.AddForce(force);
     }
 
     public void Update()
     {
-        velocity += acceleration * Time.deltaTime;
-        location += velocity * Time.deltaTime;
-
-        acceleration = Vector2.zero;
-
-        mover.transform.position = location;
         CheckEdges();
     }
 
     public void CheckEdges()
     {
-        if (location.x > maximumPos.x || location.x < minimumPos.x)
+        Vector2 velocity = rigidbody.velocity;
+        if (transform.position.x > maximumPos.x || transform.position.x < minimumPos.x)
         {
             velocity.x *= -1;
         }
-        if (location.y > maximumPos.y || location.y < minimumPos.y)
+        if (transform.position.y > maximumPos.y || transform.position.y < minimumPos.y)
         {
             velocity.y *= -1;
         }
+        rigidbody.velocity = velocity;
     }
 
     private void findWindowLimits()
