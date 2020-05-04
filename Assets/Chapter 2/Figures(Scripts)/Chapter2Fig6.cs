@@ -15,7 +15,7 @@ public class Chapter2Fig6 : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Vector2 force = a.Attract(m); // Apply the attraction from the Attractor on the Mover
         m.ApplyForce(force);
@@ -23,6 +23,7 @@ public class Chapter2Fig6 : MonoBehaviour
         a.Update();
     }
 }
+
 
 
 public class Attractor
@@ -47,14 +48,14 @@ public class Attractor
 
     public Vector2 Attract(Mover m)
     {
-        Vector2 force = location - m.location;
+        Vector2 force = location - (Vector2)m.transform.position;
         float distance = force.magnitude;
 
         // Remember we need to constrain the distance so that our circle doesn't spin out of control
         distance = Mathf.Clamp(distance, 5f, 25f);
 
         force.Normalize();
-        float strength = (G * mass * m.mass) / (distance * distance);
+        float strength = (G * mass * m.rigidbody.mass) / (distance * distance);
         force *= strength;
         return force;
     }
@@ -65,11 +66,13 @@ public class Attractor
     }
 }
 
+
+
 public class Mover
 {
     // The basic properties of a mover class
-    public Vector2 location, velocity, acceleration;
-    public float mass;
+    public Transform transform;
+    public Rigidbody rigidbody;
 
     private Vector2 minimumPos, maximumPos;
 
@@ -78,44 +81,42 @@ public class Mover
     public Mover()
     {
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        transform = mover.transform;
+        mover.AddComponent<Rigidbody>();
+        rigidbody = mover.GetComponent<Rigidbody>();
+        rigidbody.useGravity = false;
         Renderer renderer = mover.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Diffuse"));
         renderer.material.color = Color.white;
 
-        mass = 1;
-        location = new Vector2(5, 0); // Default location
-        velocity = new Vector2(0, -4); // The extra velocity makes the mover orbit
-        acceleration = Vector2.zero;
+        rigidbody.mass = 1;
+        transform.position = new Vector2(5, 0); // Default location
+        rigidbody.velocity = new Vector2(0, -4); // The extra velocity makes the mover orbit
         findWindowLimits();
     }
 
     public void ApplyForce(Vector2 force)
     {
-        Vector2 f = force / mass;
-        acceleration += f;
+        rigidbody.AddForce(force);
     }
 
     public void Update()
     {
-        velocity += acceleration * Time.deltaTime;
-        location += velocity * Time.deltaTime;
-
-        acceleration = Vector2.zero;
-
-        mover.transform.position = location;
         CheckEdges();
     }
 
     public void CheckEdges()
     {
-        if (location.x > maximumPos.x || location.x < minimumPos.x)
+        Vector2 velocity = rigidbody.velocity;
+        if (transform.position.x > maximumPos.x || transform.position.x < minimumPos.x)
         {
             velocity.x *= -1;
         }
-        if (location.y > maximumPos.y || location.y < minimumPos.y)
+        if (transform.position.y > maximumPos.y || transform.position.y < minimumPos.y)
         {
             velocity.y *= -1;
         }
+        rigidbody.velocity = velocity;
     }
 
     private void findWindowLimits()
