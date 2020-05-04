@@ -89,6 +89,9 @@ public class Mover2_8
 
         // Create the components required for the mover
         gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        //We need to create a new material for WebGL
+        Renderer r = gameObject.GetComponent<Renderer>();
+        r.material = new Material(Shader.Find("Diffuse"));
         body = gameObject.AddComponent<Rigidbody>();
         // Remove functionality that come with the primitive that we don't want
         gameObject.GetComponent<SphereCollider>().enabled = false;
