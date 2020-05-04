@@ -31,6 +31,8 @@ public class Chapter3Fig4 : MonoBehaviour
         //Make the line smaller for aesthetics
         lineRender.GetComponent<LineRenderer>().startWidth = 0.1f;
         lineRender.GetComponent<LineRenderer>().endWidth = 0.1f;
+        //We need to create a new material for WebGL
+        lineRender.material = new Material(Shader.Find("Diffuse"));
     }
 
     // Update is called once per frame

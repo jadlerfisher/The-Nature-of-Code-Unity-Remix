@@ -4,38 +4,27 @@ using UnityEngine;
 
 public class Chapter3Fig10 : MonoBehaviour
 {
+    // Get the gravity strength and the pendulum from the scene
+    public float gravity;
+    public float damping;
+    public float radius;
+    public float startingAngleDegrees;
 
+    Pendulum pendulum;
 
-    public GameObject pendulumObject;
-    private pendulum pendulum;
-
-
-    float r;
-    float angle;
-    float aVelocity;
-    float aAcceleration;
-    float damping;
-
-    // Start is called before the first frame update
     void Start()
     {
-        pendulum = pendulumObject.GetComponent<pendulum>();
-        pendulum.r = 125f;
-    }
+        // Create a new instance of the Pendulum behavior
+        pendulum = gameObject.AddComponent<Pendulum>();
+        // Position the pivot for the pendulum at the top center of the camera
+        pendulum.pivot = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width / 2, Screen.height));
+        // Pass the values into the new pendulum
+        pendulum.gravity = gravity;
+        pendulum.damping = damping;
+        pendulum.radius = radius;
+        // Adjust the angle since 0 degrees should point down, not up
+        pendulum.angle = (180 - startingAngleDegrees) * Mathf.Deg2Rad;
 
-    // Update is called once per frame
-    void Update()
-    {
-
-        float gravity = 0.4f;
-        pendulum.aAcceleration = (-1*gravity/pendulum.r) * Mathf.Sin(angle);
-
-        pendulum.aVelocity += pendulum.aAcceleration;
-        pendulum.angle += pendulum.aVelocity;
-
-        pendulum.aVelocity *= pendulum.damping;
-
-        pendulum.Go();
 
     }
 }
