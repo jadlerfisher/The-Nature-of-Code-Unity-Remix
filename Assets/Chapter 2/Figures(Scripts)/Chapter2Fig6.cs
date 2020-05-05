@@ -17,7 +17,7 @@ public class Chapter2Fig6 : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Vector2 force = a.Attract(m); // Apply the attraction from the Attractor on the Mover
+        Vector2 force = a.Attract(m.body); // Apply the attraction from the Attractor on the Mover
         m.ApplyForce(force);
         m.Update();
         a.Update();
@@ -29,33 +29,38 @@ public class Chapter2Fig6 : MonoBehaviour
 public class Attractor
 {
     public float mass;
-    private Vector2 location;
+    private Vector3 location;
     private float G;
+    public Rigidbody body;
 
     private GameObject attractor;
 
     public Attractor()
     {
         attractor = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        attractor.GetComponent<SphereCollider>().enabled = false;
+
+        attractor.AddComponent<Rigidbody>();
+        body = attractor.GetComponent<Rigidbody>();
+        body.useGravity = false;
         Renderer renderer = attractor.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Diffuse"));
         renderer.material.color = Color.red;
 
-        location = Vector2.zero;
-        mass = 20f;
+        body.mass = 20f;
         G = 9.8f;
     }
 
-    public Vector2 Attract(Mover2_6 m)
+    public Vector3 Attract(Rigidbody m)
     {
-        Vector2 force = location - (Vector2)m.transform.position;
+        Vector3 force = body.position - m.position;
         float distance = force.magnitude;
 
         // Remember we need to constrain the distance so that our circle doesn't spin out of control
         distance = Mathf.Clamp(distance, 5f, 25f);
 
         force.Normalize();
-        float strength = (G * mass * m.rigidbody.mass) / (distance * distance);
+        float strength = G * (body.mass * m.mass) / (distance * distance);
         force *= strength;
         return force;
     }
@@ -72,7 +77,7 @@ public class Mover2_6
 {
     // The basic properties of a mover class
     public Transform transform;
-    public Rigidbody rigidbody;
+    public Rigidbody body;
 
     private Vector2 minimumPos, maximumPos;
 
@@ -83,21 +88,21 @@ public class Mover2_6
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         transform = mover.transform;
         mover.AddComponent<Rigidbody>();
-        rigidbody = mover.GetComponent<Rigidbody>();
-        rigidbody.useGravity = false;
+        body = mover.GetComponent<Rigidbody>();
+        body.useGravity = true;
         Renderer renderer = mover.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Diffuse"));
         renderer.material.color = Color.white;
 
-        rigidbody.mass = 1;
+        body.mass = 10;
         transform.position = new Vector2(5, 0); // Default location
-        rigidbody.velocity = new Vector2(0, -4); // The extra velocity makes the mover orbit
+        //body.velocity = new Vector2(0, -4); // The extra velocity makes the mover orbit
         findWindowLimits();
     }
 
     public void ApplyForce(Vector2 force)
     {
-        rigidbody.AddForce(force);
+        body.AddForce(force, ForceMode.Force);
     }
 
     public void Update()
@@ -107,7 +112,7 @@ public class Mover2_6
 
     public void CheckEdges()
     {
-        Vector2 velocity = rigidbody.velocity;
+        Vector2 velocity = body.velocity;
         if (transform.position.x > maximumPos.x || transform.position.x < minimumPos.x)
         {
             velocity.x *= -1;
@@ -116,13 +121,13 @@ public class Mover2_6
         {
             velocity.y *= -1;
         }
-        rigidbody.velocity = velocity;
+        body.velocity = velocity;
     }
 
     private void findWindowLimits()
     {
         Camera.main.orthographic = true;
-        Camera.main.orthographicSize = 8;
+        Camera.main.orthographicSize = 4;
         minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }

@@ -152,10 +152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42cdb85d5011a9948a7e0d326b2e2080, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Movers: []
-  Mover: {fileID: 7916325375329418980, guid: 023d6458cef9d5f49842190f760fba59, type: 3}
-  amountMovers: 30
-  a: {fileID: 506230478}
 --- !u!135 &506230480
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -224,7 +220,7 @@ Transform:
   m_GameObject: {fileID: 506230478}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 1, z: 10}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
