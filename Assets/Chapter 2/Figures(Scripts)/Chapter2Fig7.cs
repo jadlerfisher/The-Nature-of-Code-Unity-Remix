@@ -57,7 +57,7 @@ public class Attractor2_7
         attractor.transform.position = location;
     }
 
-    public Vector2 Attract(Mover m)
+    public Vector2 Attract(Mover2_7 m)
     {
         Vector2 force = location - (Vector2)m.transform.position;
         float distance = force.magnitude;
