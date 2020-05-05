@@ -94,11 +94,11 @@ public class Mover2_8
         r.material = new Material(Shader.Find("Diffuse"));
         body = gameObject.AddComponent<Rigidbody>();
         // Remove functionality that come with the primitive that we don't want
-        gameObject.GetComponent<SphereCollider>().enabled = false;
-        UnityEngine.Object.Destroy(gameObject.GetComponent<SphereCollider>());
+        //gameObject.GetComponent<SphereCollider>().enabled = false;
+        //UnityEngine.Object.Destroy(gameObject.GetComponent<SphereCollider>());
 
         // Generate random properties for this mover
-        radius = UnityEngine.Random.Range(0.1f, .5f);
+        radius = UnityEngine.Random.Range(0.1f, 1f);
 
         // Place our mover at the specified spawn position relative
         // to the bottom of the sphere
