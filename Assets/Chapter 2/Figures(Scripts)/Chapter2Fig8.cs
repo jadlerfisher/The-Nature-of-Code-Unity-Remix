@@ -94,11 +94,11 @@ public class Mover2_8
         r.material = new Material(Shader.Find("Diffuse"));
         body = gameObject.AddComponent<Rigidbody>();
         // Remove functionality that come with the primitive that we don't want
-        //gameObject.GetComponent<SphereCollider>().enabled = false;
-        //UnityEngine.Object.Destroy(gameObject.GetComponent<SphereCollider>());
+        gameObject.GetComponent<SphereCollider>().enabled = false;
+        UnityEngine.Object.Destroy(gameObject.GetComponent<SphereCollider>());
 
         // Generate random properties for this mover
-        radius = UnityEngine.Random.Range(0.1f, 1f);
+        radius = UnityEngine.Random.Range(0.1f, .4f);
 
         // Place our mover at the specified spawn position relative
         // to the bottom of the sphere
@@ -120,12 +120,15 @@ public class Mover2_8
 
     public Vector2 attract(Rigidbody m)
     {
-        Vector2 difference = m.position - body.position;
-        float dist = Mathf.Clamp(difference.magnitude, 10f, 25f);
-        Vector3 gravityDirection = difference.normalized;
-        float gravity = -9.81f * (m.mass * body.mass) / (dist * dist);
-        Vector2 gravityVector = (gravityDirection * gravity);
-        return gravityVector;
+        Vector2 difference = body.position - m.position;
+        float dist = difference.magnitude;
+        dist = Mathf.Clamp(dist, 10f, 25f);
+
+        difference.Normalize();
+        float gravity = (9.81f * m.mass * body.mass) / (dist * dist);
+        difference *= gravity;
+        return difference;
+
     }
 
     //Checks to ensure the body stays within the boundaries

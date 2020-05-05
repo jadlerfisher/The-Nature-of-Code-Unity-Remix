@@ -103,7 +103,7 @@ public class Mover2_7
 
     public void ApplyForce(Vector2 force)
     {
-        rigidbody.AddForce(force);
+        rigidbody.AddForce(force, ForceMode.Force);
     }
 
     public void Update()

@@ -14,8 +14,6 @@ public class Chapter3Fig2 : MonoBehaviour
     private List<mover3_2> Movers = new List<mover3_2>();
     public Transform moverSpawnTransform;
 
-    Vector3 force;
-
     public Rigidbody attractor;
 
     // Start is called before the first frame update
@@ -52,9 +50,9 @@ public class Chapter3Fig2 : MonoBehaviour
             Vector2 attractedMover = Movers[i].attract(attractor);
             //Now let's constrain the angular velocity
             Quaternion constrainedRotation = Movers[i].constrainAngularMotion(attractedMover);
-            Movers[i].body.MoveRotation(constrainedRotation); 
             //We then apply that force the Movers[i] with the Rigidbody's Addforce method
-            Movers[i].body.AddForce(attractedMover, ForceMode.Impulse);
+            Movers[i].body.AddForce(attractedMover, ForceMode.Force);
+            Movers[i].body.MoveRotation(constrainedRotation);
 
             Movers[i].CheckBoundaries();
             }            
@@ -90,8 +88,8 @@ public class mover3_2
         r.material = new Material(Shader.Find("Diffuse"));
         body = gameObject.AddComponent<Rigidbody>();
         // Remove functionality that come with the primitive that we don't want
-        gameObject.GetComponent<Collider>().enabled = false;
-        UnityEngine.Object.Destroy(gameObject.GetComponent<Collider>());
+        gameObject.GetComponent<BoxCollider>().enabled = false;
+        UnityEngine.Object.Destroy(gameObject.GetComponent<BoxCollider>());
 
         // Generate random properties for this mover
         side = UnityEngine.Random.Range(0.1f, .5f);
@@ -108,21 +106,22 @@ public class mover3_2
         // Assuming the cube is of even density throughout,
         // the mass will be proportional to the volume.
         body.mass = side * side * side;
-        //Make sure the regular gravity is on
-        body.useGravity = true;
-        //Turn off the angular drag as well
-        body.angularDrag = 0f;
+        //Make sure the regular gravity is off
+        body.useGravity = false;
+
     }
 
     //Special attractor for 3.2
     public Vector2 attract(Rigidbody m)
     {
-        Vector2 difference = body.position - m.position;
-        float dist = Mathf.Clamp(difference.magnitude, 10f, 25f);
-        Vector3 gravityDirection = difference.normalized;
-        float gravity = -9.81f * (m.mass * body.mass) / (dist * dist);
-        Vector2 gravityVector = (gravityDirection * gravity);
-        return gravityVector;
+        Vector2 difference = m.position - body.position;
+        float dist = difference.magnitude;
+        dist = Mathf.Clamp(dist, 5f, 25f);
+
+        difference.Normalize();
+        float gravity = 9.81f * (m.mass * body.mass) / (dist * dist);
+        difference *= gravity;
+        return difference;
     }
 
     //Constrain the forces with (arbitrary) angular motion
@@ -130,13 +129,13 @@ public class mover3_2
     public Quaternion constrainAngularMotion(Vector3 angularForce)
     {
         //Calculate angular acceleration according to the acceleration's X horizontal direction and magnitude
-        Vector3 aAcceleration = new Vector3(angularForce.x / 10.0f, 0f, 0f);
+        Vector3 aAcceleration = new Vector3(angularForce.x / 100.0f, 0f, 0f);
         Quaternion bodyRotation = body.rotation;
-        bodyRotation.eulerAngles += new Vector3(aAcceleration.x, aAcceleration.y, aAcceleration.z);
+        bodyRotation.eulerAngles += new Vector3(aAcceleration.x, 0f, 0f) * Time.deltaTime;
         bodyRotation.x = Mathf.Clamp(bodyRotation.x, -.1f, .1f);
         bodyRotation.y = Mathf.Clamp(bodyRotation.y, -.1f, .1f);
         bodyRotation.z = Mathf.Clamp(bodyRotation.z, -.1f, .1f);
-        angle += bodyRotation.eulerAngles;
+        angle += bodyRotation.eulerAngles * Time.deltaTime;
         angleRotation = Quaternion.Euler(angle.x, angle.y, angle.z);
         return angleRotation;
     }
