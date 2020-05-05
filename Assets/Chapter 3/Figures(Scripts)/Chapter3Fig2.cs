@@ -47,7 +47,6 @@ public class Chapter3Fig2 : MonoBehaviour
         // This is seen on line 51.
         for (int i = 0; i < Movers.Count; i++)
         {
-
             //Now that we are sure that our Mover will not attract itself, we need it to attract a different Mover
             //We do that by directing a Mover[j] to use their attract() meothd on a Movers[i] Rigidbody
             Vector2 attractedMover = Movers[i].attract(attractor);
@@ -58,8 +57,6 @@ public class Chapter3Fig2 : MonoBehaviour
             Movers[i].body.AddForce(attractedMover, ForceMode.Impulse);
 
             Movers[i].CheckBoundaries();
-
-
             }            
         }
     }
