@@ -120,52 +120,32 @@ public class Mover2_8
 
     public Vector2 attract(Rigidbody m)
     {
-        Vector2 difference = body.position - m.position;
-        float dist = difference.magnitude;
-        dist = Mathf.Clamp(dist, 10f, 25f);
+        Vector2 force = body.position - m.position;
+        float distance = force.magnitude;
 
-        difference.Normalize();
-        float gravity = (9.81f * m.mass * body.mass) / (dist * dist);
-        difference *= gravity;
-        return difference;
+        // Remember we need to constrain the distance so that our circle doesn't spin out of control
+        distance = Mathf.Clamp(distance, 5f, 25f);
+
+        force.Normalize();
+        float strength = (9.81f * body.mass * m.mass) / (distance * distance);
+        force *= strength;
+        return force;
 
     }
 
     //Checks to ensure the body stays within the boundaries
     public void CheckBoundaries()
     {
-        // Using the absolute value here is and important safe
-        // guard for the scenario that it takes multiple ticks
-        // of FixedUpdate for the mover to return to its boundaries.
-        // The intuitive solution of flipping the velocity may result
-        // in the mover not returning to the boundaries and flipping
-        // direction on every tick. (Mathf.Abs)
-
-        Vector3 restrainedVelocity = body.velocity;
-
-        if (body.position.y - radius < yMin)
+        Vector2 velocity = body.velocity;
+        if (body.position.x > xMax || body.position.x < xMin)
         {
-            restrainedVelocity.y = Mathf.Abs(restrainedVelocity.y);
+            velocity.x *= -1 * Time.deltaTime;
         }
-        else if (body.position.y + radius > yMax)
+        if (body.position.y > yMax || body.position.y < yMin)
         {
-            restrainedVelocity.y = -Mathf.Abs(restrainedVelocity.y);
-
+            velocity.y *= -1 * Time.deltaTime;
         }
-
-        if (body.position.x - radius < xMin)
-        {
-            restrainedVelocity.x = Mathf.Abs(restrainedVelocity.x);
-
-
-        }
-        else if (body.position.x + radius > xMax)
-        {
-            restrainedVelocity.x = -Mathf.Abs(restrainedVelocity.x);
-
-        }
-
-        body.velocity = restrainedVelocity;
+        body.velocity = velocity;
 
     }
 }

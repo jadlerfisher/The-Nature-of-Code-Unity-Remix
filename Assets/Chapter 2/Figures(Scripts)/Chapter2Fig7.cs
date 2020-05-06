@@ -26,7 +26,8 @@ public class Chapter2Fig7 : MonoBehaviour
     {
         foreach (Mover2_7 m in movers)
         {
-            Vector2 force = a.Attract(m); // Apply the attraction from the Attractor on each Mover object
+            Rigidbody body = m.body;
+            Vector2 force = a.Attract(body); // Apply the attraction from the Attractor on each Mover object
 
             m.ApplyForce(force);
             m.Update();
@@ -40,33 +41,52 @@ public class Attractor2_7
     public float mass;
     private Vector2 location;
     private float G;
-
+    public Rigidbody body;
     private GameObject attractor;
+    private float radius;
 
     public Attractor2_7()
     {
         attractor = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         GameObject.Destroy(attractor.GetComponent<SphereCollider>());
         Renderer renderer = attractor.GetComponent<Renderer>();
+        body = attractor.AddComponent<Rigidbody>();
+        body.position = Vector2.zero;
+
+        // Generate a radius
+        radius = 2;
+
+        // Place our mover at the specified spawn position relative
+        // to the bottom of the sphere
+        attractor.transform.position = body.position;
+
+        // The default diameter of the sphere is one unit
+        // This means we have to multiple the radius by two when scaling it up
+        attractor.transform.localScale = 2 * radius * Vector3.one;
+
+        // We need to calculate the mass of the sphere.
+        // Assuming the sphere is of even density throughout,
+        // the mass will be proportional to the volume.
+        body.mass = (4f / 3f) * Mathf.PI * radius * radius * radius;
+        body.useGravity = false;
+        body.isKinematic = true;
+
         renderer.material = new Material(Shader.Find("Diffuse"));
         renderer.material.color = Color.red;
 
-        location = Vector2.zero;
-        mass = 20f;
         G = 9.8f;
-        attractor.transform.position = location;
     }
 
-    public Vector2 Attract(Mover2_7 m)
+    public Vector2 Attract(Rigidbody m)
     {
-        Vector2 force = location - (Vector2)m.transform.position;
+        Vector2 force = body.position - m.position;
         float distance = force.magnitude;
 
         // Remember we need to constrain the distance so that our circle doesn't spin out of control
         distance = Mathf.Clamp(distance, 5f, 25f);
 
         force.Normalize();
-        float strength = (G * mass * m.rigidbody.mass) / (distance * distance);
+        float strength = (G * body.mass * m.mass) / (distance * distance);
         force *= strength;
         return force;
     }
@@ -76,7 +96,7 @@ public class Mover2_7
 {
     // The basic properties of a mover class
     public Transform transform;
-    public Rigidbody rigidbody;
+    public Rigidbody body;
 
     private Vector2 minimumPos, maximumPos;
 
@@ -88,22 +108,26 @@ public class Mover2_7
         GameObject.Destroy(mover.GetComponent<SphereCollider>());
         transform = mover.transform;
         mover.AddComponent<Rigidbody>();
-        rigidbody = mover.GetComponent<Rigidbody>();
-        rigidbody.useGravity = false;
+        body = mover.GetComponent<Rigidbody>();
+        body.useGravity = false;
         Renderer renderer = mover.GetComponent<Renderer>();
-        renderer.material = new Material(Shader.Find("Transparent/Diffuse"));
-        renderer.material.color = Color.white;
+        renderer.material = new Material(Shader.Find("Diffuse"));
         mover.transform.localScale = new Vector3(randomMass, randomMass, randomMass);
 
-        rigidbody.mass = 1;
-        transform.position = initialPosition; // Default location
-        rigidbody.velocity = initialVelocity; // The extra velocity makes the mover orbit
+        body.mass = 1;
+        body.position = initialPosition; // Default location
+        body.velocity = initialVelocity; // The extra velocity makes the mover orbit
         findWindowLimits();
+
+
+
+
+
     }
 
     public void ApplyForce(Vector2 force)
     {
-        rigidbody.AddForce(force, ForceMode.Force);
+        body.AddForce(force, ForceMode.Force);
     }
 
     public void Update()
@@ -113,16 +137,16 @@ public class Mover2_7
 
     public void CheckEdges()
     {
-        Vector2 velocity = rigidbody.velocity;
+        Vector2 velocity = body.velocity;
         if (transform.position.x > maximumPos.x || transform.position.x < minimumPos.x)
         {
-            velocity.x *= -1;
+            velocity.x *= -1 * Time.deltaTime;
         }
         if (transform.position.y > maximumPos.y || transform.position.y < minimumPos.y)
         {
-            velocity.y *= -1;
+            velocity.y *= -1 * Time.deltaTime;
         }
-        rigidbody.velocity = velocity;
+        body.velocity = velocity;
     }
 
     private void findWindowLimits()
