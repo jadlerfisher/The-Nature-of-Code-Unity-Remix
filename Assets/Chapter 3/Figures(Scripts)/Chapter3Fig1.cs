@@ -9,7 +9,7 @@ public class Chapter3Fig1 : MonoBehaviour
    
     // We are going to rotate on the z-axis. We'll rename this as a velocity;
     public Vector3 aVelocity = new Vector3(0f, 0f, 0f);
-    public Vector3 aAcceleration = new Vector3(0f, 0f, .1f);
+    public Vector3 aAcceleration = new Vector3(0f, 0f, .001f);
 
     // Start is called before the first frame update
     void Start()
@@ -18,10 +18,9 @@ public class Chapter3Fig1 : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         aVelocity += aAcceleration;
         Baton.transform.Rotate(aVelocity, Space.World);
-
     }
 }

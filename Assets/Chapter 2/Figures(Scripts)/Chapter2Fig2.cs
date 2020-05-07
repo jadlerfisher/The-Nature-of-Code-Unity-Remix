@@ -40,7 +40,7 @@ public class Chapter2Fig2 : MonoBehaviour
         {
             // ForceMode.Impulse takes mass into account
             mover.body.AddForce(wind, ForceMode.Impulse);
-            mover.body.AddForce(gravity, ForceMode.Impulse);
+            mover.body.AddForce(gravity, ForceMode.Force);
 
             mover.CheckBoundaries();
         }
