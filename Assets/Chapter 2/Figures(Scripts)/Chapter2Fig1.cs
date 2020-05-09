@@ -54,8 +54,8 @@ public class Mover2_1
         gameObject.GetComponent<SphereCollider>().enabled = false;
         Object.Destroy(gameObject.GetComponent<SphereCollider>());
 
-        // Generate random properties for this mover
-        radius = Random.Range(0.1f, 0.4f);
+        // Generate a radius of 1f for this mover
+        radius = 1f;
 
         // Place our mover at the specified spawn position relative
         // to the bottom of the sphere

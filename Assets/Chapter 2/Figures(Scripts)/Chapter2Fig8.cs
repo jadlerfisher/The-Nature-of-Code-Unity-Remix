@@ -15,14 +15,10 @@ public class Chapter2Fig8 : MonoBehaviour
     private List<Mover2_8> Movers = new List<Mover2_8>();
     public Transform moverSpawnTransform;
 
-    Vector3 force;
-
     // Start is called before the first frame update
     void Start()
     {
-
         // Create copys of our mover and add them to our list
-
         while (Movers.Count < 30)
         {
             // Instantiate them at random vectors from the left to the right wall and from our floor to ceiling.
@@ -56,12 +52,10 @@ public class Chapter2Fig8 : MonoBehaviour
                     //We then apply that force the Movers[i] with the Rigidbody's Addforce method
                     Movers[i].body.AddForce(attractedMover, ForceMode.Impulse);
                 }
-
             }
             //Now we check the boundaries of our scene to make sure the movers don't fly off
             //When we use gravity, the Movers will naturally fall out of the camera's view
             // This stops that.
-
             Movers[i].CheckBoundaries();
         }
     }
@@ -85,7 +79,6 @@ public class Mover2_8
         this.xMax = xMax;
         this.yMin = yMin;
         this.yMax = yMax;
-
 
         // Create the components required for the mover
         gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -146,7 +139,6 @@ public class Mover2_8
             velocity.y *= -1 * Time.deltaTime;
         }
         body.velocity = velocity;
-
     }
 }
 

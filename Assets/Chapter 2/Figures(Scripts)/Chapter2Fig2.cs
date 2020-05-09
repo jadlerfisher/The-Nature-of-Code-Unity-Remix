@@ -13,7 +13,7 @@ public class Chapter2Fig2 : MonoBehaviour
     private List<Mover2_2> Movers = new List<Mover2_2>();
     // Define constant forces in our environment
     private Vector3 wind = new Vector3(0.004f, 0f, 0f);
-    private Vector3 gravity = new Vector3(0, -0.01f, 0f);
+    private Vector3 gravity = new Vector3(0, -0.04f, 0f);
 
     // Start is called before the first frame update
     void Start()
@@ -111,8 +111,6 @@ public class Mover2_2
         else if (body.position.x + radius > xMax)
         {
             restrainedVelocity.x = -Mathf.Abs(restrainedVelocity.x);
-
-            Debug.Log("hello" + restrainedVelocity);
 
         }
         body.velocity = restrainedVelocity;

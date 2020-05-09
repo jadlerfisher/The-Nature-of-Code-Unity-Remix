@@ -96,7 +96,6 @@ public class Mover2_6
 
         body.mass = 10;
         transform.position = new Vector2(5, 0); // Default location
-        //body.velocity = new Vector2(0, -4); // The extra velocity makes the mover orbit
         findWindowLimits();
     }
 

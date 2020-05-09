@@ -52,7 +52,7 @@ public class Chapter2Fig5 : MonoBehaviour
                     Vector3 friction = mover.body.velocity;
                     friction.Normalize();
                     friction *= -fluid.dragCoefficient;
-                    mover.body.AddForce(friction, ForceMode.Acceleration);
+                    mover.body.AddForce(friction, ForceMode.Force);
                 }
             }
 

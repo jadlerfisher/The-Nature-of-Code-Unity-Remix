@@ -86,7 +86,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Chapter 2/Scenes/Chapter 2 Figure 1.unity
     guid: 89a419facded46447a994c71ec2db175
-  - enabled: 0
+  - enabled: 1
     path: Assets/Chapter 2/Scenes/Chapter 2 Figure 2.unity
     guid: f4a6b0765124de741b25850c5c0ea49b
   - enabled: 0
@@ -101,7 +101,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Chapter 3/Scenes/Chapter 3 Figure 1-basic.unity
     guid: d12b9146b22c4774eb0190995981845f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Chapter 3/Scenes/Chapter 3 Figure 2.unity
     guid: 10a21539ab3814d41be3df5def6cd526
   - enabled: 0

@@ -43,7 +43,7 @@ public class Chapter2Fig4 : MonoBehaviour
             Vector3 friction = mover.body.velocity;
             friction.Normalize();
             friction *= -frictionStrength;
-            mover.body.AddForce(friction, ForceMode.Acceleration);
+            mover.body.AddForce(friction, ForceMode.Force);
 
             mover.CheckBoundaries();
         }
