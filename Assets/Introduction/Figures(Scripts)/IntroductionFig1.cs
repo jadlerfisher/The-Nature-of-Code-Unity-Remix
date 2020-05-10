@@ -1,96 +1,102 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class IntroductionFig1 : MonoBehaviour
 {
-
-    // We need to instantiate the Walker PrefAB
-    public GameObject WalkerPrefab;
-    //And create a variable to track it
-    private GameObject walkerGO;
-    //And then we need to be able to access the walker Component on our walkerGO (Walker Game Object)
-    private walker walker;
+    //We need to create a walker
+    introMover walker;
 
     // Start is called before the first frame update
     void Start()
     {
-        GameObject walkerGameObject = new GameObject();
-        walker = walkerGameObject.AddComponent<walker>();
+        walker = new introMover();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        //Have the walker choose a direction
+    void FixedUpdate()
+    {        //Have the walker choose a direction
         walker.step();
-        //Instantiate the sphere in the last previous location to "draw" the path
-        walker.draw();
+        walker.CheckEdges();
     }
-
-
 }
 
 
-public class walker : MonoBehaviour
+public class introMover
 {
+    // The basic properties of a mover class
+    private Vector3 location;
 
-    public int x;
-    public int y;
+    // The window limits
+    private Vector2 minimumPos, maximumPos;
 
-    GameObject walkerGO;
+    // Gives the class a GameObject to draw on the screen
+    public GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-    // Start is called before the first frame update
-    void Start()
+    public introMover()
     {
-
-    walkerGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-    Destroy(walkerGO.GetComponent<SphereCollider>());
-
-        x = 0;
-        y = 0;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        findWindowLimits();
+        location = Vector2.zero;
+        //We need to create a new material for WebGL
+        Renderer r = mover.GetComponent<Renderer>();
+        r.material = new Material(Shader.Find("Diffuse"));
     }
 
     public void step()
     {
+        location = mover.transform.position;
         //Each frame choose a new Random number 0,1,2,3, 
         //If the number is equal to one of those values, take a step
         int choice = Random.Range(0, 4);
         if (choice == 0)
         {
-            x++;
+            location.x++;
+
         }
         else if (choice == 1)
         {
-            x--;
+            location.x--;
         }
         else if (choice == 3)
         {
-            y++;
+            location.y++;
         }
         else
         {
-            y--;
+            location.y--;
         }
-        walkerGO.transform.position = new Vector3(x, y, 0F);
+
+        mover.transform.position += location * Time.deltaTime;
     }
 
-    //Now let's draw the path of the Mover by creating spheres in its position in the most recent frame.
-    public void draw()
+    public void CheckEdges()
     {
-        //This creates a sphere GameObject
-        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        Destroy(sphere.GetComponent<SphereCollider>());
-        //This sets our ink "sphere game objects" at the position of the Walker GameObject (walkerGO) at the current frame
-        //to draw the path
-        sphere.transform.position = new Vector3(walkerGO.transform.position.x, walkerGO.transform.position.y, 0F);
+        location = mover.transform.position;
+
+        if (location.x > maximumPos.x)
+        {
+            location = Vector2.zero;
+        }
+        else if (location.x < minimumPos.x)
+        {
+            location = Vector2.zero;
+        }
+        if (location.y > maximumPos.y)
+        {
+            location = Vector2.zero;
+        }
+        else if (location.y < minimumPos.y)
+        {
+            location = Vector2.zero;
+        }
+        mover.transform.position = location;
     }
 
+    private void findWindowLimits()
+    {
+        // We want to start by setting the camera's projection to Orthographic mode
+        Camera.main.orthographic = true;
+        // Next we grab the minimum and maximum position for the screen
+        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+    }
 }
 

@@ -4,22 +4,14 @@ using UnityEngine;
 
 public class IntroductionFig3 : MonoBehaviour
 {
-
-    // We need to instantiate the Walker PrefAB
-    public GameObject WalkerPrefab;
-    //And create a variable to track it
-    private GameObject walkerGO;
     //And then we need to be able to access the walker Component on our walkerGO (Walker Game Object)
     private WalkerIntro3 walkeri3;
 
     // Start is called before the first frame update
     void Start()
     {
-        //Create an empty GameObject for the component we'll be adding.
-        GameObject walkerGameObject = new GameObject();
-        // Add the component
-        walkeri3 = walkerGameObject.AddComponent<WalkerIntro3>();
-
+        // Create the walker
+        walkeri3 = new WalkerIntro3();
     }
 
     // Update is called once per frame
@@ -32,30 +24,32 @@ public class IntroductionFig3 : MonoBehaviour
     }
 }
 
-public class WalkerIntro3 : MonoBehaviour
+public class WalkerIntro3 
 {
     public int x;
     public int y;
     float num;
     GameObject walkerGO;
+    List<GameObject> walkers = new List<GameObject>();
 
     // Start is called before the first frame update
-    void Start()
+    public WalkerIntro3 ()
     {
-        walkerGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        walkerGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);     //We need to create a new material for WebGL
+        Renderer r = walkerGO.GetComponent<Renderer>();
+        walkerGO.GetComponent<SphereCollider>().enabled = false;
+        Object.Destroy(walkerGO.GetComponent<SphereCollider>());
+        r.material = new Material(Shader.Find("Diffuse"));
 
         x = 0;
         y = 0;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        num = Random.Range(0f, 1f);
-    }
 
     public void step()
     {
+        num = Random.Range(0f, 1f);
+
         //Each frame choose a new Random number 0-1;
         //If the number is less than the the float take a step
         if (num < 0.4F)
@@ -80,11 +74,27 @@ public class WalkerIntro3 : MonoBehaviour
     //Now let's draw the path of the Mover by creating spheres in its position in the most recent frame.
     public void draw()
     {
-        //This creates a sphere GameObject
-        GameObject sphere = Instantiate(walkerGO);
-        //This sets our ink "sphere game objects" at the position of the Walker GameObject (walkerGO) at the current frame
-        //to draw the path
-        sphere.transform.position = new Vector3(walkerGO.transform.position.x, walkerGO.transform.position.y, 0F);
+ 
+        if (walkers.Count <= 60)
+        {
+            //This creates a sphere GameObject
+            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);     //We need to create a new material for WebGL
+            Renderer r = sphere.GetComponent<Renderer>();
+            sphere.GetComponent<SphereCollider>().enabled = false;
+            Object.Destroy(sphere.GetComponent<SphereCollider>());
+            r.material = new Material(Shader.Find("Diffuse"));
+            //This sets our ink "sphere game objects" at the position of the Walker GameObject (walkerGO) at the current frame
+            //to draw the path
+            sphere.transform.position = new Vector3(walkerGO.transform.position.x, walkerGO.transform.position.y, 0F);
+            walkers.Add(sphere);
+        }
+        else if (walkers.Count <= 1)
+        {
+            foreach(GameObject walker in walkers)
+            {
+                GameObject.Destroy(walker);
+            }
+        }
     }
 }
 

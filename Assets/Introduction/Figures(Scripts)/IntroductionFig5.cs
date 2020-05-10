@@ -1,23 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class IntroductionFig5 : MonoBehaviour
 {
-    // We need to instantiate the Walker PrefAB
-    public GameObject WalkerPrefab;
-    //And create a variable to track it
-    private GameObject walkerGO;
-    //And then we need to be able to access the walker Component on our walkerGO (Walker Game Object)
+    //And then we need to create a walker
     private WalkerIntro5 walkeri5;
 
     // Start is called before the first frame update
     void Start()
     {
-        //Create an empty GameObject for the component we'll be adding.
-        GameObject walkerGameObject = new GameObject();
-        // Add the component
-        walkeri5 = walkerGameObject.AddComponent<WalkerIntro5>();
+        // Create the walker
+        walkeri5 = new WalkerIntro5();
     }
 
     // Update is called once per frame
@@ -25,46 +17,81 @@ public class IntroductionFig5 : MonoBehaviour
     {
         //Have the walker move
         walkeri5.step();
+        walkeri5.CheckEdges();
     }
-
 }
 
-
-
-public class WalkerIntro5 : MonoBehaviour
+public class WalkerIntro5
 {
     //GameObject
-    float x, y;
+    Vector2 location;
     GameObject walkerGo;
 
+    // The window limits
+    private Vector2 minimumPos, maximumPos;
+
     //Perlin
-    float heightScale = 2;
-    float widthScale = 1;
+     float heightScale = 2;
+     float widthScale = 1;
 
     float xScale, yScale;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        walkerGo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+    // Gives the class a GameObject to draw on the screen
+    public GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-    }
-
-    // Update is called once per frame
-    void Update()
+    public WalkerIntro5()
     {
-        widthScale += .02f;
-        heightScale += .001f;
+        findWindowLimits();
+        location = Vector2.zero;
+        //We need to create a new material for WebGL
+        Renderer r = mover.GetComponent<Renderer>();
+        r.material = new Material(Shader.Find("Diffuse"));
     }
 
     public void step()
     {
+        widthScale += .02f;
+        heightScale += .001f;
+
         float height = heightScale * Mathf.PerlinNoise(Time.time * .5f, 0.0f);
         float width = widthScale * Mathf.PerlinNoise(Time.time * 1, 0.0f);
-        Vector3 pos = transform.position;
+        Vector3 pos = mover.transform.position;
         pos.y = height;
         pos.x = width;
-        walkerGo.transform.position = pos;
+        mover.transform.position = pos;
+    }
+
+    public void CheckEdges()
+    {
+        location = mover.transform.position;
+
+        if ((location.x > maximumPos.x) || (location.x < minimumPos.x))
+        {
+            reset();
+        }
+        
+        if ((location.y > maximumPos.y) || (location.y < minimumPos.y))
+        {
+            reset();
+        }
+        
+        mover.transform.position = location;
+    }
+
+    void reset() {
+        location = Vector2.zero;
+        heightScale = 2;
+        widthScale = 1;
+    }
+
+    private void findWindowLimits()
+    {
+        // We want to start by setting the camera's projection to Orthographic mode
+        Camera.main.orthographic = true;
+        // Next we grab the minimum and maximum position for the screen
+        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
 
