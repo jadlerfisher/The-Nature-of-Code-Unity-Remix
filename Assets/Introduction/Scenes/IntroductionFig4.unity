@@ -232,6 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4b4439b7adb6d14599b7f5f2d38c5d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transparencyPrefab: {fileID: 2100000, guid: 7ffdecad29fcd4b42aff0df743062fd7, type: 2}
 --- !u!4 &220392582
 Transform:
   m_ObjectHideFlags: 0

@@ -50,6 +50,7 @@ public class Chapter2Fig5 : MonoBehaviour
                 {
                     // Apply a friction force that directly opposes the current motion
                     Vector3 friction = mover.body.velocity;
+
                     friction.Normalize();
                     friction *= -fluid.dragCoefficient;
                     mover.body.AddForce(friction, ForceMode.Force);

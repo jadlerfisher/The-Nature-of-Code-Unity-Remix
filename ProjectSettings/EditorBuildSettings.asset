@@ -38,7 +38,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Chapter 1/Scenes/Chapter 1 Figure 10.unity
     guid: bfb063f69d273d347b90c2ae1605b6f2
-  - enabled: 0
+  - enabled: 1
     path: Assets/Chapter 2/Scenes/Chapter 2 Figure 5a.unity
     guid: f4e7cdf3c043e4d46be99853b5d36839
   - enabled: 0
@@ -86,7 +86,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Chapter 2/Scenes/Chapter 2 Figure 1.unity
     guid: 89a419facded46447a994c71ec2db175
-  - enabled: 1
+  - enabled: 0
     path: Assets/Chapter 2/Scenes/Chapter 2 Figure 2.unity
     guid: f4a6b0765124de741b25850c5c0ea49b
   - enabled: 0
@@ -147,9 +147,6 @@ EditorBuildSettings:
     path: Assets/Chapter 4/Scenes/Chapter 4 Figure 4.unity
     guid: b36e7ca2eb62a1a46a338784760822d3
   - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
     path: Assets/Chapter 4/Scenes/Chapter 4 Figure 6.unity
     guid: a94ffa52ff37c354bbfa7bb3ec76a3e3
   - enabled: 0
@@ -161,4 +158,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Chapter 2/Scenes/Chapter 2 Figure 8.unity
     guid: d6a4f02f0a569e74881efede2a1ecdfb
+  - enabled: 0
+    path: Assets/Introduction/Scenes/IntroductionFig5.unity
+    guid: e8e0c9bc93b461648a9cf58b94c26c7f
   m_configObjects: {}

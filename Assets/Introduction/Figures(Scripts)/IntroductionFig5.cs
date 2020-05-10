@@ -25,7 +25,6 @@ public class WalkerIntro5
 {
     //GameObject
     Vector2 location;
-    GameObject walkerGo;
 
     // The window limits
     private Vector2 minimumPos, maximumPos;
@@ -33,8 +32,6 @@ public class WalkerIntro5
     //Perlin
      float heightScale = 2;
      float widthScale = 1;
-
-    float xScale, yScale;
 
     // Start is called before the first frame update
     // Gives the class a GameObject to draw on the screen
@@ -65,17 +62,15 @@ public class WalkerIntro5
     public void CheckEdges()
     {
         location = mover.transform.position;
-
-        if ((location.x > maximumPos.x) || (location.x < minimumPos.x))
-        {
-            reset();
-        }
+            if ((location.x > maximumPos.x) || (location.x < minimumPos.x))
+            {
+                reset();
+            }
         
-        if ((location.y > maximumPos.y) || (location.y < minimumPos.y))
-        {
-            reset();
-        }
-        
+            if ((location.y > maximumPos.y) || (location.y < minimumPos.y))
+            {
+                reset();
+            }     
         mover.transform.position = location;
     }
 
