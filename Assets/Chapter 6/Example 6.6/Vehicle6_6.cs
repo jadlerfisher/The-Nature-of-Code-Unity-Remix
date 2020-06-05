@@ -2,188 +2,141 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class vehicleChapter6_6f : MonoBehaviour
+public class Vehicle6_6 : MonoBehaviour
 {
-    public Vector3 location;
-    public Vector3 velocity;
-    public Vector3 acceleration;
-    public Vector3 wanderAngle;
-
-    public float r;
-    public float maxforce;
+    // Variables accessible to other scripts.
     public float maxspeed;
-    public float mass;
+    public Rigidbody2D body;
 
-    private GameObject vehicle;
-    private Vector3 circleCenter;
-
-    private float worldRecord = 1000000f;
-
-
-    // Start is called before the first frame update
+    #region DEBUG
+    private bool debugIsActive = false;
+    private LineRenderer predictLine, normalLine, steerLine;
     void Start()
     {
-        //assign the mover's GameObject to the varaible
-        vehicle = this.gameObject;
-        location = this.gameObject.transform.position;
-        r = 3.0f;
-        maxspeed = 1f;
-        maxforce = 10f;
-        mass = 10000f;
+        predictLine = new GameObject().AddComponent<LineRenderer>();
+        predictLine.material = new Material(Shader.Find("Diffuse"));
+        predictLine.positionCount = 2;
+        predictLine.widthMultiplier = 0.1f;
 
-        //Assign that spawn location to the mover
-        vehicle.transform.position = location;
-        acceleration = new Vector3(0f, 0f, 0f);
-        velocity = new Vector3(0f, 0f, 0f);
+        normalLine = new GameObject().AddComponent<LineRenderer>();
+        normalLine.material = new Material(Shader.Find("Diffuse"));
+        normalLine.positionCount = 2;
+        normalLine.widthMultiplier = 0.1f;
+
+        steerLine = new GameObject().AddComponent<LineRenderer>();
+        steerLine.material = new Material(Shader.Find("Diffuse"));
+        steerLine.positionCount = 2;
+        steerLine.widthMultiplier = 0.1f;
     }
+    #endregion
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        velocity += new Vector3(acceleration.x, acceleration.y, acceleration.z);
+        // Look in the direction the vehicle is traveling in.
+        // Vector3.back must be specified since that is the "up" direction in our scene.
+        gameObject.transform.LookAt(transform.position + (Vector3)body.velocity, Vector3.back);
 
-        velocity.x = Mathf.Clamp(velocity.x, -maxspeed, maxspeed);
-        velocity.y = Mathf.Clamp(velocity.y, -maxspeed, maxspeed);
-        velocity.z = Mathf.Clamp(velocity.z, -maxspeed, maxspeed);
-        location += new Vector3(velocity.x, velocity.y, velocity.z);
-
-        this.gameObject.transform.position = location;
-
-        acceleration *= 0;
-        //We need to update the wander angle each frame to steer the vehicle
-        wanderAngle = new Vector3(Random.Range(-360, 360), Random.Range(-360, 360), Random.Range(-360, 360));
-    }
-
-    public void seek(Vector3 target)
-    {
-        location = this.gameObject.transform.position;
-        Vector3 desired = target - location;
-        desired.Normalize();
-        desired *= maxspeed;
-        Vector3 steer = desired - velocity;
-        steer.x = Mathf.Clamp(steer.x, -maxforce, maxforce);
-        steer.y = Mathf.Clamp(steer.y, -maxforce, maxforce);
-        steer.z = Mathf.Clamp(steer.z, -maxforce, maxforce);
-        applyForce(steer);
-    }
-
-    public void arrive(Vector3 target)
-    {
-        location = this.gameObject.transform.position;
-        Vector3 desired = target - location;
-        float d = desired.magnitude;
-        Debug.Log(d);
-        if (d < 1)
+        #region DEBUG
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            float m = ExtensionMethods.Remap(d, 0f, 1f, 0, maxspeed);
-            desired *= m;
-
-        } else
-        {
-            desired *= maxspeed;
+            debugIsActive = !debugIsActive;
+            if (!debugIsActive)
+            {
+                predictLine.SetPosition(0, Vector3.zero);
+                predictLine.SetPosition(1, Vector3.zero);
+                normalLine.SetPosition(0, Vector3.zero);
+                normalLine.SetPosition(1, Vector3.zero);
+                steerLine.SetPosition(0, Vector3.zero);
+                steerLine.SetPosition(1, Vector3.zero);
+            }
         }
-
-        Vector3 steer = desired - velocity;
-        Debug.Log(desired);
-        steer.x = Mathf.Clamp(steer.x, -maxforce, maxforce);
-        steer.y = Mathf.Clamp(steer.y, -maxforce, maxforce);
-        steer.z = Mathf.Clamp(steer.z, -maxforce, maxforce);
-        applyForce(steer);
+        #endregion
     }
 
-    public void wander()
+    public void Seek(Vector2 target)
     {
-        circleCenter = velocity;
-        Vector3.Normalize(circleCenter);
-        float CircleDistance = 2f;
-        circleCenter *= CircleDistance;
+        // Get a vector pointing from our location to the target.
+        Vector2 desired = target - body.position;
+        // Scale our desired vector by our maximum speed.
+        desired = desired.normalized * maxspeed;
 
-        Vector3 displacement = new Vector3(0f, 1f, 0f);
-        float CircleRadius = 2f;
-        displacement *= CircleRadius;
-
-        float AngleChange = Vector3.Angle(displacement, wanderAngle);
-        wanderAngle.x += (Random.value * AngleChange) - (AngleChange * .5f);
-        wanderAngle.y += (Random.value * AngleChange) - (AngleChange * .5f);
-        wanderAngle.z += (Random.value * AngleChange) - (AngleChange * .5f);
-
-        Vector3 wanderForce = circleCenter + displacement;
-        wanderForce.x = Mathf.Clamp(wanderAngle.x, -maxforce, maxforce);
-        wanderForce.y = Mathf.Clamp(wanderAngle.y, -maxforce, maxforce);
-        wanderForce.z = Mathf.Clamp(wanderAngle.z, -maxforce, maxforce);
-        applyForce(wanderForce);
+        // Apply Reynold's path following force relative to time.
+        Vector2 steer = desired - body.velocity;
+        body.AddForce(steer * Time.fixedDeltaTime, ForceMode2D.Impulse);
     }
 
-    public void follow(flowFieldChapter6_4 flow)
+    public void FollowPath(Path6_6 path)
     {
-        Vector3 desiredVector = flow.lookup(location);
-        Vector3 desired = new Vector3(desiredVector.x, desiredVector.y, 0);
-        desired *= maxspeed;
+        // Predict the future location of the body.
+        Vector2 predictedLocation = body.position + body.velocity.normalized * 2.5f;
 
-        Vector3 steer = desired - velocity;
-        steer.x = Mathf.Clamp(steer.x, -maxforce, maxforce);
-        steer.y = Mathf.Clamp(steer.y, -maxforce, maxforce);
-        steer.z = Mathf.Clamp(steer.z, -maxforce, maxforce);
-        applyForce(steer*10);
-    }
-
-    public void pathFollow(pathChapter66 path) {
-
-        float distance = new float();
-
-        Vector3 predict = velocity;
-        Vector3 pNormal = predict.normalized;
-        pNormal *= 20;
-        Vector3 predictedLocation = location + pNormal;
-
-        for (int i = 0; i < path.pathVectors.Count - 1; i++)
-        {           
-            Vector3 a = path.pathVectors[i];
-            Vector3 b = path.pathVectors[i + 1];
-
-            Vector3 normalPoint = getNormalPoint(predictedLocation, a, b);
-            if(normalPoint.x < a.x || normalPoint.x > b.x)
+        float distanceRecord = float.MaxValue;
+        Vector2 target = Vector2.zero;
+        // Look at each segment and find the closest normal point.
+        for(int i = 0; i < path.points.Length - 1; i++)
+        {
+            Vector2 a = path.points[i].position;
+            Vector2 b = path.points[i + 1].position;
+            Vector2 normalPoint = GetNormalPoint(predictedLocation, a, b);
+            // If the normal point is beyond the line segment, clamp it to the endpoint.
+            if(normalPoint.x > b.x || normalPoint.x < a.x)
             {
                 normalPoint = b;
             }
 
-            distance = Vector3.Distance(normalPoint, predictedLocation);
-
-            if (distance > 10)
+            // If this point is closer than any previous point, update the record.
+            float distance = Vector2.Distance(predictedLocation, normalPoint);
+            if(distance < distanceRecord)
             {
-                Vector3 target = normalPoint;
-                seek(target);
-            }  
-            else
-            {
-                wander();
+                distanceRecord = distance;
+                target = normalPoint;
             }
         }
 
+        // Is the vehicle predicted to leave the path?
+        if (distanceRecord > path.radius)
+        {
+            // If so, steer the vehicle towards the path.
+            Seek(target);
+
+            #region DEBUG
+            if (debugIsActive)
+            {
+                steerLine.SetPosition(0, new Vector3(target.x, target.y, -1));
+                steerLine.SetPosition(1, new Vector3(target.x, target.y, -1));
+            }
+            #endregion
+        }
+        #region DEBUG
+        else if (debugIsActive)
+        {
+            steerLine.SetPosition(0, Vector3.zero);
+            steerLine.SetPosition(1, Vector3.zero);
+        }
+
+        if (debugIsActive)
+        {
+            predictLine.SetPosition(0, new Vector3(body.position.x, body.position.y, -1));
+            predictLine.SetPosition(1, new Vector3(predictedLocation.x, predictedLocation.y, -1));
+            normalLine.SetPosition(0, new Vector3(predictedLocation.x, predictedLocation.y, -1));
+            normalLine.SetPosition(1, new Vector3(target.x, target.y, -1));
+        }
+        #endregion
     }
 
-    //Newton's second law
-    //Receive a force, divide by mass, and add to acceleration
-    public void applyForce(Vector3 force)
+    private Vector2 GetNormalPoint(Vector2 point, Vector2 start, Vector2 end)
     {
-        Vector3 f = force / mass;
-        acceleration = acceleration + f;
-    }
+        // Treat start as the origin of our problem.
+        Vector2 ap = point - start;
+        Vector2 ab = end - start;
 
+        // Scale the vector by the dot product to find the nearest point to p.
+        ab.Normalize();
+        ab *= Vector2.Dot(ap, ab);
 
-
-    Vector3 getNormalPoint(Vector3 p, Vector3 a, Vector3 b)
-    {
-        Vector3 ap = p - a;
-        Vector3 ab = b - a;
-
-        Vector3 abNormal = ab.normalized;
-
-        abNormal *= (Vector3.Dot(ap,abNormal));
-
-        Vector3 normalPoint = a + abNormal;
-
+        // Re-add the relative position of our input.
+        Vector2 normalPoint = ab + start;
         return normalPoint;
-
     }
 }
