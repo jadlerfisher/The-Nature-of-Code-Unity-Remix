@@ -254,8 +254,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b55cdc247287c489a56ecfb7a3a19d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vehicles: []
-  vehicle: {fileID: 5584890451184551033, guid: 3721b2e908620304ba9c62a2907c0ce5, type: 3}
+  maxSpeed: 8
+  maxForce: 5
 --- !u!1 &1254276751
 GameObject:
   m_ObjectHideFlags: 0
