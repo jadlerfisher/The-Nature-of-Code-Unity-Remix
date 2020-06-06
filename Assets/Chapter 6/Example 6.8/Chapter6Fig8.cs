@@ -25,17 +25,24 @@ public class Chapter6Fig8 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector2 mousePos = Input.mousePosition;
+        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+
         foreach (Vehicle v in vehicles)
         {
-            v.Seperate(vehicles);
-            v.Update();
+            Vector2 seperate = v.Seperate(vehicles);
+            Vector2 seek = v.Seek(mousePos);
+
+            /* These values can be whatever you want. */
+            seperate *= 1.5f;
+            seek *= 0.7f;
+
+            v.ApplyForce(seperate);
+            v.ApplyForce(seek);
         }
 
         if (Input.GetMouseButton(0))
         {
-            Vector2 mousePos = Input.mousePosition;
-            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-
             vehicles.Add(new Vehicle(mousePos, minimumPos, maximumPos, maxSpeed, maxForce));
         }
     }
@@ -85,70 +92,58 @@ class Vehicle
         rb.useGravity = false; // Remember to ignore gravity!
     }
 
-    public void Update()
+    public Vector2 Seek(Vector2 target)
     {
-        if (location.x > maxPos.x)
-        {
-            location = new Vector2(minPos.x, location.y);
-        }
-        else if (location.x < minPos.x)
-        {
-            location = new Vector2(maxPos.x, location.y);
-        }
+        Vector2 desired = target - location;
+        desired.Normalize();
+        desired *= maxSpeed;
+        Vector2 steer = desired - velocity;
+        steer = Vector2.ClampMagnitude(steer, maxForce);
 
-        if (location.y > maxPos.y)
-        {
-            location = new Vector2(location.x, minPos.y);
-        }
-        else if (location.y < minPos.y)
-        {
-            location = new Vector2(location.x, maxPos.y);
-        }
+        return steer;
     }
 
-    public void Seperate(List<Vehicle> vehicles)
+    public Vector2 Seperate(List<Vehicle> vehicles)
     {
-        Vector2 sum = Vector2.zero; // Start with a blank Vector2.
-        int count = 0; // We have to keep track of how many Vehicles are too close.
+        Vector2 sum = Vector2.zero;
+        int count = 0;
 
-        // Note how the desired separation is based on the Vehicle's size.
         float desiredSeperation = myVehicle.transform.localScale.x * 2;
 
         foreach (Vehicle other in vehicles)
         {
-            // What is the distance between me and another Vehicle?
             float d = Vector2.Distance(other.location, location);
 
             if ((d > 0) && (d < desiredSeperation))
             {
-                // Any code here will be executed if the Vehicle is within 0.5 Meters.
-                Vector2 diff = location - other.location; // A Vector2 pointing away from the other’s location.
+                Vector2 diff = location - other.location;
                 diff.Normalize();
 
-                /* What is the magnitude of the PVector pointing away
-                 * from the other vehicle? The closer it is, the more we 
-                 * should flee. The farther, the less. So we divide by the
-                 * distance to weight it appropriately. */
                 diff /= d;
 
-                sum += diff; // Add all the vectors together and increment the count
+                sum += diff;
                 count++;
             }
         }
 
-        /* We have to make sure we found at least one close vehicle.
-         * We don't want to bother doing anything if nothing is
-         * too close (not to mention we can't divide by zero!) */
         if (count > 0)
         {
             sum /= count;
 
-            sum *= maxSpeed; // Scale averate to maxSpeed (this becomes desired).
+            sum *= maxSpeed;
 
-            Vector2 steer = sum - velocity; // Reynold's steering formula
-            steer = steer.normalized * maxForce; // Clamp to the maximum force.
+            Vector2 steer = sum - velocity;
+            steer = Vector2.ClampMagnitude(steer, maxForce);
 
-            rb.AddForce(steer, ForceMode.Impulse); // Apply the force to the Vehicle's acceleration.
+
+            return steer;
         }
+        return Vector2.zero;
     }
+
+    public void ApplyForce(Vector2 force) 
+    {
+        rb.AddForce(force, ForceMode.Impulse);
+    }
+
 }

@@ -78,7 +78,7 @@ EditorBuildSettings:
     path: Assets/Chapter 6/Scenes/Chapter 6 Figure 7.unity
     guid: ac4a2a4103e9757479dc75a8bbed9afa
   - enabled: 0
-    path: Assets/Chapter 6/Scenes/Chapter 6 Figure 8.unity
+    path: Assets/Chapter 6/Example 6.8/Chapter 6 Figure 8.unity
     guid: bac1ddc6be7b22c4fafffc27045b4cb2
   - enabled: 0
     path: Assets/Chapter 6/Scenes/Chapter 6 Figure 9.unity
