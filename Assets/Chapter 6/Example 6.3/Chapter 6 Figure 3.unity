@@ -149,6 +149,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53adc6ca5985cfa4b8108d769d55dda9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingAcceleration: {x: 150, y: 200}
+  distance: 3
+  maxSpeed: 4
+  maxForce: 0.1
 --- !u!4 &259800547
 Transform:
   m_ObjectHideFlags: 0

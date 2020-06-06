@@ -5,10 +5,19 @@ using UnityEngine;
 public class Chapter6Fig3 : MonoBehaviour
 {
     [Header("Sets vehicle's acceleration on Start")]
+    [Tooltip("This number is multiplied by fixedDeltaTime, a very small number, so this number needs to be large ie 300x300")]
     [SerializeField] private Vector2 startingAcceleration;
 
     [Header("How far from screen bounds before steering away")]
-    [SerializeField] private float distance;
+    [Tooltip("In meters/Unity Units")]
+    [SerializeField][Range(3,10)] private float distance;
+
+    [Header("Vehicle cannot go above this speed")]
+    [Tooltip("In meters/Unity Units")]
+    [SerializeField] private float maxSpeed;
+
+    [Header("How much force can we add to steering, or how sharply we can turn")]
+    [SerializeField] private float maxForce;
 
     // Our vehicle, a mover with velocity, acceleration and steering
     private Ch6Fig3Vehicle vehicle;
@@ -18,7 +27,8 @@ public class Chapter6Fig3 : MonoBehaviour
     {
         // Instantiate vehicle at origin. Use exposed variable for distance, or how far from the wall before we steer.
         // Use exposed variable for starting acceleration, which only happens in the first frame before getting reset.
-        vehicle = new Ch6Fig3Vehicle(startingAcceleration, distance);
+        // Use exposed variables for maxSpeed of our vehicle and how much force it can use to steer away from walls
+        vehicle = new Ch6Fig3Vehicle(startingAcceleration, distance, maxSpeed, maxForce);
     }
 
     // FixedUpdate is called 50 times per second per project default
@@ -53,9 +63,9 @@ public class Ch6Fig3Vehicle
     private Vector2 minimumPos;
 
     // How far away from each wall before we start steering away, in meters
-    private float distance; // TODO expose this as a range 
+    private float distance; 
 
-    public Ch6Fig3Vehicle(Vector2 _acceleration, float _distance)
+    public Ch6Fig3Vehicle(Vector2 _acceleration, float _distance, float _maxSpeed, float _maxForce)
     {
         distance = _distance;
 
@@ -69,6 +79,7 @@ public class Ch6Fig3Vehicle
         Renderer renderer = vehicleObject.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Diffuse"));
 
+        // Gives us min and max Pos, or the edges of the screen
         findWindowLimits();
 
         // Let's assign our initial position to origin
@@ -84,10 +95,10 @@ public class Ch6Fig3Vehicle
         acceleration = _acceleration;
 
         // Neither Velocity.x or Velocity.y can exceed maxSpeed
-        maxSpeed = 4f;
+        maxSpeed = _maxSpeed;
 
         // Steering force. Higher numbers means sharper turn
-        maxForce = 0.1f;
+        maxForce = _maxForce;
     }
 
     public void Update() // Gets called every FixedUpdate
