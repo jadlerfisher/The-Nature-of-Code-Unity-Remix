@@ -9,7 +9,6 @@ public class Chapter6Fig7 : MonoBehaviour
     private List<Vehicle> vehicles; // Declare a List of Vehicle objects.
     private Vector2 minimumPos, maximumPos;
 
-    // Start is called before the first frame update
     void Start()
     {
         findWindowLimits();
@@ -21,12 +20,11 @@ public class Chapter6Fig7 : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         foreach (Vehicle v in vehicles) 
         {
-            v.Seperate(vehicles);
+            v.Separate(vehicles);
             v.Update();
         }
 
@@ -105,7 +103,7 @@ class Vehicle
         }
     }
 
-    public void Seperate(List<Vehicle> vehicles) 
+    public void Separate(List<Vehicle> vehicles) 
     {
         Vector2 sum = Vector2.zero; // Start with a blank Vector2.
         int count = 0; // We have to keep track of how many Vehicles are too close.
@@ -147,7 +145,7 @@ class Vehicle
             Vector2 steer = sum - velocity; // Reynold's steering formula
             steer = Vector2.ClampMagnitude(steer, maxForce); // Clamp to the maximum force.
 
-            rb.AddForce(steer, ForceMode.Impulse); // Apply the force to the Vehicle's acceleration.
+            rb.AddForce(steer); // Apply the force to the Vehicle's acceleration.
         }
     }
 }
