@@ -4,68 +4,125 @@ using UnityEngine;
 
 public class Chapter6Fig3 : MonoBehaviour
 {
+    [Header("Sets vehicle's acceleration on Start")]
+    [SerializeField] private Vector2 startingAcceleration;
+
+    [Header("How far from screen bounds before steering away")]
+    [SerializeField] private float distance;
+
+    // Our vehicle, a mover with velocity, acceleration and steering
     private Ch6Fig3Vehicle vehicle;
 
     // Start is called before the first frame update
     void Start()
     {
-        vehicle = new Ch6Fig3Vehicle(0,0);
+        // Instantiate vehicle at origin. Use exposed variable for distance, or how far from the wall before we steer.
+        // Use exposed variable for starting acceleration, which only happens in the first frame before getting reset.
+        vehicle = new Ch6Fig3Vehicle(startingAcceleration, distance);
     }
 
-    // FixedUpdate is called once per Physics Update which is 50 times a second unless changed in Project Settings
+    // FixedUpdate is called 50 times per second per project default
     void FixedUpdate()
     {
+        // Update vehicle behavior
         vehicle.Update();
-        vehicle.StayWithinWalls();
+
+        // Stays within screen bounds
+        vehicle.StayWithinWalls(); 
     }
 }
 
 public class Ch6Fig3Vehicle
 {
-    private GameObject vehicleObject;    
+    // Visual representation of our vehicle
+    private GameObject vehicleObject; 
     private Vector2 location;
-    private Vector2 velocity;
-    private Vector2 acceleration;    
-    private float maxSpeed;
-    private float maxForce;
-    private Vector2 maximumPos;
-    private Vector2 minimumPos;
-    private float distance; // TODO expose this as a range
+    public Vector2 velocity { get; private set; } // TODO Remove
+    private Vector2 acceleration;
 
-    public Ch6Fig3Vehicle(float locationX, float locationY)
+    // How fast we can go, velocity cannot go higher
+    private float maxSpeed;
+
+    // How much to steer in the opposite direction when reaching screen bounds. Higher numbers mean sharper turns.
+    private float maxForce;
+
+    // Top right of the screen
+    private Vector2 maximumPos;
+
+    // Bottom left of the screen
+    private Vector2 minimumPos;
+
+    // How far away from each wall before we start steering away, in meters
+    private float distance; // TODO expose this as a range 
+
+    public Ch6Fig3Vehicle(Vector2 _acceleration, float _distance)
     {
-        findWindowLimits();
-        vehicleObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);        
-        Object.Destroy(vehicleObject.GetComponent<SphereCollider>());
-        Renderer renderer = vehicleObject.GetComponent<Renderer>();        
+        distance = _distance;
+
+        // Our vehicle will be a sphere
+        vehicleObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+        // Remove component we do not need
+        Object.Destroy(vehicleObject.GetComponent<SphereCollider>()); 
+
+        // We need to create a new material for WebGL
+        Renderer renderer = vehicleObject.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Diffuse"));
-        location = new Vector2(locationX, locationY);
+
+        findWindowLimits();
+
+        // Let's assign our initial position to origin
+        location = Vector2.zero;
+
+        // The sphere will match our position
         vehicleObject.transform.position = location;
+
+        // Velocity is initialized to zero, this is changed in first frame update due to setting our acceleration
         velocity = Vector2.zero;
-        acceleration = new Vector2(-150,150); // TODO expose these
+
+        // Setting our initial acceleration to constructor parameters. Acceleration gets reset at first Update
+        acceleration = _acceleration;
+
+        // Neither Velocity.x or Velocity.y can exceed maxSpeed
         maxSpeed = 4f;
+
+        // Steering force. Higher numbers means sharper turn
         maxForce = 0.1f;
     }
 
-    public void Update()
+    public void Update() // Gets called every FixedUpdate
     {
+        // We multiplay these values with Time.fixedDelaTime to ensure frame rate independence.
+        // Although FixedUpdate is fixed, environments that can't keep up with 50 Frames Per Second 
+        // will experience different behavior unless we do this.
+
         velocity += acceleration * Time.fixedDeltaTime;
+
+        // We clamp velocity's magnitude so its values don't exceed maxSpeed
         Vector2.ClampMagnitude(velocity, maxSpeed);
+
+        // Update location according to velocity, update vehicle's sphere representation
         location += velocity * Time.fixedDeltaTime;
         vehicleObject.transform.position = location;
-        acceleration *= 0;
-        Debug.Log(velocity);
+        acceleration *= 0;        
     }
 
     public void StayWithinWalls() 
     {
+        // If the vehicle comes within distance of a wall, it desires to move at 
+        // Maximum speed in the opposite direction of the wall.
+
+        // Left side of the screen
         if (location.x < minimumPos.x + distance)
         {
+            // Make a desired vector that retains its Y velocity but 
+            // with an X velocity that's pointed away from the left wall.
             Vector2 desired = new Vector2(maxSpeed, velocity.y);
             Vector2 steer = desired - velocity;
             Vector2.ClampMagnitude(steer, maxForce);
             applyForce(steer);
         }
+        // Right side of the screen
         else if (location.x > maximumPos.x - distance)
         {
             Vector2 desired = new Vector2(-maxSpeed, velocity.y);
@@ -74,6 +131,7 @@ public class Ch6Fig3Vehicle
             applyForce(steer);
         }
 
+        // Bottom of the screen
         if (location.y < minimumPos.y + distance)
         {
             Vector2 desired = new Vector2(velocity.x, maxSpeed);
@@ -81,6 +139,7 @@ public class Ch6Fig3Vehicle
             Vector2.ClampMagnitude(steer, maxForce);
             applyForce(steer);
         }
+        // Top of the screen
         else if (location.y > maximumPos.y - distance)
         {
             Vector2 desired = new Vector2(velocity.x, -maxSpeed);
@@ -92,6 +151,7 @@ public class Ch6Fig3Vehicle
     
     private void applyForce(Vector2 force)
     {
+        // Newton's second law with force accumulation.
         acceleration += force;
     }
 
@@ -100,7 +160,6 @@ public class Ch6Fig3Vehicle
         Camera.main.orthographic = true;
         Camera.main.orthographicSize = 10;
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-        minimumPos = -maximumPos;
-        distance = 3f;
+        minimumPos = -maximumPos;        
     }
 }
