@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 2
-  maxForce: 1
+  maxForce: 3
 --- !u!4 &919715671
 Transform:
   m_ObjectHideFlags: 0

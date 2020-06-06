@@ -145,7 +145,7 @@ class Vehicle
             sum *= maxSpeed; // Scale averate to maxSpeed (this becomes desired).
 
             Vector2 steer = sum - velocity; // Reynold's steering formula
-            steer = steer.normalized * maxForce; // Clamp to the maximum force.
+            steer = Vector2.ClampMagnitude(steer, maxForce); // Clamp to the maximum force.
 
             rb.AddForce(steer, ForceMode.Impulse); // Apply the force to the Vehicle's acceleration.
         }
