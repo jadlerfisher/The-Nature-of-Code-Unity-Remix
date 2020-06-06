@@ -30,12 +30,12 @@ public class Chapter6Fig8 : MonoBehaviour
 
         foreach (Vehicle v in vehicles)
         {
-            Vector2 seperate = v.Seperate(vehicles);
+            Vector2 seperate = v.Separate(vehicles);
             Vector2 seek = v.Seek(mousePos);
 
             /* These values can be whatever you want. */
-            seperate *= 1.5f;
-            seek *= 0.7f;
+            seperate *= 3.5f;
+            seek *= 1.0f;
 
             v.ApplyForce(seperate);
             v.ApplyForce(seek);
@@ -103,7 +103,7 @@ class Vehicle
         return steer;
     }
 
-    public Vector2 Seperate(List<Vehicle> vehicles)
+    public Vector2 Separate(List<Vehicle> vehicles)
     {
         Vector2 sum = Vector2.zero;
         int count = 0;
@@ -143,7 +143,7 @@ class Vehicle
 
     public void ApplyForce(Vector2 force) 
     {
-        rb.AddForce(force, ForceMode.Impulse);
+        rb.AddForce(force);
     }
 
 }
