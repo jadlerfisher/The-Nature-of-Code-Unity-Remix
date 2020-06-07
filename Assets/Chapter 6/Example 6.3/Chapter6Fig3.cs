@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Example 6.3 Stay Within Walls, Steering Behavior
+/// </summary>
+
 public class Chapter6Fig3 : MonoBehaviour
 {
     [Header("Sets vehicle's acceleration on Start")]
@@ -126,10 +130,11 @@ public class Ch6Fig3Vehicle
         // Left side of the screen
         if (location.x < minimumPos.x + distance)
         {
-            // Make a desired vector that retains its Y velocity but 
-            // with an X velocity that's pointed away from the left wall.
+            // Make a desired vector that wants to go in the opposite direction of the wall
+            // as fast as possible (maxSpeed);
             Vector2 desired = new Vector2(maxSpeed, velocity.y);
             Vector2 steer = desired - velocity;
+            // But can only steer away from the wall as much as maxForce will let us
             Vector2.ClampMagnitude(steer, maxForce);
             applyForce(steer);
         }
