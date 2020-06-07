@@ -15,12 +15,13 @@ public class Ch6Fig4 : MonoBehaviour
     void Start()
     {
         vehicle = new Ch6Fig4Vehicle();
+
+        // Makes a grid of random vectors that moves our vehicle around
         field = new Ch6Fig4FlowField();
     }
 
     private void FixedUpdate()
-    {
-        // Makes a grid of random vectors that moves our vehicle around
+    {        
         vehicle.Follow(field);
         vehicle.Update();
     }
@@ -135,7 +136,7 @@ public class Ch6Fig4FlowField
         {
             for (int j = 0; j < rows; j++) 
             {
-                // A random Vector2
+                // Our grid consists of random Vector2's pushing our vehicle around
                 Vector2 v = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f,1f)); 
 
                 // Not necessary to Normalize in this situation
@@ -147,6 +148,7 @@ public class Ch6Fig4FlowField
 
     public Vector2 Lookup(Vector2 _lookUp)
     {
+        // Repeatedly checks to see what Vector2 we're sitting on
         int column = (int)Mathf.Clamp(_lookUp.x, 0, columns - 1);
         int row = (int)Mathf.Clamp(_lookUp.y, 0, rows - 1);
         return field[column, row];
