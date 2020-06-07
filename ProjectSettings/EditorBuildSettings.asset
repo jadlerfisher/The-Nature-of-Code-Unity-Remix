@@ -135,22 +135,22 @@ EditorBuildSettings:
     path: Assets/Chapter 2/Scenes/Chapter 2 Figure 6.unity
     guid: d7d1382af52272b43ba781fe4c11c244
   - enabled: 0
-    path: Assets/Chapter 4/Scenes/Chapter 4 Figure 1.unity
+    path: Assets/Chapter 4/Example 4.1/Chapter 4 Figure 1.unity
     guid: 2ff898121a9bba544a1f47bcb03b93d5
   - enabled: 0
-    path: Assets/Chapter 4/Scenes/Chapter 4 Figure 2.unity
+    path: Assets/Chapter 4/Example 4.2/Chapter 4 Figure 2.unity
     guid: 74fc390439a59734fb3f65a2d6acafcf
   - enabled: 0
-    path: Assets/Chapter 4/Scenes/Chapter 4 Figure 3.unity
+    path: Assets/Chapter 4/Example 4.3/Chapter 4 Figure 3.unity
     guid: fa069d471d2d63f4aa1cd229c683c73b
   - enabled: 0
-    path: Assets/Chapter 4/Scenes/Chapter 4 Figure 4.unity
+    path: Assets/Chapter 4/Example 4.4/Chapter 4 Figure 4.unity
     guid: b36e7ca2eb62a1a46a338784760822d3
   - enabled: 0
-    path: Assets/Chapter 4/Scenes/Chapter 4 Figure 6.unity
+    path: Assets/Chapter 4/Example 4.6/Chapter 4 Figure 6.unity
     guid: a94ffa52ff37c354bbfa7bb3ec76a3e3
   - enabled: 0
-    path: Assets/Chapter 4/Scenes/Chapter 4 Figure 7.unity
+    path: Assets/Chapter 4/Example 4.7/Chapter 4 Figure 7.unity
     guid: e6e0e73bce45f0f4db1f786c72796987
   - enabled: 0
     path: Assets/Chapter 2/Scenes/Chapter 2 Figure 7.unity

@@ -127,6 +127,7 @@ public class vehicleChapter6_8 : MonoBehaviour
         applyForce(steer*10);
     }
 
+    /*
     public void pathFollow(pathChapter66 path) {
 
         float distance = new float();
@@ -161,6 +162,7 @@ public class vehicleChapter6_8 : MonoBehaviour
         }
 
     }
+    */
 
 
     public Vector3 separate(List<GameObject> vehicles)
