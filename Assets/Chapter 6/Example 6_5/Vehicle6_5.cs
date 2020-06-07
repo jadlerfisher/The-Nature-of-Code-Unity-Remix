@@ -29,6 +29,7 @@ public class Vehicle6_5 : MonoBehaviour
         steerLine.widthMultiplier = 0.1f;
     }
     #endregion
+    public Rigidbody2D body;
 
     // Update is called once per frame
     void Update()
@@ -56,29 +57,20 @@ public class Vehicle6_5 : MonoBehaviour
 
     public void Seek(Vector2 target)
     {
-        // Get the current location and velocity.
-        // This step is neccasary to truncate the Z component that we are not using.
-        Vector2 location = transform.position;
-        Vector2 velocity = body.velocity;
-
         // Get a vector pointing from our location to the target.
-        Vector2 desired = target - location;
+        Vector2 desired = target - body.position;
         // Scale our desired vector by our maximum speed.
         desired = desired.normalized * maxspeed;
 
         // Apply Reynold's path following force relative to time.
-        Vector2 steer = desired - velocity;
-        body.AddForce(steer * Time.fixedDeltaTime, ForceMode.Impulse);
+        Vector2 steer = desired - body.velocity;
+        body.AddForce(steer * Time.fixedDeltaTime, ForceMode2D.Impulse);
     }
 
     public void FollowPath(Path6_5 path)
     {
-        // Get the current location and velocity.
-        // This step is neccasary to truncate the Z component that we are not using.
-        Vector2 location = transform.position;
-        Vector2 velocity = body.velocity;
         // Predict the future location of the body.
-        Vector2 predictedLocation = location + velocity.normalized * 2.5f;
+        Vector2 predictedLocation = body.position + body.velocity.normalized * 2.5f;
 
         // Find the closest point along the path:
         Vector2 a = path.startVector.position;
