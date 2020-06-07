@@ -6,29 +6,6 @@ public class Vehicle6_5 : MonoBehaviour
 {
     // Variables accessible to other scripts.
     public float maxspeed;
-    public Rigidbody body;
-
-    #region DEBUG
-    private bool debugIsActive = false;
-    private LineRenderer predictLine, normalLine, steerLine;
-    void Start()
-    {
-        predictLine = new GameObject().AddComponent<LineRenderer>();
-        predictLine.material = new Material(Shader.Find("Diffuse"));
-        predictLine.positionCount = 2;
-        predictLine.widthMultiplier = 0.1f;
-
-        normalLine = new GameObject().AddComponent<LineRenderer>();
-        normalLine.material = new Material(Shader.Find("Diffuse"));
-        normalLine.positionCount = 2;
-        normalLine.widthMultiplier = 0.1f;
-
-        steerLine = new GameObject().AddComponent<LineRenderer>();
-        steerLine.material = new Material(Shader.Find("Diffuse"));
-        steerLine.positionCount = 2;
-        steerLine.widthMultiplier = 0.1f;
-    }
-    #endregion
     public Rigidbody2D body;
 
     // Update is called once per frame
@@ -37,22 +14,6 @@ public class Vehicle6_5 : MonoBehaviour
         // Look in the direction the vehicle is traveling in.
         // Vector3.back must be specified since that is the "up" direction in our scene.
         gameObject.transform.LookAt(body.position + body.velocity, Vector3.back);
-
-        #region DEBUG
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            debugIsActive = !debugIsActive;
-            if(!debugIsActive)
-            {
-                predictLine.SetPosition(0, Vector3.zero);
-                predictLine.SetPosition(1, Vector3.zero);
-                normalLine.SetPosition(0, Vector3.zero);
-                normalLine.SetPosition(1, Vector3.zero);
-                steerLine.SetPosition(0, Vector3.zero);
-                steerLine.SetPosition(1, Vector3.zero);
-            }
-        }
-        #endregion
     }
 
     public void Seek(Vector2 target)
@@ -88,29 +49,16 @@ public class Vehicle6_5 : MonoBehaviour
         {
             // If so, steer the vehicle towards the path.
             Seek(target);
-
-            #region DEBUG
-            if (debugIsActive)
-            {
-                steerLine.SetPosition(0, new Vector3(normalPoint.x, normalPoint.y, -1));
-                steerLine.SetPosition(1, new Vector3(target.x, target.y, -1));
-            }
-            #endregion
-        }
-        #region DEBUG
-        else if (debugIsActive)
-        {
-            steerLine.SetPosition(0, Vector3.zero);
-            steerLine.SetPosition(1, Vector3.zero);
         }
 
-        if (debugIsActive)
-        {
-            predictLine.SetPosition(0, new Vector3(location.x, location.y, -1));
-            predictLine.SetPosition(1, new Vector3(predictedLocation.x, predictedLocation.y, -1));
-            normalLine.SetPosition(0, new Vector3(predictedLocation.x, predictedLocation.y, -1));
-            normalLine.SetPosition(1, new Vector3(normalPoint.x, normalPoint.y, -1));
-        }
+        #region Debug Line Drawing
+        // Send the information that was calculated to the debug lines drawer.
+        DrawDebugLines(
+            (distance > path.radius) ? normalPoint : Vector2.zero,
+            (distance > path.radius) ? target : Vector2.zero,
+            body.position, predictedLocation,
+            predictedLocation, normalPoint
+        );
         #endregion
     }
 
@@ -128,4 +76,66 @@ public class Vehicle6_5 : MonoBehaviour
         Vector2 normalPoint = ab + start;
         return normalPoint;
     }
+
+    #region Debug Line Drawing
+    // Fields for debug:
+    private bool debugIsActive = false;
+    private LineRenderer predictLine, normalLine, steerLine;
+    // Setup of the debug elements:
+    void Start()
+    {
+        predictLine = new GameObject().AddComponent<LineRenderer>();
+        predictLine.material = new Material(Shader.Find("Diffuse"));
+        predictLine.positionCount = 2;
+        predictLine.widthMultiplier = 0.1f;
+
+        normalLine = new GameObject().AddComponent<LineRenderer>();
+        normalLine.material = new Material(Shader.Find("Diffuse"));
+        normalLine.positionCount = 2;
+        normalLine.widthMultiplier = 0.1f;
+
+        steerLine = new GameObject().AddComponent<LineRenderer>();
+        steerLine.material = new Material(Shader.Find("Diffuse"));
+        steerLine.positionCount = 2;
+        steerLine.widthMultiplier = 0.1f;
+
+        StartCoroutine(DebugUpdate());
+    }
+    // Check for the space bar to be pressed.
+    private IEnumerator DebugUpdate()
+    {
+        while(true)
+        {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                Debug.Log("yeet");
+                debugIsActive = !debugIsActive;
+                if(!debugIsActive)
+                {
+                    predictLine.SetPosition(0, Vector3.zero);
+                    predictLine.SetPosition(1, Vector3.zero);
+                    normalLine.SetPosition(0, Vector3.zero);
+                    normalLine.SetPosition(1, Vector3.zero);
+                    steerLine.SetPosition(0, Vector3.zero);
+                    steerLine.SetPosition(1, Vector3.zero);
+                }
+            }
+            yield return null;
+        }
+    }
+    // Draw the debug lines.
+    private void DrawDebugLines(Vector2 steerStart, Vector2 steerEnd, Vector2 predictStart,
+                                Vector2 predictEnd, Vector2 normalStart, Vector2 normalEnd)
+    {
+        if(debugIsActive)
+        {
+            steerLine.SetPosition(0, new Vector3(steerStart.x, steerStart.y, -1));
+            steerLine.SetPosition(1, new Vector3(steerEnd.x, steerEnd.y, -1));
+            predictLine.SetPosition(0, new Vector3(predictStart.x, predictStart.y, -1));
+            predictLine.SetPosition(1, new Vector3(predictEnd.x, predictEnd.y, -1));
+            normalLine.SetPosition(0, new Vector3(normalStart.x, normalStart.y, -1));
+            normalLine.SetPosition(1, new Vector3(normalEnd.x, normalEnd.y, -1));
+        }
+    }
+    #endregion
 }
