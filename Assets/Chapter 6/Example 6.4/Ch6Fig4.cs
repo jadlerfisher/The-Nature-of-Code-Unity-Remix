@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Example 6.4: Flow Field Following
+/// </summary>
+
 public class Ch6Fig4 : MonoBehaviour
-{
+{    
     private Ch6Fig4Vehicle vehicle;
     private Ch6Fig4FlowField field;
 
@@ -14,9 +18,9 @@ public class Ch6Fig4 : MonoBehaviour
         field = new Ch6Fig4FlowField();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
+        // Makes a grid of random vectors that moves our vehicle around
         vehicle.Follow(field);
         vehicle.Update();
     }
@@ -24,12 +28,17 @@ public class Ch6Fig4 : MonoBehaviour
 
 public class Ch6Fig4Vehicle
 {
+    // This Sphere will represent our vehicle
     private GameObject vehicleRepresentation;
     private Vector2 location;
     private Vector2 velocity;
     private Vector2 acceleration;
+
+    // How fast we can move
     private float maxSpeed;
-    private float maxForce;
+
+    // How much force to put into steering
+    private float maxForce;    
     private Vector2 minimumPos;
     private Vector2 maximumPos;
 
@@ -46,6 +55,7 @@ public class Ch6Fig4Vehicle
 
     public void Follow(Ch6Fig4FlowField flow)
     {        
+        // What is the vector at the place we're standing in?
         Vector2 desiredVelocity = flow.Lookup(location);
         desiredVelocity *= maxSpeed;        
         Vector2 steerVelocity = desiredVelocity - velocity;
@@ -55,16 +65,24 @@ public class Ch6Fig4Vehicle
 
     private void applyForce(Vector2 forceToAdd)
     {
+        // Newton's second law, force gets accumulated
         acceleration += forceToAdd;
     }
 
     public void Update()
     {
+        // FixedUpdate is called 50 times per second per project default
         velocity += acceleration * Time.fixedDeltaTime;
         Vector2.ClampMagnitude(velocity, maxSpeed);
         location += velocity * Time.fixedDeltaTime;
+
+        // Acceleration gets reset every update
         acceleration *= 0;
+
+        // Updates sphere representation
         display();
+
+        // If the representation goes off screen, representation and location gets reset
         stayWithinScreen();
     }
 
@@ -93,8 +111,13 @@ public class Ch6Fig4Vehicle
 
 public class Ch6Fig4FlowField
 {
+    // A flow field is a two-dimensional array of Vector2s
     private Vector2[,] field;
+
+    // Columns and rows to line the grid
     private int columns, rows;
+
+    // Resolution of grid relative to screen width and height
     private int resolution;
 
     public Ch6Fig4FlowField()
@@ -112,7 +135,10 @@ public class Ch6Fig4FlowField
         {
             for (int j = 0; j < rows; j++) 
             {
-                Vector2 v = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f,1f));
+                // A random Vector2
+                Vector2 v = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f,1f)); 
+
+                // Not necessary to Normalize in this situation
                 v.Normalize();                
                 field[i,j] = v;
             }
