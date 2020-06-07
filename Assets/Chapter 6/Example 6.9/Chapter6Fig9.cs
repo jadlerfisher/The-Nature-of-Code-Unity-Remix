@@ -6,6 +6,8 @@ public class Chapter6Fig9 : MonoBehaviour
 {
     public float maxSpeed = 2, maxForce = 2;
 
+    public Mesh coneMesh; // If you want to use your own cone mesh, drop it into the editor here.
+
     private List<Boid> boids; // Declare a List of Vehicle objects.
     private Vector2 minimumPos, maximumPos;
 
@@ -16,9 +18,9 @@ public class Chapter6Fig9 : MonoBehaviour
         boids = new List<Boid>(); // Initilize and fill the List with a bunch of Vehicles
         for (int i = 0; i < 100; i++)
         {
-            float ranX = Random.Range(minimumPos.x, maximumPos.x);
-            float ranY = Random.Range(minimumPos.y, maximumPos.y);
-            boids.Add(new Boid(new Vector2(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce));
+            float ranX = Random.Range(-1.0f, 1.0f);
+            float ranY = Random.Range(-1.0f, 1.0f);
+            boids.Add(new Boid(new Vector2(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce, coneMesh));
         }
     }
 
@@ -35,14 +37,14 @@ public class Chapter6Fig9 : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            boids.Add(new Boid(mousePos, minimumPos, maximumPos, maxSpeed, maxForce));
+            boids.Add(new Boid(mousePos, minimumPos, maximumPos, maxSpeed, maxForce, coneMesh));
         }
     }
 
     private void findWindowLimits()
     {
         Camera.main.orthographic = true;
-        Camera.main.orthographicSize = 10;
+        Camera.main.orthographicSize = 20;
         minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
@@ -67,7 +69,7 @@ class Boid
     private GameObject myVehicle;
     private Rigidbody rb;
 
-    public Boid(Vector2 initPos, Vector2 _minPos, Vector2 _maxPos, float _maxSpeed, float _maxForce)
+    public Boid(Vector2 initPos, Vector2 _minPos, Vector2 _maxPos, float _maxSpeed, float _maxForce, Mesh coneMesh)
     {
         minPos = _minPos - Vector2.one;
         maxPos = _maxPos + Vector2.one;
@@ -84,9 +86,19 @@ class Boid
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         rb.useGravity = false; // Remember to ignore gravity!
 
-        myVehicle.transform.localScale = new Vector3(1, 1, 1.5f);
 
-        
+        /* We want to double check if a custom mesh is
+         * being used. If not, we will scale a cube up
+         * instead ans use that for our boids. */
+        if (coneMesh != null)
+        {
+            MeshFilter filter = myVehicle.GetComponent<MeshFilter>();
+            filter.mesh = coneMesh;
+        }
+        else 
+        {
+            myVehicle.transform.localScale = new Vector3(1f, 2f, 1f);
+        }
     }
 
     private void checkBounds() {
@@ -105,8 +117,20 @@ class Boid
         {
             location = new Vector2(location.x, maxPos.y);
         }
-        Vector2 lookat = location + velocity;
-        myVehicle.transform.LookAt(lookat);
+    }
+
+    private void lookForward() 
+    {
+        /* We want our boids to face the same direction
+         * that they're going. To do that, we take our location
+         * and velocity to see where we're heading. */
+        Vector2 futureLocation = location + velocity;
+        myVehicle.transform.LookAt(futureLocation); // We can use the built in 'LookAt' function to automatically face us the right direction
+
+        /* In the case our model is facing the wrong direction,
+         * we can adjust it using Eular Angles. */
+        Vector3 eular = myVehicle.transform.rotation.eulerAngles;
+        myVehicle.transform.rotation = Quaternion.Euler(eular.x + 90, eular.y + 0, eular.z + 0); // Adjust these numbers to make the boids face different directions!
     }
 
     public void Flock(List<Boid> boids) 
@@ -115,7 +139,7 @@ class Boid
         Vector2 ali = Align(boids);
         Vector2 coh = Cohesion(boids);
 
-        sep *= 3.0f; // Arbitrary weights for these forces (Try different ones!)
+        sep *= 5.0f; // Arbitrary weights for these forces (Try different ones!)
         ali *= 1.5f;
         coh *= 0.5f;
 
@@ -124,6 +148,7 @@ class Boid
         ApplyForce(coh);
 
         checkBounds(); // To loop the world to the other side of the screen.
+        lookForward(); // Make the boids face forward.
     }
 
     public Vector2 Align(List<Boid> boids) 
