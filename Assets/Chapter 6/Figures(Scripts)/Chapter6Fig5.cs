@@ -23,7 +23,6 @@ public class Chapter6Fig5 : MonoBehaviour
             vC65f.pathFollow(path);
 
         } else {
-            Debug.Log("no path to walk, young son");
         }
     }
 }

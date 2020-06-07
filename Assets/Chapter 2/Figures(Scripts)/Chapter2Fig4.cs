@@ -69,7 +69,7 @@ public class Mover2_4
         // Create the components required for the mover
         gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         body = gameObject.AddComponent<Rigidbody>();
-        // Remove functionality that come with the primitive that we don't want
+        // Remove functionality that comes with the primitive that we don't want
         gameObject.GetComponent<SphereCollider>().enabled = false;
         Object.Destroy(gameObject.GetComponent<SphereCollider>());
 

@@ -127,7 +127,7 @@ public class vehicleChapter6_7 : MonoBehaviour
         applyForce(steer*10);
     }
 
-    public void pathFollow(pathChapter66 path) {
+    public void pathFollow(Path6_6 path) {
 
         float distance = new float();
 
@@ -135,7 +135,7 @@ public class vehicleChapter6_7 : MonoBehaviour
         Vector3 pNormal = predict.normalized;
         pNormal *= 20;
         Vector3 predictedLocation = location + pNormal;
-
+        /*
         for (int i = 0; i < path.pathVectors.Count - 1; i++)
         {           
             Vector3 a = path.pathVectors[i];
@@ -159,6 +159,7 @@ public class vehicleChapter6_7 : MonoBehaviour
                 wander();
             }
         }
+        */
 
     }
 
