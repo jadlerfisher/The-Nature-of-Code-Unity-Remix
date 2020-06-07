@@ -235,7 +235,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1300755048662112373}
-  m_Mesh: {fileID: -2432090755550338912, guid: ddfc14ec5b1b9444395c732f431b1d3f, type: 3}
+  m_Mesh: {fileID: -2432090755550338912, guid: 142660332165b0947bd6e8b99b85cb9b, type: 3}
 --- !u!1 &1562742429704878775
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,7 +560,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5584890451184551029}
   - component: {fileID: 7293353270614024319}
-  - component: {fileID: 43418409356883985}
+  - component: {fileID: 5062650259981042980}
   m_Layer: 0
   m_Name: Vehicle6_5
   m_TagString: Untagged
@@ -598,20 +598,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxspeed: 10
-  body: {fileID: 43418409356883985}
---- !u!54 &43418409356883985
-Rigidbody:
+  body: {fileID: 5062650259981042980}
+--- !u!50 &5062650259981042980
+Rigidbody2D:
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5584890451184551033}
-  serializedVersion: 2
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 0
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
   m_Interpolate: 0
-  m_Constraints: 120
+  m_SleepingMode: 1
   m_CollisionDetection: 0
+  m_Constraints: 0
