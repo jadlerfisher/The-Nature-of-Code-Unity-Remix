@@ -63,7 +63,7 @@ public class Ch6Fig4Vehicle
         // What is the vector at the place we're standing in?
         Vector2 desiredVelocity = flow.Lookup(location);
         desiredVelocity *= maxSpeed;        
-        Vector2 steerVelocity = desiredVelocity - velocity;
+        Vector2 steerVelocity = desiredVelocity - velocity; // Steering is desired minus velocity
         Vector2.ClampMagnitude(steerVelocity, maxForce);
         applyForce(steerVelocity);
     }
@@ -118,20 +118,20 @@ public class Ch6Fig4Vehicle
 
 public class Ch6Fig4FlowField
 {
-    // A flow field is a two-dimensional array of Vector2s
+    // Declaring a 2D array of Vector2's
     private Vector2[,] field;
 
-    // Columns and rows to line the grid
+    // How many columns and how many rows in the grid?
     private int columns, rows;
 
-    // Resolution of grid relative to screen width and height
+    // Resolution of grid relative to window width and height in pixels
     private int resolution;
 
     public Ch6Fig4FlowField()
     {
         resolution = 10;
-        columns = Screen.width / resolution;        
-        rows = Screen.height / resolution;
+        columns = Screen.width / resolution; // Total columns equals width divided by resolution
+        rows = Screen.height / resolution; // Total rows equals height divided by resolution
         field = new Vector2[columns, rows];
         initializeFlowField();        
     }
@@ -139,15 +139,18 @@ public class Ch6Fig4FlowField
     private void initializeFlowField()
     {
         float xOff = 0;
-        for (int i = 0; i < columns; i++)
+        for (int i = 0; i < columns; i++) // Using a nested loop to hit every column and every row of the flow field
         {
             float yOff = 0;
             for (int j = 0; j < rows; j++) 
             {
+                // In this example, we use Perlin noise to seed the vectors.
                 float noiseValue = Mathf.PerlinNoise(xOff, yOff);
-                float theta = 0 + ((Mathf.PI * 2) - 0) * ((noiseValue - 0) / (1 - 0));
-                
-                // Our grid consists of random Vector2's pushing our vehicle around
+
+                // A C# recreation of Processing's Map function, which re-maps
+                // A number from one range to another. 
+                // https://processing.org/reference/map_.html
+                float theta = 0 + ((Mathf.PI * 2) - 0) * ((noiseValue - 0) / (1 - 0));                                
                 Vector2 v = new Vector2(Mathf.Cos(theta), Mathf.Sin(theta));
                                               
                 field[i,j] = v;
@@ -159,7 +162,7 @@ public class Ch6Fig4FlowField
 
     public Vector2 Lookup(Vector2 _lookUp)
     {
-        // Repeatedly checks to see what Vector2 we're sitting on
+        // A method to return a Vector2 based on a location
         int column = (int)Mathf.Clamp(_lookUp.x, 0, columns - 1);
         int row = (int)Mathf.Clamp(_lookUp.y, 0, rows - 1);
         return field[column, row];
