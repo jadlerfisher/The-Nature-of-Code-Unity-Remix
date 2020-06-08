@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class Chapter6Fig3 : MonoBehaviour
 {
+    [SerializeField] private GameObject vehiclePrefab;
+
     [Header("Sets vehicle's acceleration on Start")]
     [Tooltip("This number is multiplied by fixedDeltaTime, a very small number, so this number needs to be large ie 300x300")]
     [SerializeField] private Vector2 startingAcceleration;
@@ -29,10 +31,9 @@ public class Chapter6Fig3 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameObject vehicleRepresentation = Instantiate(vehiclePrefab, Vector2.zero, Quaternion.identity);
         // Instantiate vehicle at origin. Use exposed variable for distance, or how far from the wall before we steer.
-        // Use exposed variable for starting acceleration, which only happens in the first frame before getting reset.
-        // Use exposed variables for maxSpeed of our vehicle and how much force it can use to steer away from walls
-        vehicle = new Ch6Fig3Vehicle(startingAcceleration, distance, maxSpeed, maxForce);
+        vehicle = new Ch6Fig3Vehicle(vehicleRepresentation, startingAcceleration, distance, maxSpeed, maxForce);
     }
 
     // FixedUpdate is called 50 times per second per project default
@@ -69,19 +70,12 @@ public class Ch6Fig3Vehicle
     // How far away from each wall before we start steering away, in meters
     private float distance; 
 
-    public Ch6Fig3Vehicle(Vector2 _acceleration, float _distance, float _maxSpeed, float _maxForce)
+    public Ch6Fig3Vehicle(GameObject _vehicle, Vector2 _acceleration, float _distance, float _maxSpeed, float _maxForce)
     {
         distance = _distance;
 
-        // Our vehicle will be a sphere
-        vehicleObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-
-        // Remove component we do not need
-        Object.Destroy(vehicleObject.GetComponent<SphereCollider>()); 
-
-        // We need to create a new material for WebGL
-        Renderer renderer = vehicleObject.GetComponent<Renderer>();
-        renderer.material = new Material(Shader.Find("Diffuse"));
+        // Our vehicle will be a cone
+        vehicleObject = _vehicle;
 
         // Gives us min and max Pos, or the edges of the screen
         findWindowLimits();
@@ -116,9 +110,16 @@ public class Ch6Fig3Vehicle
         // We clamp velocity's magnitude so its values don't exceed maxSpeed
         Vector2.ClampMagnitude(velocity, maxSpeed);
 
-        // Update location according to velocity, update vehicle's sphere representation
+        // Update location according to velocity, update vehicle representation
         location += velocity * Time.fixedDeltaTime;
         vehicleObject.transform.position = location;
+
+        // Use transform.LookAt toward where we're going
+        vehicleObject.transform.LookAt(vehicleObject.transform.position + (Vector3)velocity);
+
+        // Adjust the x rotation of the object by 90 degrees
+        Vector3 vehicleEularAngles = vehicleObject.transform.rotation.eulerAngles;
+        vehicleObject.transform.rotation = Quaternion.Euler(vehicleEularAngles.x + 90, vehicleEularAngles.y, vehicleEularAngles.z); 
         acceleration *= 0;        
     }
 

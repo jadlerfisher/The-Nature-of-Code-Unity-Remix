@@ -149,6 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53adc6ca5985cfa4b8108d769d55dda9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vehiclePrefab: {fileID: 6942800970577707110, guid: 1038021adc0c9ea47a3340483766387e,
+    type: 3}
   startingAcceleration: {x: 150, y: 200}
   distance: 3
   maxSpeed: 4
