@@ -7,14 +7,18 @@ using UnityEngine;
 /// </summary>
 
 public class Ch6Fig4 : MonoBehaviour
-{    
+{
+    [SerializeField] private GameObject vehicleRepresentation;
+
     private Ch6Fig4Vehicle vehicle;
     private Ch6Fig4FlowField field;
 
     // Start is called before the first frame update
     void Start()
     {
-        vehicle = new Ch6Fig4Vehicle();
+        // Instantiate our vehicle, location doesn't matter as it will get overwritten
+        GameObject vehicleObject = Instantiate(vehicleRepresentation, Vector3.zero, Quaternion.identity);
+        vehicle = new Ch6Fig4Vehicle(vehicleObject);
 
         // Makes a grid of random vectors that moves our vehicle around
         field = new Ch6Fig4FlowField();
@@ -43,9 +47,9 @@ public class Ch6Fig4Vehicle
     private Vector2 minimumPos;
     private Vector2 maximumPos;
 
-    public Ch6Fig4Vehicle()
+    public Ch6Fig4Vehicle(GameObject _vehicleObject)
     {
-        vehicleRepresentation = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        vehicleRepresentation = _vehicleObject;        
         location = Vector2.zero;
         velocity = Vector2.zero;
         acceleration = Vector2.zero;
@@ -77,11 +81,18 @@ public class Ch6Fig4Vehicle
         Vector2.ClampMagnitude(velocity, maxSpeed);
         location += velocity * Time.fixedDeltaTime;
 
+        // Use transform.LookAt toward where we're going
+        vehicleRepresentation.transform.LookAt(vehicleRepresentation.transform.position + (Vector3)velocity);
+
+        // Adjust the x rotation of the object by 90 degrees
+        Vector3 vehicleEularAngles = vehicleRepresentation.transform.rotation.eulerAngles;
+        vehicleRepresentation.transform.rotation = Quaternion.Euler(vehicleEularAngles.x + 90, vehicleEularAngles.y, vehicleEularAngles.z);
+
         // Acceleration gets reset every update
         acceleration *= 0;
 
         // Updates sphere representation
-        display();
+        vehicleRepresentation.transform.position = location;
 
         // If the representation goes off screen, representation and location gets reset
         stayWithinScreen();
@@ -94,11 +105,6 @@ public class Ch6Fig4Vehicle
         {            
             location = vehicleRepresentation.transform.position = Vector2.zero;            
         }
-    }
-
-    private void display()
-    {
-        vehicleRepresentation.transform.position = location;
     }
 
     private void findWindowBounds()
