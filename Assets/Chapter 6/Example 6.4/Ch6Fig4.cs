@@ -138,17 +138,22 @@ public class Ch6Fig4FlowField
 
     private void initializeFlowField()
     {
+        float xOff = 0;
         for (int i = 0; i < columns; i++)
         {
+            float yOff = 0;
             for (int j = 0; j < rows; j++) 
             {
+                float noiseValue = Mathf.PerlinNoise(xOff, yOff);
+                float theta = 0 + ((Mathf.PI * 2) - 0) * ((noiseValue - 0) / (1 - 0));
+                
                 // Our grid consists of random Vector2's pushing our vehicle around
-                Vector2 v = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f,1f)); 
-
-                // Not necessary to Normalize in this situation
-                v.Normalize();                
+                Vector2 v = new Vector2(Mathf.Cos(theta), Mathf.Sin(theta));
+                                              
                 field[i,j] = v;
+                yOff += 0.1f;
             }
+            xOff += 0.1f;
         }
     }
 
