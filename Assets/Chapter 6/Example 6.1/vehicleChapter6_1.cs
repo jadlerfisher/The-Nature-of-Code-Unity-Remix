@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class vehicleChapter6_1 : MonoBehaviour
 {
-
     public Vector3 location;
     public Vector3 velocity;
     public Vector3 acceleration;
@@ -15,11 +14,12 @@ public class vehicleChapter6_1 : MonoBehaviour
     public float mass;
 
     private GameObject vehicle;
+    public GameObject target;
 
     // Start is called before the first frame update
     void Start()
     {
-        //assign the mover's GameObject to the varaible
+        //assign the mover's GameObject to the variable
         vehicle = this.gameObject;
         location = this.gameObject.transform.position;
         r = 3.0f;
@@ -47,6 +47,8 @@ public class vehicleChapter6_1 : MonoBehaviour
         acceleration *= 0;
         this.gameObject.transform.position = location;
 
+        seek(target.transform.position);
+        vehicle.transform.rotation = Quaternion.LookRotation(velocity);
     }
 
 
@@ -62,6 +64,7 @@ public class vehicleChapter6_1 : MonoBehaviour
         steer.y = Mathf.Clamp(steer.y, -maxforce, maxforce);
         steer.z = Mathf.Clamp(steer.z, -maxforce, maxforce);
         applyForce(steer);
+        Debug.Log(desired);
 
     }
 

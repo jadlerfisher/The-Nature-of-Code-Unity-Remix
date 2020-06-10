@@ -14,6 +14,7 @@ public class vehicleChapter6_2 : MonoBehaviour
     public float mass;
 
     private GameObject vehicle;
+    public GameObject target;
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +25,7 @@ public class vehicleChapter6_2 : MonoBehaviour
         r = 3.0f;
         maxspeed = 4.0f;
         maxforce = 1f;
-        mass = 20f;
+        mass = 1000f;
 
         //Assign that spawn location to the mover
         vehicle.transform.position = location;
@@ -41,10 +42,11 @@ public class vehicleChapter6_2 : MonoBehaviour
         velocity.y = Mathf.Clamp(velocity.y, -maxspeed, maxspeed);
         velocity.z = Mathf.Clamp(velocity.z, -maxspeed, maxspeed);
         location += new Vector3(velocity.x, velocity.y, velocity.z);
+        acceleration *= 0;
         this.gameObject.transform.position = location;
 
-        acceleration *= 0;
-
+        //arrive(target.transform.position);
+        vehicle.transform.rotation = Quaternion.LookRotation(velocity);
     }
 
     public void seek(Vector3 target)
@@ -66,23 +68,28 @@ public class vehicleChapter6_2 : MonoBehaviour
         location = this.gameObject.transform.position;
         Vector3 desired = target - location;
         float d = desired.magnitude;
+        //desired = desired.normalized;
         Debug.Log(d);
-        if (d < 1)
+        if (d < 100)
         {
-            float m = ExtensionMethods.Remap(d, 0f, 1f, 0, maxspeed);
-            desired *= m;
+            desired = Vector3.ClampMagnitude(desired * d, maxspeed);
+            //float m = ExtensionMethods.Remap(d, 0f, 1f, 0, maxspeed);
+            //desired *= m;
+            Debug.Log("near" + desired);
 
         } else
         {
             desired *= maxspeed;
+            Debug.Log("far" + desired);
         }
 
         Vector3 steer = desired - velocity;
-        Debug.Log(desired);
+        //  Debug.Log(desired);
         steer.x = Mathf.Clamp(steer.x, -maxforce, maxforce);
         steer.y = Mathf.Clamp(steer.y, -maxforce, maxforce);
         steer.z = Mathf.Clamp(steer.z, -maxforce, maxforce);
         applyForce(steer);
+        //Debug.Log(steer);
     }
 
     //Newton's second law
@@ -92,6 +99,4 @@ public class vehicleChapter6_2 : MonoBehaviour
         Vector3 f = force / mass;
         acceleration = acceleration + f;
     }
-
-
 }
