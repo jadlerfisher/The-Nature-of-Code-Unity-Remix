@@ -16,7 +16,7 @@ public class Chapter6Fig2 : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //set gameObject's position equal to the mouse's;
         target.transform.position = MousePosition(camera);

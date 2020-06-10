@@ -257,7 +257,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4817917821016887065, guid: e704bd4628ede32409c3b43a97b80814, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e704bd4628ede32409c3b43a97b80814, type: 3}
 --- !u!1 &859806573
 GameObject:
@@ -440,7 +441,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5584890451184551030, guid: 1f06b2d4baed5bc44a602312da4a2fb5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1f06b2d4baed5bc44a602312da4a2fb5, type: 3}
 --- !u!1 &1972674396
 GameObject:
@@ -451,7 +453,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1972674397}
-  - component: {fileID: 1972674398}
   - component: {fileID: 1972674399}
   m_Layer: 0
   m_Name: Scripts
@@ -474,21 +475,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1972674398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1972674396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08194edcca2515f4990306bc0b855142, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camera: {fileID: 0}
-  vehicle: {fileID: 0}
-  target: {fileID: 0}
 --- !u!114 &1972674399
 MonoBehaviour:
   m_ObjectHideFlags: 0
