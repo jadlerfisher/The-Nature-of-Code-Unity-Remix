@@ -28,12 +28,7 @@ public class Example8_6 : MonoBehaviour
         Vector2 end = parentRoot.position + parentRoot.up * length;
 
         // Create the line renderer for this branch.
-        LineRenderer renderer = parentRoot.gameObject.AddComponent<LineRenderer>();
-        renderer.material = branchMaterial;
-        renderer.widthMultiplier = width;
-        renderer.positionCount = 2;
-        renderer.SetPosition(0, parentRoot.position);
-        renderer.SetPosition(1, end);
+        DrawLine(parentRoot.gameObject, parentRoot.position, end);
 
         // Create left and right branches depending on this branch length.
         if(length > minimumLength)
@@ -54,5 +49,19 @@ public class Example8_6 : MonoBehaviour
             rightRoot.localEulerAngles = new Vector3(0, 0, -childAngle);
             Branch(rightRoot, length * childScale);
         }
+    }
+
+    void DrawLine(GameObject parent, Vector2 start, Vector2 end)
+    {
+        LineRenderer renderer = parent.GetComponent<LineRenderer>();
+        if (renderer == null)
+        {
+            renderer = parent.AddComponent<LineRenderer>();
+        }
+        renderer.positionCount = 2;
+        renderer.SetPosition(0, start);
+        renderer.SetPosition(1, end);
+        renderer.material = branchMaterial;
+        renderer.widthMultiplier = width;
     }
 }
