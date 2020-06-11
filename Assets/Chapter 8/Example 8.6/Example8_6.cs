@@ -9,9 +9,7 @@ public class Example8_6 : MonoBehaviour
 
     // Parameters for generating the tree fractal.
     public float width = 0.05f;
-    public Vector2 startPoint = Vector2.zero;
     public float startLength = 5;
-    public float startAngle = 90;
     [Range(0, 0.9f)]
     public float childScale = 0.75f;
     public float childAngle = 30;
@@ -20,32 +18,41 @@ public class Example8_6 : MonoBehaviour
 
     void Start()
     {
-        // Convert the parameters to radians.
-        childAngle *= Mathf.Deg2Rad;
-        startAngle *= Mathf.Deg2Rad;
         // Start the recursive branch function.
-        Branch(startPoint, startAngle, startLength);
+        Branch(transform, startLength);
     }
 
-    void Branch(Vector2 start, float angle, float length)
+    void Branch(Transform parentRoot, float length)
     {
-        // Find the end position of this branch.
-        Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-        Vector2 end = start + direction * length;
+        // Determine where this branch ends.
+        Vector2 end = parentRoot.position + parentRoot.up * length;
 
         // Create the line renderer for this branch.
-        LineRenderer renderer = new GameObject().AddComponent<LineRenderer>();
+        LineRenderer renderer = parentRoot.gameObject.AddComponent<LineRenderer>();
         renderer.material = branchMaterial;
         renderer.widthMultiplier = width;
         renderer.positionCount = 2;
-        renderer.SetPosition(0, start);
+        renderer.SetPosition(0, parentRoot.position);
         renderer.SetPosition(1, end);
 
         // Create left and right branches depending on this branch length.
         if(length > minimumLength)
         {
-            Branch(end, angle - childAngle, length * childScale);
-            Branch(end, angle + childAngle, length * childScale);
+            // Create a new child transform for this branch.
+            Transform leftRoot = new GameObject().transform;
+            leftRoot.parent = parentRoot;
+            // Set the position and rotation relative to the previous branch.
+            leftRoot.localPosition = Vector2.up * length;
+            leftRoot.localEulerAngles = new Vector3(0, 0, childAngle);
+            // Call this function again.
+            Branch(leftRoot, length * childScale);
+
+            // Repeat for the right branch, but with the opposite angle.
+            Transform rightRoot = new GameObject().transform;
+            rightRoot.parent = parentRoot;
+            rightRoot.localPosition = Vector2.up * length;
+            rightRoot.localEulerAngles = new Vector3(0, 0, -childAngle);
+            Branch(rightRoot, length * childScale);
         }
     }
 }
