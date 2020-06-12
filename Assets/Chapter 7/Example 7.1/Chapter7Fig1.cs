@@ -30,7 +30,7 @@ public class Chapter7Fig1CA
     public Chapter7Fig1CA(int[] r)
     {
         ruleset = r;
-        cells = new int[Screen.width / w];
+        cells = new int[(int)Camera.main.orthographicSize * 2];
         restart();
     }
 
@@ -72,6 +72,7 @@ public class Chapter7Fig1CA
         for (int i = 0; i < cells.Length; i++)
         {
             GameObject newCell = GameObject.CreatePrimitive(PrimitiveType.Cube); // TODO Plane? Quad?
+            newCell.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             Renderer r = newCell.GetComponent<Renderer>();
             r.material = new Material(Shader.Find("Diffuse"));
             Object.Destroy(newCell.GetComponent<BoxCollider>());
@@ -83,7 +84,7 @@ public class Chapter7Fig1CA
             {
                 r.material.color = Color.white;
             }
-            newCell.transform.position = new Vector3(i * w, generation);
+            newCell.transform.position = new Vector3((i - Camera.main.orthographicSize) * 0.5f, generation * 0.5f, 100f);
         }
     }
 
