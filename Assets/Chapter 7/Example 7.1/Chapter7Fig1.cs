@@ -73,7 +73,7 @@ public class Chapter7Fig1 : MonoBehaviour
         rulesetList.Add(ruleSet6);
     }
 
-    private static void setOrthographicCamera()
+    private void setOrthographicCamera()
     {
         Camera.main.orthographic = true;
         Camera.main.orthographicSize = 10;
