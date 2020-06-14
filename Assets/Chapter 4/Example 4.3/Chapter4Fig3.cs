@@ -68,7 +68,7 @@ public class particleSystemFigure3
 
         //We then to create a MinMaxCurves which will manage the change in velocity a
         ParticleSystem.MinMaxCurve minMaxCurveX = new ParticleSystem.MinMaxCurve(-velocity.x * velocity.x, velocity.x);
-        ParticleSystem.MinMaxCurve minMaxCurveY = new ParticleSystem.MinMaxCurve(-velocity.y * velocity.y, -velocity.y);
+        ParticleSystem.MinMaxCurve minMaxCurveY = new ParticleSystem.MinMaxCurve(velocity.y, -velocity.y);
 
         velocityOverLifetime.x = minMaxCurveX;
         velocityOverLifetime.y = minMaxCurveY;
@@ -103,7 +103,7 @@ public class particleSystemFigure3
         var trailsModule = particleSystemComponent.trails;
         trailsModule.enabled = true;
         //This is how many particles will receive the trails. Setting it to 1 means they all will. 
-        trailsModule.ratio = 1f;
+        trailsModule.ratio = .5f;
         //Next we want the trail to die when the particle dies 
         trailsModule.dieWithParticles = true;
         //And we want these trails to act like a ribbon
@@ -118,7 +118,7 @@ public class particleSystemFigure3
         Gradient grad = new Gradient();
         //This gradient key lets us choose points on a gradient that represent different RGBA or Unity.Color values.
         //These gradient values exist in an array
-        grad.SetKeys(new GradientColorKey[] { new GradientColorKey(Color.white, 0.0f), new GradientColorKey(Color.red, 2.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f), new GradientAlphaKey(1f, 2.0f) });
+        grad.SetKeys(new GradientColorKey[] { new GradientColorKey(Color.green, 0.0f)}, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f), new GradientAlphaKey(1f, 2.0f) });
         //Set the color to the gradient we created above
         trailsModule.colorOverLifetime = grad;
 
