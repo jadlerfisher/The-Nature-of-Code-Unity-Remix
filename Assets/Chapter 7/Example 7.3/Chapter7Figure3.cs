@@ -52,7 +52,7 @@ public class Chapter7Figure3Cell
 
     // Size of the screen in meters, or Unity units
     private Vector2 screenSize;
-    private float yScreenOffset; // Cells are spawned with a small offset so they spawn in more centered
+    private float yScreenOffset; // Cells are spawned with a small offset so they spawn in more centered    
     private float xScreenOffset;
 
     // Location
@@ -68,8 +68,8 @@ public class Chapter7Figure3Cell
 
         // How big our screen is in World Units
         screenSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-        xScreenOffset = screenSize.x / 2;
-        yScreenOffset = screenSize.y / 2;
+        xScreenOffset = 9f;
+        yScreenOffset = 3f;
 
         State = Random.Range(0, 2);
         Previous = State;
@@ -105,8 +105,8 @@ public class Chapter7Figure3Cell
             cellMaterial.color = Color.white;
         }
 
-        cellRep.transform.position = new Vector3((x * cellRep.transform.localScale.x) - xScreenOffset, 
-                                                 (y * cellRep.transform.localScale.x) - yScreenOffset);
+        cellRep.transform.position = new Vector3((x * cellRep.transform.localScale.x) - screenSize.x - xScreenOffset, 
+                                                 (y * cellRep.transform.localScale.x) - screenSize.y - yScreenOffset);
     }
 
     private void createGameObject()
@@ -131,8 +131,8 @@ public class Chapter7Figure3GOL
 
     public Chapter7Figure3GOL()
     {        
-        columns = 25;
-        rows = 25;
+        columns = 72;
+        rows = 41;
         board = new Chapter7Figure3Cell[columns, rows];
         innit();
     }
