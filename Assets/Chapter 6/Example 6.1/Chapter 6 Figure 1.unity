@@ -127,6 +127,12 @@ Camera:
     type: 3}
   m_PrefabInstance: {fileID: 902317757}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &365423110 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5584890451184551033, guid: a374037dda58480478e27e073253a118,
+    type: 3}
+  m_PrefabInstance: {fileID: 1251533669}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &618359547
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -209,7 +215,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4817917821016887065, guid: 627292a34a6550242afcd226b16d2bae, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 627292a34a6550242afcd226b16d2bae, type: 3}
 --- !u!1 &859806573
 GameObject:
@@ -464,7 +471,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: vehicleChapter6_1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5584890451184551030, guid: a374037dda58480478e27e073253a118, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a374037dda58480478e27e073253a118, type: 3}
 --- !u!1 &1483638440 stripped
 GameObject:
@@ -516,5 +524,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 71707596}
-  vehicle: {fileID: 0}
+  vehicle: {fileID: 365423110}
   target: {fileID: 1483638440}

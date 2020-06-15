@@ -13,14 +13,14 @@ public class Chapter6Fig1 : MonoBehaviour
     void Start()
     {
         Cursor.visible = false;
-        vehicle = Instantiate(vehicle);
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //set gameObject's position equal to the mouse's;
         target.transform.position = MousePosition(camera);
+        vehicle.GetComponent<vehicleChapter6_1>().seek(target.transform.position);
     }
     Vector2 MousePosition(Camera camera)
     {

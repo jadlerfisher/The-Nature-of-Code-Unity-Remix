@@ -13,6 +13,7 @@ public class Chapter6Fig2 : MonoBehaviour
     void Start()
     {
         Cursor.visible = false;
+        vehicle = Instantiate(vehicle);
     }
 
     // Update is called once per frame
