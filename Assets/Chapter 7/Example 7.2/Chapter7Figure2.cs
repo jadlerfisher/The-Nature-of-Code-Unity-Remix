@@ -45,8 +45,7 @@ public class Chapter7Fig2GameOfLife
 {
     private int columns, rows;
     private Vector2 screenSize; 
-    private float yScreenOffset; // Cells are spawned with a small offset so they spawn in more centered
-    private float xScreenOffset;
+    private float yScreenOffset; // Cells are spawned with a small offset so they spawn in more centered    
 
     // One array for conceptual board, another to draw and change Unity GameObjects used for displaying
     private int[,] board;
@@ -56,10 +55,9 @@ public class Chapter7Fig2GameOfLife
     {        
         // How big our screen is in World Units
         screenSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-        xScreenOffset = screenSize.x / 2;
-        yScreenOffset = screenSize.y / 2;
-        columns = 25;
-        rows = 25;
+        yScreenOffset = 2f;
+        columns = 72;
+        rows = 41;
         unityBoard = new GameObject[columns, rows];
         board = new int[columns, rows];
         spawnUnityBoard();
@@ -83,8 +81,8 @@ public class Chapter7Fig2GameOfLife
 
                 // Set position based to lower left of screen, with screen offset
                 // Since we shrunk the objects, we'll have to compensate when setting x and y position
-                newCell.transform.position = new Vector3((i * newCell.transform.localScale.x) - xScreenOffset,
-                                                         (j * newCell.transform.localScale.y) - yScreenOffset);
+                newCell.transform.position = new Vector3((i * newCell.transform.localScale.x) - screenSize.x,
+                                                         (j * newCell.transform.localScale.y) - screenSize.y + yScreenOffset);
             }
         }
     }
