@@ -13,25 +13,19 @@ public class Chapter8Fig10 : MonoBehaviour
     private Chapter8Fig10Turtle turtle;
 
     private Vector2 screenSize;
+    private Transform previousState;
 
     private int counter;
 
     // Start is called before the first frame update
     void Start()
-    {
-        //GameObject g = new GameObject();
-        //LineRenderer l = g.AddComponent<LineRenderer>();
-        ////l.positionCount = 2;
-        //l.SetPosition(0, new Vector2(0, 0));
-        //l.SetPosition(1, new Vector2(100, 0));
-        //l.useWorldSpace = false; // lines origin will be GO's origin!
-
+    {  
         counter = 0;
         screenSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
         Chapter8Fig10Rule[] ruleset = new Chapter8Fig10Rule[1];
         ruleset[0] = new Chapter8Fig10Rule('F', "FF+[+F-F-F]-[-F+F+F]");
         lSys = new Chapter8Fig10LSystem("F", ruleset);
-        turtle = new Chapter8Fig10Turtle(lSys.Sentence, screenSize.y / 3, 25 * Mathf.Deg2Rad); // TODO Should screen.height be screenSize.y / 3 ?
+        turtle = new Chapter8Fig10Turtle(lSys.Sentence, screenSize.y / 3, 25 * Mathf.Deg2Rad); 
         redraw();
     }
 
@@ -39,7 +33,7 @@ public class Chapter8Fig10 : MonoBehaviour
     {
         transform.position += new Vector3(screenSize.x / 2, screenSize.y);
         transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z + (Mathf.Rad2Deg * (-Mathf.PI / 2)));
-        turtle.Render();
+        previousState = turtle.Render(transform);
     }
 
     // Update is called once per frame
@@ -51,7 +45,6 @@ public class Chapter8Fig10 : MonoBehaviour
             {
                 // pushMatrix
                 lSys.Generate();
-                Debug.Log(lSys.Sentence); // TODO remove
                 turtle.Todo = lSys.Sentence;
                 turtle.Len *= 0.5f;
                 // popMatrix
@@ -66,24 +59,22 @@ public class Chapter8Fig10Turtle
 {
     public string Todo;
     public float Len;
-    private float theta;
-    private Transform g;
+    private float theta;    
 
     public Chapter8Fig10Turtle(string s, float l, float t)
     {
-        g = new GameObject().transform; // TODO doesn't need to be GO, use Transomf
         Todo = s;
         Len = l;
         theta = t;
     }
 
-    public void Render()
+    public Transform Render(Transform currentTransform)
     {
         for (int i = 0; i < Todo.Length; i++)
         {
             GameObject go = new GameObject();
-            go.transform.position = g.transform.position;
-            go.transform.rotation = g.transform.rotation;
+            go.transform.position = currentTransform.position;
+            go.transform.rotation = currentTransform.rotation;
             char[] todoCharArray = Todo.ToCharArray();
             char c = todoCharArray[i];
             if (c == 'F' || c == 'G')
@@ -93,27 +84,28 @@ public class Chapter8Fig10Turtle
                 l.useWorldSpace = false;
                 l.SetPosition(0, new Vector2(go.transform.position.x, go.transform.position.y));
                 l.SetPosition(1, new Vector2(Len, go.transform.position.y));
-                go.transform.position += new Vector3(Len, 0);
+                currentTransform.position += new Vector3(Len, 0);
             }
             else if (c == '+')
             {
-                go.transform.rotation = Quaternion.Euler(new Vector3(go.transform.rotation.x, go.transform.rotation.y, go.transform.rotation.z + theta));
+                currentTransform.localRotation = Quaternion.Euler(new Vector3(currentTransform.transform.rotation.x, currentTransform.transform.rotation.y, currentTransform.transform.rotation.z + theta));
             }
             else if (c == '-')
             {
-                go.transform.rotation = Quaternion.Euler(new Vector3(go.transform.rotation.x, go.transform.rotation.y, go.transform.rotation.z - theta));
+                currentTransform.localRotation = Quaternion.Euler(new Vector3(currentTransform.transform.rotation.x, currentTransform.transform.rotation.y, currentTransform.transform.rotation.z - theta));
             }
             else if (c == '[')
             {
-                g.transform.position = go.transform.position;
-                g.transform.rotation = go.transform.rotation;
+                //currentTransform.position = go.transform.position;
+                //currentTransform.rotation = go.transform.rotation;
             }
-            else if (c == ']') // Not really necessary
+            else if (c == ']') 
             {
-                go.transform.position = g.transform.position;
-                go.transform.rotation = g.transform.rotation;
+                go.transform.position = currentTransform.position;
+                go.transform.rotation = currentTransform.rotation;
             }
         }
+        return null; // TODO return new transform
     }
 }
 
