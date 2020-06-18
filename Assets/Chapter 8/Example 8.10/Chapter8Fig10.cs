@@ -33,7 +33,8 @@ public class Chapter8Fig10 : MonoBehaviour
     {
         transform.position += new Vector3(screenSize.x / 2, screenSize.y);
         transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z + (Mathf.Rad2Deg * (-Mathf.PI / 2)));
-        previousState = turtle.Render(transform);
+        previousState = transform;
+        turtle.Render(transform);
     }
 
     // Update is called once per frame
@@ -43,11 +44,13 @@ public class Chapter8Fig10 : MonoBehaviour
         {
             if (counter < 5)
             {
-                // pushMatrix
+                previousState.position = transform.position;
+                previousState.rotation = transform.rotation;
                 lSys.Generate();
                 turtle.Todo = lSys.Sentence;
                 turtle.Len *= 0.5f;
-                // popMatrix
+                transform.position = previousState.position;
+                transform.rotation = previousState.rotation;
                 counter++;
                 redraw();
             }
@@ -68,7 +71,7 @@ public class Chapter8Fig10Turtle
         theta = t;
     }
 
-    public Transform Render(Transform currentTransform)
+    public void Render(Transform currentTransform)
     {
         for (int i = 0; i < Todo.Length; i++)
         {
@@ -105,7 +108,6 @@ public class Chapter8Fig10Turtle
                 go.transform.rotation = currentTransform.rotation;
             }
         }
-        return null; // TODO return new transform
     }
 }
 
