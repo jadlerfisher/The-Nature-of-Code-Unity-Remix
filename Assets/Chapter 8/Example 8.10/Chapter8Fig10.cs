@@ -13,13 +13,20 @@ public class Chapter8Fig10 : MonoBehaviour
     private Chapter8Fig10Turtle turtle;
 
     private Vector2 screenSize;
-    private Transform previousState;
+    private Transform lastState;
 
     private int counter;
 
     // Start is called before the first frame update
     void Start()
-    {  
+    {
+        
+        GameObject g = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        g.transform.position = Vector3.zero;
+        g.transform.position += new Vector3(10, 10, 10);
+        // P changing the transofmr only changes any object drawn AFTER the transformation, and resets to normal coordinates on the very next draw!
+
+        lastState = transform;
         counter = 0;
         screenSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
         Chapter8Fig10Rule[] ruleset = new Chapter8Fig10Rule[1];
@@ -31,7 +38,11 @@ public class Chapter8Fig10 : MonoBehaviour
 
     private void redraw()
     {
-        
+        transform.position = Vector3.zero;
+        transform.rotation = Quaternion.Euler(Vector3.zero);
+        transform.position = new Vector2(screenSize.x / 2, screenSize.y);
+        transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z - 90);
+        // turtle.Render();
     }
 
     // Update is called once per frame
@@ -41,9 +52,13 @@ public class Chapter8Fig10 : MonoBehaviour
         {
             if (counter < 5)
             {
-                
-                counter++;
+                lastState.position = transform.position;
+                lastState.rotation = transform.rotation;
+                lSys.Generate();
+                // turtle.Sentence = lSys.Sentence;
+                // turtle.Len *= 0.5f;
                 redraw();
+                counter++;
             }
         }
     }
@@ -51,7 +66,42 @@ public class Chapter8Fig10 : MonoBehaviour
 
 public class Chapter8Fig10Turtle
 {
+    public string Todo;
+    public float Len;
+    private float theta;
 
+    private Transform currentTransform;
+    private Transform savedTransform;
+
+    public Chapter8Fig10Turtle(Transform current, Transform saved, string s, float l, float t)
+    {
+        Todo = s;
+        Len = l;
+        theta = t;
+        currentTransform = current;
+        savedTransform = saved;
+    }
+
+    public void Render()
+    {
+        for (int i = 0; i < Todo.Length; i++)
+        {
+            char[] todoCharArray = Todo.ToCharArray();
+            char c = todoCharArray[i];
+            if (c == 'F' || c == 'G')
+            {
+                GameObject g = new GameObject();
+                g.transform.position = currentTransform.position;
+                g.transform.rotation = currentTransform.rotation;
+                LineRenderer l = g.AddComponent<LineRenderer>();
+                l.useWorldSpace = false;
+                l.positionCount = 2;
+                l.SetPosition(0, Vector2.zero);
+                l.SetPosition(1, new Vector2(Len, 0));
+                currentTransform.position += new Vector3(Len, 0);
+            }
+        }
+    }
 }
 
 public class Chapter8Fig10LSystem
