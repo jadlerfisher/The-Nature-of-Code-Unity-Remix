@@ -25,16 +25,13 @@ public class Chapter8Fig10 : MonoBehaviour
         Chapter8Fig10Rule[] ruleset = new Chapter8Fig10Rule[1];
         ruleset[0] = new Chapter8Fig10Rule('F', "FF+[+F-F-F]-[-F+F+F]");
         lSys = new Chapter8Fig10LSystem("F", ruleset);
-        turtle = new Chapter8Fig10Turtle(lSys.Sentence, screenSize.y / 3, 25 * Mathf.Deg2Rad); 
+        //turtle = new Chapter8Fig10Turtle(lSys.Sentence, screenSize.y / 3, 25 * Mathf.Deg2Rad); 
         redraw();
     }
 
     private void redraw()
     {
-        transform.position += new Vector3(screenSize.x / 2, screenSize.y);
-        transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z + (Mathf.Rad2Deg * (-Mathf.PI / 2)));
-        previousState = transform;
-        turtle.Render(transform);
+        
     }
 
     // Update is called once per frame
@@ -44,13 +41,7 @@ public class Chapter8Fig10 : MonoBehaviour
         {
             if (counter < 5)
             {
-                previousState.position = transform.position;
-                previousState.rotation = transform.rotation;
-                lSys.Generate();
-                turtle.Todo = lSys.Sentence;
-                turtle.Len *= 0.5f;
-                transform.position = previousState.position;
-                transform.rotation = previousState.rotation;
+                
                 counter++;
                 redraw();
             }
@@ -60,55 +51,7 @@ public class Chapter8Fig10 : MonoBehaviour
 
 public class Chapter8Fig10Turtle
 {
-    public string Todo;
-    public float Len;
-    private float theta;    
 
-    public Chapter8Fig10Turtle(string s, float l, float t)
-    {
-        Todo = s;
-        Len = l;
-        theta = t;
-    }
-
-    public void Render(Transform currentTransform)
-    {
-        for (int i = 0; i < Todo.Length; i++)
-        {
-            GameObject go = new GameObject();
-            go.transform.position = currentTransform.position;
-            go.transform.rotation = currentTransform.rotation;
-            char[] todoCharArray = Todo.ToCharArray();
-            char c = todoCharArray[i];
-            if (c == 'F' || c == 'G')
-            {
-                LineRenderer l = go.AddComponent<LineRenderer>();
-                //l.GetComponent<Renderer>().material = Shader.Find("Diffuse");
-                l.useWorldSpace = false;
-                l.SetPosition(0, new Vector2(go.transform.position.x, go.transform.position.y));
-                l.SetPosition(1, new Vector2(Len, go.transform.position.y));
-                currentTransform.position += new Vector3(Len, 0);
-            }
-            else if (c == '+')
-            {
-                currentTransform.localRotation = Quaternion.Euler(new Vector3(currentTransform.transform.rotation.x, currentTransform.transform.rotation.y, currentTransform.transform.rotation.z + theta));
-            }
-            else if (c == '-')
-            {
-                currentTransform.localRotation = Quaternion.Euler(new Vector3(currentTransform.transform.rotation.x, currentTransform.transform.rotation.y, currentTransform.transform.rotation.z - theta));
-            }
-            else if (c == '[')
-            {
-                //currentTransform.position = go.transform.position;
-                //currentTransform.rotation = go.transform.rotation;
-            }
-            else if (c == ']') 
-            {
-                go.transform.position = currentTransform.position;
-                go.transform.rotation = currentTransform.rotation;
-            }
-        }
-    }
 }
 
 public class Chapter8Fig10LSystem
