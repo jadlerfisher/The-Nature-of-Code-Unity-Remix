@@ -8,7 +8,6 @@ public class Chapter4Fig1 : MonoBehaviour
     particleSystemFigure1 psf1;
     Vector3 particleSystemLocation;
     public Vector3 velocity;
-    public Vector3 acceleration;
     public float lifeTime;
     public float startSpeed;
 

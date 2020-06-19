@@ -6,7 +6,7 @@ using UnityEngine;
 public class Chapter4Fig2 : MonoBehaviour
 {
     Vector3 origin;
-
+    particleSystemFigure2 psf2;
     // Update is called once per frame
     void Update()
     {
@@ -14,6 +14,10 @@ public class Chapter4Fig2 : MonoBehaviour
         {
             origin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             createParticleSystem(origin);
+        } else if (Input.GetMouseButtonDown(1))
+        {
+            origin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            createParticleSystem(origin, psf2.particleSystemGameObject);
         }
     }
 
@@ -21,19 +25,34 @@ public class Chapter4Fig2 : MonoBehaviour
     {
         Vector3 particleSystemLocation = new Vector3(origin.x, origin.y, -10);
         Vector3 velocity = new Vector3(1f, 3f, 0f);
-        Vector3 acceleration = Vector3.zero;
         float lifeTime = 5f;
         float startSpeed = Random.Range(-3f, 0f);
         int maxParticles = 1000;
 
-        particleSystemFigure2 psf2 = new particleSystemFigure2(particleSystemLocation, startSpeed, velocity, lifeTime, maxParticles);
+        psf2 = new particleSystemFigure2(particleSystemLocation, startSpeed, velocity, lifeTime, maxParticles);
+    }
+
+    void createParticleSystem(Vector3 origin, GameObject parentParticleSystem)
+    {
+        Vector3 particleSystemLocation = new Vector3(origin.x, origin.y, -10);
+        Vector3 velocity = new Vector3(1f, 3f, 0f);
+        float lifeTime = 5f;
+        float startSpeed = Random.Range(-3f, 0f);
+        int maxParticles = 1000;
+        //Create the child particle system
+        particleSystemFigure2 child = new particleSystemFigure2(particleSystemLocation, startSpeed, velocity, lifeTime, maxParticles);
+        //Now let's go ahead and give the child a parent particle system
+        child.particleSystemGameObject.transform.SetParent(psf2.particleSystemGameObject.transform);
+
+        //Now let's turn on the inherit velocity module
+        child.inheritVelocityModule();
     }
 }
 
 public class particleSystemFigure2
 {
     //We need to create a GameObject to hold the ParticleSystem component
-    GameObject particleSystemGameObject;
+    public GameObject particleSystemGameObject;
 
     //This is the ParticleSystem component but we'll need to access everything through the .main property
     //This is because ParticleSystems in Unity are interfaces and not independent objects
@@ -61,6 +80,21 @@ public class particleSystemFigure2
         //Now we'll call methods to control the velocity of individual particles and their colors
         velocityModule(velocity);
         colorModule();
+    }
+
+    public void inheritVelocityModule()
+    {
+        var inheritVelocityModule = particleSystemComponent.inheritVelocity;
+        inheritVelocityModule.enabled = true;
+        //Let's change the color of the child material so it is easier to see
+        ParticleSystemRenderer r = particleSystemGameObject.GetComponent<ParticleSystemRenderer>();
+        r.material.color = Color.red;
+
+        //Now let's grab the current velocity from the parent particleSystem 
+        inheritVelocityModule.mode = ParticleSystemInheritVelocityMode.Current;
+        //And add a multiplier so they move faster
+        //We can use a curve, like above in velocity, or just a general multiplier.
+        inheritVelocityModule.curveMultiplier = 100;
     }
 
     public void velocityModule(Vector3 velocity)
@@ -102,4 +136,5 @@ public class particleSystemFigure2
         //Set the color to the gradient we created above
         colorOverLifetime.color = grad;
     }
+
 }

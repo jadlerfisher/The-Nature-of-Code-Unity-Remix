@@ -9,6 +9,7 @@ public class Chapter4Fig5 : MonoBehaviour
     Vector3 particleSystemLocation = new Vector3(0, 2f, 0);
     public float lifeTime;
     public float startSpeed;
+    public Vector3 rotationVelocity;
 
     int maxParticles;
 
@@ -17,9 +18,15 @@ public class Chapter4Fig5 : MonoBehaviour
     {
         //Let's just have one particle
         maxParticles = 1000;
-        psf5 = new particleSystemFigure5(particleSystemLocation, startSpeed, lifeTime, maxParticles);
+        //For this example, let's pass 360-degree rotations into the Velocity
+        rotationVelocity = new Vector3(360, 360, 0);
+        psf5 = new particleSystemFigure5(particleSystemLocation, startSpeed, lifeTime, maxParticles, rotationVelocity);
     }
 
+    void Update()
+    {
+        psf5.gravityModifier();
+    }
 }
 
 public class particleSystemFigure5
@@ -33,7 +40,7 @@ public class particleSystemFigure5
 
     ParticleSystemRenderer r;
 
-    public particleSystemFigure5(Vector3 particleSystemLocation, float startSpeed, float lifeTime, int maxParticles)
+    public particleSystemFigure5(Vector3 particleSystemLocation, float startSpeed, float lifeTime, int maxParticles, Vector3 rotationVelocity)
     {
         //Create the GameObject in the constructor
         particleSystemGameObject = new GameObject();
@@ -61,6 +68,41 @@ public class particleSystemFigure5
         main.gravityModifier = 1f;
 
         colorModule();
+        rotationOverLifetime(rotationVelocity);
+        rotationBySpeed(rotationVelocity);
+    }
+
+    public void gravityModifier()
+    {
+        //The main interface covers general properties
+        var main = particleSystemComponent.main;
+        //We'll dramatically move gravity around to create a pulsing fountain effect
+        main.gravityModifierMultiplier = Random.Range(-6, 10);
+    }
+
+    public void rotationOverLifetime(Vector3 rotationVelocity)
+    {
+        var rotationOverLifetime = particleSystemComponent.rotationOverLifetime;
+        rotationOverLifetime.enabled = true;
+        //we'll now go ahead and rotate 360-degrees on the x and y axes.
+        rotationOverLifetime.separateAxes = true;
+        //Now let's pass on the floats in our Vector3
+        rotationOverLifetime.x = rotationVelocity.x;
+        rotationOverLifetime.y = rotationVelocity.y;
+        rotationOverLifetime.z = rotationVelocity.z;
+    }
+
+    public void rotationBySpeed(Vector3 rotationVelocity)
+    {
+        var rotationBySpeed = particleSystemComponent.rotationBySpeed;
+        rotationBySpeed.enabled = true;
+        //we'll now go ahead and rotate 360-degrees on the x and y axes.
+        rotationBySpeed.separateAxes = true;
+        //Now let's pass on the floats in our Vector3
+        //This time let's pass the Y into the Z
+        rotationBySpeed.x = 0f;
+        rotationBySpeed.y = 0f;
+        rotationBySpeed.z = rotationVelocity.y;
     }
 
     public void colorModule()
