@@ -13,8 +13,6 @@ public class Chapter8Fig10 : MonoBehaviour
     private Chapter8Fig10Turtle turtle;
 
     private Vector2 screenSize;
-    private Vector3 savedPos;
-    private Quaternion savedRotate;
 
     private int counter;
 
@@ -37,8 +35,7 @@ public class Chapter8Fig10 : MonoBehaviour
     private void redraw()
     {
         
-        transform.position = new Vector2(screenSize.x / 2, screenSize.y);
-        transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z - 90);
+        
         turtle.Render();
     }
 
@@ -49,8 +46,6 @@ public class Chapter8Fig10 : MonoBehaviour
         {
             if (counter < 5)
             {
-                // P
-                //savedPos = transform.position;
                 
                 lSys.Generate();
                 turtle.Todo= lSys.Sentence;
@@ -76,11 +71,7 @@ public class Chapter8Fig10Turtle
     }
 
     public void Render()
-    {
-        Vector2 newX = Vector2.zero;
-        Vector3 newRotate = Vector3.zero;
-        Vector2 oldX = Vector2.zero;
-        Vector3 oldRotate = Vector3.zero;
+    {        
         for (int i = 0; i < Todo.Length; i++)
         {
             char[] todoCharArray = Todo.ToCharArray();
@@ -88,32 +79,23 @@ public class Chapter8Fig10Turtle
             
             if (c == 'F' || c == 'G')
             {
-                GameObject g = new GameObject();
-                g.transform.rotation = Quaternion.Euler(newRotate);
-                LineRenderer l = g.AddComponent<LineRenderer>();
-                l.useWorldSpace = false;
-                l.positionCount = 2;
-                l.SetPosition(0, Vector2.zero + newX);
-                l.SetPosition(1, new Vector2(Len + newX.x, 0 + newX.y));
-                newX += new Vector2(Len, 0);
+                
             }
             else if (c == '+')
             {
-                newRotate.z += theta;
+                
             }
             else if (c == '-')
             {
-                newRotate.z -= theta;
+                
             }
             else if (c == '[')
             {
-                oldX = newX;
-                oldRotate = newRotate;
+                
             }
             else if (c == ']')
             {
-                newX = oldX;
-                newRotate = oldRotate;
+                
             }
         }
     }
