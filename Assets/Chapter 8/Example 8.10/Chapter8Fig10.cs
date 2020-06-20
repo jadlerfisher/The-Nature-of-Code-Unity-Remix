@@ -52,7 +52,7 @@ public class Chapter8Fig10 : MonoBehaviour
         transform.rotation = Quaternion.Euler(Vector3.zero); // We can't parent new objects to this object
         transform.position = new Vector3(0f, screenSize.y); // Bottom center of screen
         //transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z - 90);
-        transform.RotateAround(new Vector3(-screenSize.x, -screenSize.y), Vector3.right, -90f);
+        transform.RotateAround(new Vector3(-screenSize.x, -screenSize.y), Vector3.right, -90f); // Unity rotates objects around the object's center while P rotates the entire coordinates
         turtle.Render(out newPos, out newRot); // Render probably needs to know what the current transform pos and rot are
         transform.position = newPos;
         transform.rotation = newRot;
