@@ -16,7 +16,7 @@ public class Chapter8Fig5Animated : MonoBehaviour
         findWindowLimits();
 
         points = new List<Vector2>();
-        desiredPoints = new List<Vector2>();
+        desiredPoints = new List<Vector2>(); // We need a desired set to move towards in the curve
 
         Vector2 a = new Vector2(minPos.x, minPos.y + 1f);
         Vector2 b = new Vector2(maxPos.x, minPos.y + 1f);
@@ -24,17 +24,17 @@ public class Chapter8Fig5Animated : MonoBehaviour
         desiredPoints.Add(a);
         desiredPoints.Add(b);
 
-        points.Add(Vector2.zero);
+        points.Add(Vector2.zero); // for a nicer starting effect, we'll start the line at 0,0
         points.Add(Vector2.zero);
 
-        StartCoroutine(itterate());
+        StartCoroutine(itterate()); // We can then start a Coroutine to do the generations over time
     }
 
     private IEnumerator itterate() 
     {
-        while (calls < 6) 
+        while (calls < 6) // We have to limit the number of times we call generate() otherwise the LineRenderer will reach max points
         {
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(5f); // After 5 seconds, the function will continue
             generate();
             calls++;
         }
@@ -44,7 +44,7 @@ public class Chapter8Fig5Animated : MonoBehaviour
     {
         if (KochLine != null) 
         {
-            Destroy(KochLine);
+            Destroy(KochLine); // If the KochLine exsists, we're goint to replace it
         }
 
         for (int i = 0; i < desiredPoints.Count; i++) 
@@ -52,10 +52,12 @@ public class Chapter8Fig5Animated : MonoBehaviour
             Vector2 desired = desiredPoints[i];
             Vector2 at = points[i];
 
-            points[i] += ((desired - at) / 1.3f) * Time.deltaTime;
+            // For each point, we move the current point towards the desitred point by 30% every second.
+
+            points[i] += ((desired - at) / 1.3f) * Time.deltaTime; // Time.deltaTime will help convert the 'Per Frame' speed of the Update Function to a 'Per Second' one
         }
 
-        KochLine = line(points);
+        KochLine = line(points); // We then regenerate the line
     }
 
     void generate()
@@ -65,23 +67,29 @@ public class Chapter8Fig5Animated : MonoBehaviour
 
         for (int i = 0; i < desiredPoints.Count - 1; i++) // We're going to use 2 points each time to make a line
         {
+            // First we make sure to add the points to the real line so they can be animated
             Vector2 v = points[i + 1] - points[i];
 
-            cutPoints.Add(points[i]);
-            cutPoints.Add(points[i] + ((v / 4) * 1));
-            cutPoints.Add(points[i] + (v / 2));
-            cutPoints.Add(points[i] + ((v / 4) * 3));
-            cutPoints.Add(points[i] + v);
+            cutPoints.Add(points[i]); // We keep the first point
+            cutPoints.Add(points[i] + ((v / 4) * 1)); // The second point is 1/4th of the way in
+            cutPoints.Add(points[i] + (v / 2)); // The 3rd is 1/2 of the way in
+            cutPoints.Add(points[i] + ((v / 4) * 3)); // The third is 3/4ths
+            cutPoints.Add(points[i] + v); // and the last is the same as before
 
+            // Next we do the math for the desired points
+
+            // We then change V into the distance between the intended first and last points
             v = desiredPoints[i + 1] - desiredPoints[i];
-            v = v / 3;
+            v = v / 3; // Then we cut it since we need 3rds
 
+            // The math is the same as the 8.5 example
             Vector2 a = desiredPoints[i];
             Vector2 b = v + a;
             Vector2 c = Rotate(v, 60) + b;
             Vector2 d = (v * 2f) + a;
             Vector2 e = desiredPoints[i + 1];
 
+            // We then add it in order
             newPoints.Add(a);
             newPoints.Add(b);
             newPoints.Add(c);
@@ -89,7 +97,7 @@ public class Chapter8Fig5Animated : MonoBehaviour
             newPoints.Add(e);
         }
 
-        desiredPoints = newPoints;
+        desiredPoints = newPoints; // Then we update both sets of points
         points = cutPoints;
     }
 
