@@ -15,22 +15,22 @@ public class Chapter8Fig4 : MonoBehaviour
 
     void cantor(float x, float y, float len)
     {
-        line(x, y, x + len, y);
+        line(x, y, x + len, y); // Create the first line
 
         if (len >= 0.01f) // Stop at 0.01 meters length!
         {
             y -= 2;
 
             cantor(x, y, len / 3); // Call the function recursively 
-            cantor(x + len * 2 / 3, y, len / 3);
+            cantor(x + len * 2 / 3, y, len / 3); // We need two lines for each line above it
         }
     }
 
     private GameObject line(float x1, float y1, float x2, float y2) 
     {
-        GameObject obj = new GameObject();
-        obj.name = "Line";
-        LineRenderer line = obj.AddComponent<LineRenderer>();
+        GameObject obj = new GameObject(); // Creates an object to attach a Line Renderer to
+        obj.name = "Line"; // We change the in-scene name so it's easier to identify
+        LineRenderer line = obj.AddComponent<LineRenderer>(); // We attach the LineRenderer to the object and store it as 'line'
 
         line.material = new Material(Shader.Find("Sprites/Default")); // Set the material
         line.startColor = line.endColor = Color.black; // Set the color
