@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class Ch6Fig4 : MonoBehaviour
 {
+    // Our cone object will be our vehicle, found in our extended primitives folder
     [SerializeField] private GameObject vehicleRepresentation;
 
     private Ch6Fig4Vehicle vehicle;
@@ -17,6 +18,7 @@ public class Ch6Fig4 : MonoBehaviour
     void Start()
     {
         // Instantiate our vehicle, location doesn't matter as it will get overwritten
+        // Instantiate makes a copy of our cone
         GameObject vehicleObject = Instantiate(vehicleRepresentation, Vector3.zero, Quaternion.identity);
         vehicle = new Ch6Fig4Vehicle(vehicleObject);
 
@@ -24,6 +26,7 @@ public class Ch6Fig4 : MonoBehaviour
         field = new Ch6Fig4FlowField();
     }
 
+    // FixedUpdate runs 50 times a second per project default
     private void FixedUpdate()
     {        
         vehicle.Follow(field);
@@ -33,7 +36,6 @@ public class Ch6Fig4 : MonoBehaviour
 
 public class Ch6Fig4Vehicle
 {
-    // This Sphere will represent our vehicle
     private GameObject vehicleRepresentation;
     private Vector2 location;
     private Vector2 velocity;
@@ -76,12 +78,11 @@ public class Ch6Fig4Vehicle
 
     public void Update()
     {
-        // FixedUpdate is called 50 times per second per project default
         velocity += acceleration * Time.fixedDeltaTime;
         Vector2.ClampMagnitude(velocity, maxSpeed);
         location += velocity * Time.fixedDeltaTime;
 
-        // Use transform.LookAt toward where we're going
+        // Use transform.LookAt to rotate our vehicle to look toward where we're going
         vehicleRepresentation.transform.LookAt(vehicleRepresentation.transform.position + (Vector3)velocity);
 
         // Adjust the x rotation of the object by 90 degrees
@@ -111,6 +112,8 @@ public class Ch6Fig4Vehicle
     {
         Camera.main.orthographic = true;
         Camera.main.orthographicSize = 10;
+
+        // Translates screen bounds (in pixels) into meters or Unity Units
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
         minimumPos = -maximumPos;
     }
