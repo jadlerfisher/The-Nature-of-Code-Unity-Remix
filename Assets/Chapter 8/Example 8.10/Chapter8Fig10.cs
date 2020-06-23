@@ -76,39 +76,32 @@ public class Chapter8Fig10Turtle
 
     public void Render()
     {
-        Vector3 pos = Vector3.zero;
-        Quaternion rotation = Quaternion.Euler(Vector3.zero);
-        Vector3 savedPos = Vector3.zero;
-        Quaternion savedRotation = Quaternion.Euler(Vector3.zero);
-
         for (int i = 0; i < Todo.Length; i++)
-        {            
+        {
             char[] todoCharArray = Todo.ToCharArray();
             char c = todoCharArray[i];
             
             if (c == 'F' || c == 'G')
             {
                 GameObject g = new GameObject();
-                // Should we set g's pos to Vector3Pos?
                 LineRenderer r = g.AddComponent<LineRenderer>();
+                // Make line points
             }
             else if (c == '+')
             {
-                rotation = Quaternion.Euler(rotation.x, rotation.y, rotation.z + theta);
+                
             }
             else if (c == '-')
             {
-                rotation = Quaternion.Euler(rotation.x, rotation.y, rotation.z - theta);
+                
             }
             else if (c == '[')
             {
-                savedPos = pos;
-                savedRotation = rotation;
+                
             }
             else if (c == ']')
             {
-                pos = savedPos;
-                rotation = savedRotation;
+                
             }
         }
     }
