@@ -16,6 +16,9 @@ public class Chapter8Fig10 : MonoBehaviour
 
     private int counter;
 
+    private Stack<Vector3> savedPositions;
+    private Stack<Quaternion> savedRotations;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,14 +32,17 @@ public class Chapter8Fig10 : MonoBehaviour
         Chapter8Fig10Rule[] ruleset = new Chapter8Fig10Rule[1];
         ruleset[0] = new Chapter8Fig10Rule('F', "FF+[+F-F-F]-[-F+F+F]");
         lSys = new Chapter8Fig10LSystem("F", ruleset);
+        savedPositions = new Stack<Vector3>();
+        savedRotations = new Stack<Quaternion>();
         
-        
-        turtle = new Chapter8Fig10Turtle(lSys.Sentence, screenSize.y / 3, 25); 
+        turtle = new Chapter8Fig10Turtle(lSys.Sentence, screenSize.y / 3, 25, savedPositions, savedRotations); 
         redraw();
     }
 
     private void redraw()
     {
+        transform.position = new Vector2(0f, -screenSize.y);
+        transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z + Mathf.Rad2Deg * (-Mathf.PI / 2));
         turtle.Render();
     }
 
@@ -47,10 +53,13 @@ public class Chapter8Fig10 : MonoBehaviour
         {
             if (counter < 5)
             {
-                // pushMatrix   
+                savedPositions.Push(transform.position);
+                savedRotations.Push(transform.rotation);
                 lSys.Generate();
                 turtle.Todo= lSys.Sentence;
                 turtle.Len *= 0.5f;
+                transform.position = savedPositions.Pop();
+                transform.rotation = savedRotations.Pop();
                 redraw();
                 counter++;
             }
@@ -63,15 +72,18 @@ public class Chapter8Fig10Turtle
     public string Todo;
     public float Len;
     private float theta;
+    private Stack<Vector3> savedPositions;
+    private Stack<Quaternion> savedRotations;
 
     // Transforms are reference-based so if we make a new var and assign it to the GO's Transform, if we manipulate the new var's values, the GO's transform will change along with it. So we use Vector's and Quaternions as they are structs 
 
-    public Chapter8Fig10Turtle(string s, float l, float t)
+    public Chapter8Fig10Turtle(string s, float l, float t, Stack<Vector3> savedPos, Stack<Quaternion> savedRot)
     {
         Todo = s;
         Len = l;
         theta = t;
-        
+        savedPositions = savedPos;
+        savedRotations = savedRot;
     }
 
     public void Render()
