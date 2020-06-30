@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Vehicle6_6 : MonoBehaviour
+public class Vehicle6_5 : MonoBehaviour
 {
     // Variables accessible to other scripts.
     public float maxspeed;
@@ -13,7 +13,7 @@ public class Vehicle6_6 : MonoBehaviour
     {
         // Look in the direction the vehicle is traveling in.
         // Vector3.back must be specified since that is the "up" direction in our scene.
-        gameObject.transform.LookAt(transform.position + (Vector3)body.velocity, Vector3.back);
+        gameObject.transform.LookAt(body.position + body.velocity, Vector3.back);
     }
 
     public void Seek(Vector2 target)
@@ -28,46 +28,36 @@ public class Vehicle6_6 : MonoBehaviour
         body.AddForce(steer * Time.fixedDeltaTime, ForceMode2D.Impulse);
     }
 
-    public void FollowPath(Path6_6 path)
+    public void FollowPath(Path6_5 path)
     {
         // Predict the future location of the body.
         Vector2 predictedLocation = body.position + body.velocity.normalized * 2.5f;
 
-        float distanceRecord = float.MaxValue;
-        Vector2 recordTarget = Vector2.zero;
-        // Look at each segment and find the closest normal point.
-        for(int i = 0; i < path.points.Length - 1; i++)
-        {
-            Vector2 a = path.points[i].position;
-            Vector2 b = path.points[i + 1].position;
-            Vector2 normalPoint = GetNormalPoint(predictedLocation, a, b);
-            // If the normal point is beyond the line segment, clamp it to the endpoint.
-            if(normalPoint.x > b.x || normalPoint.x < a.x)
-            {
-                normalPoint = b;
-            }
+        // Find the closest point along the path:
+        Vector2 a = path.startVector.position;
+        Vector2 b = path.endVector.position;
+        Vector2 normalPoint = GetNormalPoint(predictedLocation, a, b);
 
-            // If this point is closer than any previous point, update the record.
-            float distance = Vector2.Distance(predictedLocation, normalPoint);
-            if(distance < distanceRecord)
-            {
-                distanceRecord = distance;
-                recordTarget = normalPoint;
-            }
-        }
+        // Determine a follow target some distance further down the path.
+        Vector2 pathDirection = b - a;
+        Vector2 alongPath = pathDirection.normalized * 2.5f;
+        Vector2 target = normalPoint + alongPath;
 
         // Is the vehicle predicted to leave the path?
-        if (distanceRecord > path.radius)
+        float distance = Vector2.Distance(normalPoint, predictedLocation);
+        if(distance > path.radius) 
         {
             // If so, steer the vehicle towards the path.
-            Seek(recordTarget);
+            Seek(target);
         }
 
         #region Debug Line Drawing
         // Send the information that was calculated to the debug lines drawer.
         DrawDebugLines(
+            (distance > path.radius) ? normalPoint : Vector2.zero,
+            (distance > path.radius) ? target : Vector2.zero,
             body.position, predictedLocation,
-            predictedLocation, recordTarget
+            predictedLocation, normalPoint
         );
         #endregion
     }
@@ -90,7 +80,7 @@ public class Vehicle6_6 : MonoBehaviour
     #region Debug Line Drawing
     // Fields for debug:
     private bool debugIsActive = false;
-    private LineRenderer predictLine, normalLine;
+    private LineRenderer predictLine, normalLine, steerLine;
     // Setup of the debug elements:
     void Start()
     {
@@ -104,32 +94,43 @@ public class Vehicle6_6 : MonoBehaviour
         normalLine.positionCount = 2;
         normalLine.widthMultiplier = 0.1f;
 
+        steerLine = new GameObject().AddComponent<LineRenderer>();
+        steerLine.material = new Material(Shader.Find("Diffuse"));
+        steerLine.positionCount = 2;
+        steerLine.widthMultiplier = 0.1f;
+
         StartCoroutine(DebugUpdate());
     }
     // Check for the space bar to be pressed.
     private IEnumerator DebugUpdate()
     {
-        while (true)
+        while(true)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if(Input.GetKeyDown(KeyCode.Space))
             {
+                Debug.Log("yeet");
                 debugIsActive = !debugIsActive;
-                if (!debugIsActive)
+                if(!debugIsActive)
                 {
                     predictLine.SetPosition(0, Vector3.zero);
                     predictLine.SetPosition(1, Vector3.zero);
                     normalLine.SetPosition(0, Vector3.zero);
                     normalLine.SetPosition(1, Vector3.zero);
+                    steerLine.SetPosition(0, Vector3.zero);
+                    steerLine.SetPosition(1, Vector3.zero);
                 }
             }
             yield return null;
         }
     }
     // Draw the debug lines.
-    private void DrawDebugLines(Vector2 predictStart, Vector2 predictEnd, Vector2 normalStart, Vector2 normalEnd)
+    private void DrawDebugLines(Vector2 steerStart, Vector2 steerEnd, Vector2 predictStart,
+                                Vector2 predictEnd, Vector2 normalStart, Vector2 normalEnd)
     {
-        if (debugIsActive)
+        if(debugIsActive)
         {
+            steerLine.SetPosition(0, new Vector3(steerStart.x, steerStart.y, -1));
+            steerLine.SetPosition(1, new Vector3(steerEnd.x, steerEnd.y, -1));
             predictLine.SetPosition(0, new Vector3(predictStart.x, predictStart.y, -1));
             predictLine.SetPosition(1, new Vector3(predictEnd.x, predictEnd.y, -1));
             normalLine.SetPosition(0, new Vector3(normalStart.x, normalStart.y, -1));
