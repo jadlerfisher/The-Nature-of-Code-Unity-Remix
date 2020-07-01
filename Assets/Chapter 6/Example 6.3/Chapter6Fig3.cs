@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class Chapter6Fig3 : MonoBehaviour
 {
+    // Our cone asset found in Extended Primitives folder
     [SerializeField] private GameObject vehiclePrefab;
 
     [Header("Sets vehicle's acceleration on Start")]
@@ -31,8 +32,9 @@ public class Chapter6Fig3 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject vehicleRepresentation = Instantiate(vehiclePrefab, Vector2.zero, Quaternion.identity);
         // Instantiate vehicle at origin. Use exposed variable for distance, or how far from the wall before we steer.
+        // Instantiate make a copy of our cone prefab
+        GameObject vehicleRepresentation = Instantiate(vehiclePrefab, Vector2.zero, Quaternion.identity);        
         vehicle = new Ch6Fig3Vehicle(vehicleRepresentation, startingAcceleration, distance, maxSpeed, maxForce);
     }
 
@@ -52,7 +54,7 @@ public class Ch6Fig3Vehicle
     // Visual representation of our vehicle
     private GameObject vehicleObject; 
     private Vector2 location;
-    public Vector2 velocity { get; private set; } // TODO Remove
+    public Vector2 velocity { get; private set; } 
     private Vector2 acceleration;
 
     // How fast we can go, velocity cannot go higher
@@ -174,8 +176,11 @@ public class Ch6Fig3Vehicle
 
     private void findWindowLimits()
     {
+        // Set camera settings
         Camera.main.orthographic = true;
         Camera.main.orthographicSize = 10;
+
+        // Finds the space of the screen (in pixels), translates them into space of the screen in meters or Unity Units
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
         minimumPos = -maximumPos;        
     }
