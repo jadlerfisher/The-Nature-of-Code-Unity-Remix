@@ -77,6 +77,9 @@ class Boid
         maxForce = _maxForce;
 
         myVehicle = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        Renderer renderer = myVehicle.GetComponent<Renderer>();
+        renderer.material = new Material(Shader.Find("Diffuse"));
+        renderer.material.color = Color.red;
         GameObject.Destroy(myVehicle.GetComponent<BoxCollider>());
 
         myVehicle.transform.position = new Vector2(initPos.x, initPos.y);

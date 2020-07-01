@@ -6,19 +6,19 @@ public class Chapter6Fig8 : MonoBehaviour
 {
     public float maxSpeed = 2, maxForce = 2;
 
-    private List<Vehicle> vehicles; // Declare a List of Vehicle objects.
+    private List<Vehicle6_8> vehicles; // Declare a List of Vehicle objects.
     private Vector2 minimumPos, maximumPos;
 
     // Start is called before the first frame update
     void Start()
     {
         findWindowLimits();
-        vehicles = new List<Vehicle>(); // Initilize and fill the List with a bunch of Vehicles
+        vehicles = new List<Vehicle6_8>(); // Initilize and fill the List with a bunch of Vehicles
         for (int i = 0; i < 100; i++)
         {
             float ranX = Random.Range(minimumPos.x, maximumPos.x);
             float ranY = Random.Range(minimumPos.y, maximumPos.y);
-            vehicles.Add(new Vehicle(new Vector2(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce));
+            vehicles.Add(new Vehicle6_8(new Vector2(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce));
         }
     }
 
@@ -28,7 +28,7 @@ public class Chapter6Fig8 : MonoBehaviour
         Vector2 mousePos = Input.mousePosition;
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
 
-        foreach (Vehicle v in vehicles)
+        foreach (Vehicle6_8 v in vehicles)
         {
             Vector2 seperate = v.Separate(vehicles);
             Vector2 seek = v.Seek(mousePos);
@@ -43,7 +43,7 @@ public class Chapter6Fig8 : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            vehicles.Add(new Vehicle(mousePos, minimumPos, maximumPos, maxSpeed, maxForce));
+            vehicles.Add(new Vehicle6_8(mousePos, minimumPos, maximumPos, maxSpeed, maxForce));
         }
     }
 
@@ -56,7 +56,7 @@ public class Chapter6Fig8 : MonoBehaviour
     }
 }
 
-class Vehicle
+class Vehicle6_8
 {
     // To make it easier on ourselves, we use Get and Set as quick ways to get the location of the vehicle
     public Vector2 location
@@ -75,7 +75,7 @@ class Vehicle
     private GameObject myVehicle;
     private Rigidbody rb;
 
-    public Vehicle(Vector2 initPos, Vector2 _minPos, Vector2 _maxPos, float _maxSpeed, float _maxForce)
+    public Vehicle6_8(Vector2 initPos, Vector2 _minPos, Vector2 _maxPos, float _maxSpeed, float _maxForce)
     {
         minPos = _minPos - Vector2.one;
         maxPos = _maxPos + Vector2.one;
@@ -83,6 +83,9 @@ class Vehicle
         maxForce = _maxForce;
 
         myVehicle = GameObject.CreatePrimitive(PrimitiveType.Sphere); // Give our vehicle some visuals in our world.
+        Renderer renderer = myVehicle.GetComponent<Renderer>();
+        renderer.material = new Material(Shader.Find("Diffuse"));
+        renderer.material.color = Color.red;
         myVehicle.transform.position = new Vector2(initPos.x, initPos.y); // Set the vehicle's initial position.
         myVehicle.AddComponent<Rigidbody>(); // Add rigidbody so we can add forces to the vehicle.
 
@@ -103,14 +106,14 @@ class Vehicle
         return steer;
     }
 
-    public Vector2 Separate(List<Vehicle> vehicles)
+    public Vector2 Separate(List<Vehicle6_8> vehicles)
     {
         Vector2 sum = Vector2.zero;
         int count = 0;
 
         float desiredSeperation = myVehicle.transform.localScale.x * 2;
 
-        foreach (Vehicle other in vehicles)
+        foreach (Vehicle6_8 other in vehicles)
         {
             float d = Vector2.Distance(other.location, location);
 
