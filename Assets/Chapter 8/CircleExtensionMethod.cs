@@ -14,6 +14,11 @@ public static class CircleExtensionMethod
         line.endWidth = lineWidth;
         line.positionCount = segments + 1;
 
+        //We need to create a new material for WebGL
+        line.material = new Material(Shader.Find("Diffuse"));
+        line.material.color = Color.black;
+ 
+
         var pointCount = segments + 1;
         var points = new Vector3[pointCount];
 
@@ -34,6 +39,10 @@ public static class CircleExtensionMethod
         line.startWidth = lineWidth;
         line.endWidth = lineWidth;
         line.positionCount = segments + 1;
+
+        //We need to create a new material for WebGL
+        line.material = new Material(Shader.Find("Diffuse"));
+        line.material.color = Color.black;
 
         var pointCount = segments + 1;
         var points = new Vector3[pointCount];

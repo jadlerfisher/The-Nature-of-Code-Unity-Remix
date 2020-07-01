@@ -62,10 +62,7 @@ public class vehicleChapter6_2 : MonoBehaviour
         Debug.Log(d);
         if (d < 3)
         {
-
-            //desired = Vector3.ClampMagnitude(desired * d, maxspeed);
             float m = ExtensionMethods.Remap(d, 0f, 3f, 0, maxspeed);
-            //float m = Mathf.Lerp(d, 0, Mathf.InverseLerp(0, 3, maxspeed));
             desired *= m;
             Debug.Log("near" + desired);
 
@@ -76,10 +73,6 @@ public class vehicleChapter6_2 : MonoBehaviour
         }
 
         Vector3 steer = desired - body.velocity;
-        //  Debug.Log(desired);
-        //steer.x = Mathf.Clamp(steer.x, -maxforce, maxforce);
-        //steer.y = Mathf.Clamp(steer.y, -maxforce, maxforce);
-        //steer.z = Mathf.Clamp(steer.z, -maxforce, maxforce);
         applyForce(steer);
         Debug.DrawLine(body.transform.position, steer + body.transform.position);
     }
