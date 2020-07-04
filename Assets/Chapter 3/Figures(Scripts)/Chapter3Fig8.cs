@@ -53,10 +53,4 @@ public class Chapter3Fig8 : MonoBehaviour
             currentX += (right - left) / amountWavers;
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

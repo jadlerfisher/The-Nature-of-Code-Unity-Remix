@@ -123,7 +123,6 @@ public class Mover2_8
         float strength = (9.81f * body.mass * m.mass) / (distance * distance);
         force *= strength;
         return force;
-
     }
 
     //Checks to ensure the body stays within the boundaries
