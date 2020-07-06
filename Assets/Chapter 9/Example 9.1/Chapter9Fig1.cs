@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Chapter9Fig1 : MonoBehaviour
 {
@@ -10,6 +11,12 @@ public class Chapter9Fig1 : MonoBehaviour
     DNA[] population;
     List<DNA> matingPool;
     [SerializeField] string target;
+    [SerializeField] int totalIterations;
+    [SerializeField] float timeBetweenGenerations;
+    private int currentIteration = 0;
+
+    [SerializeField] private TextMeshProUGUI display;
+    [SerializeField] private TextMeshProUGUI display1;
 
     // Start is called before the first frame update
     void Start()
@@ -18,17 +25,8 @@ public class Chapter9Fig1 : MonoBehaviour
         mutationRate = 0.01f;
 
         InitializePopulation();   //STEP 1
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Selection();
-        Reproduction();
-        for (int i = 0; i < population.Length; i++)
-        {
-            Debug.Log(population[i].getPhrase());
-        }
+        StartCoroutine(nameof(NewGeneration));
     }
 
     void InitializePopulation()
@@ -56,7 +54,6 @@ public class Chapter9Fig1 : MonoBehaviour
 
             for (int j = 0; j < n; j++)
             {
-                Debug.Log($"{population[i].getPhrase()} + {population[i].fitness}");
                 matingPool.Add(population[i]);
             }
         }
@@ -64,7 +61,7 @@ public class Chapter9Fig1 : MonoBehaviour
 
     void Reproduction()
     {
-        
+
         for (int i = 0; i < population.Length; i++)
         {
             int a = (int)Random.Range(0, matingPool.Count);
@@ -77,6 +74,27 @@ public class Chapter9Fig1 : MonoBehaviour
             child.Mutate(mutationRate);
 
             population[i] = child;
+        }
+    }
+
+    private IEnumerator NewGeneration()
+    {
+        Selection(); //STEP 2
+        Reproduction(); //STEP 3
+
+        string s = "";
+        for (int i = 0; i < population.Length; i++)
+        {
+            s += population[i].getPhrase() + "     ";
+        }
+        display.text = s;
+        display1.text = "Generation: " + currentIteration;
+
+        if (currentIteration < totalIterations)
+        {
+            currentIteration++;
+            yield return new WaitForSeconds(timeBetweenGenerations);
+            StartCoroutine(nameof(NewGeneration));
         }
     }
 }
