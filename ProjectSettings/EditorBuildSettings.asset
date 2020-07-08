@@ -38,7 +38,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Chapter 1/Scenes/Chapter 1 Figure 10.unity
     guid: bfb063f69d273d347b90c2ae1605b6f2
-  - enabled: 1
+  - enabled: 0
     path: Assets/Chapter 2/Scenes/Chapter 2 Figure 5a.unity
     guid: f4e7cdf3c043e4d46be99853b5d36839
   - enabled: 0
@@ -72,16 +72,16 @@ EditorBuildSettings:
     path: Assets/Chapter 6/Example 6_5/Example6_5.unity
     guid: 13d6dcacae51a8044b0a6e01d66ff891
   - enabled: 0
-    path: Assets/Chapter 6/Scenes/Chapter 6 Figure 6.unity
-    guid: fb2bf9b35ce36944e9123d2724645d96
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 0
     path: Assets/Chapter 6/Example 6.7/Chapter 6 Figure 7.unity
     guid: ac4a2a4103e9757479dc75a8bbed9afa
   - enabled: 0
-    path: Assets/Chapter 6/Scenes/Chapter 6 Figure 8.unity
+    path: Assets/Chapter 6/Example 6.8/Chapter 6 Figure 8.unity
     guid: bac1ddc6be7b22c4fafffc27045b4cb2
   - enabled: 0
-    path: Assets/Chapter 6/Scenes/Chapter 6 Figure 9.unity
+    path: Assets/Chapter 6/Example 6.9/Chapter 6 Figure 9.unity
     guid: fc5f26c09dcba7c419eea6c505081cfd
   - enabled: 0
     path: Assets/Chapter 2/Scenes/Chapter 2 Figure 1.unity
@@ -161,4 +161,46 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Introduction/Scenes/IntroductionFig5.unity
     guid: e8e0c9bc93b461648a9cf58b94c26c7f
+  - enabled: 0
+    path: Assets/Chapter 6/Example 6.6/Example6_6.unity
+    guid: b358993250744254e8beaa9a8e5686da
+  - enabled: 0
+    path: Assets/Chapter 6/Example 6.1/Chapter 6 Figure 1.unity
+    guid: 9152e2a0a951fc04e9f2a6f8af6c39bf
+  - enabled: 0
+    path: Assets/Chapter 6/Example 6.2/Chapter 6 Figure 2.unity
+    guid: 258c8e83a038af143aa482ee8069b523
+  - enabled: 0
+    path: Assets/Chapter 6/Example 6.3/Chapter 6 Figure 3.unity
+    guid: 392c647646b2acc49944914654bf6612
+  - enabled: 0
+    path: Assets/Chapter 6/Example 6.4/Chapter 6 Figure 4.unity
+    guid: 70f584bd7c0b7ee4fbef6c29890d075f
+  - enabled: 0
+    path: Assets/Chapter 8/Example 8.1/Chapter 8 Figure 1.unity
+    guid: d6afecb92f8172c42877814b1fa061d2
+  - enabled: 0
+    path: Assets/Chapter 8/Example 8.2/Chapter 8 Figure 2.unity
+    guid: 5b80e84b08ddef245bc2546b4bfa3b2b
+  - enabled: 0
+    path: Assets/Chapter 8/Example 8.3/Chapter 8 Figure 3.unity
+    guid: ba035a8c7aa556b4984445dcbc5077e6
+  - enabled: 0
+    path: Assets/Chapter 8/Example 8.4/Example 8.4.unity
+    guid: 2ba14d22699e9f74c8063d85f8eac11a
+  - enabled: 0
+    path: Assets/Chapter 8/Example 8.5/Example 8.5.unity
+    guid: 95e20f7b8cd449748b634ad6ba51dd0b
+  - enabled: 0
+    path: Assets/Chapter 8/Example 8.6/Example8_6.unity
+    guid: 9a360cebcbd0546468f3a0a7d9b35930
+  - enabled: 0
+    path: Assets/Chapter 8/Example 8.7/Example8_7.unity
+    guid: d8859f07e34ca26489c58a871b26f6d9
+  - enabled: 0
+    path: Assets/Chapter 8/Example 8.9/Chapter 8 Figure 9.unity
+    guid: b75574c777631f14bad36bd2105c8df6
+  - enabled: 1
+    path: Assets/Chapter 8/Example 8.10/Chapter 8 Figure 10.unity
+    guid: 3cab53cad0138f24dae6c8dfb25df547
   m_configObjects: {}

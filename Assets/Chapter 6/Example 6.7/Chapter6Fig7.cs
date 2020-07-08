@@ -73,6 +73,10 @@ class Vehicle
         maxForce = _maxForce;
 
         myVehicle = GameObject.CreatePrimitive(PrimitiveType.Sphere); // Give our vehicle some visuals in our world.
+        Renderer renderer = myVehicle.GetComponent<Renderer>();
+        renderer.material = new Material(Shader.Find("Diffuse"));
+        renderer.material.color = Color.red;
+
         myVehicle.transform.position = new Vector2(initPos.x, initPos.y); // Set the vehicle's initial position.
         myVehicle.AddComponent<Rigidbody>(); // Add rigidbody so we can add forces to the vehicle.
 

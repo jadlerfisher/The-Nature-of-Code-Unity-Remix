@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Chapter1Fig10 : MonoBehaviour
 {
-
-    //Mouse coordinates
-    Vector3 mousePosition;
     Mover_10 mover;
 
     // Start is called before the first frame update
@@ -23,7 +20,6 @@ public class Chapter1Fig10 : MonoBehaviour
         Vector2 dir = mover.subtractVectors(mousePos, mover.location);
         mover.acceleration = mover.multiplyVector(dir.normalized, .5f);
         mover.Update();
-
     }
 
 }
@@ -85,18 +81,26 @@ public class Mover_10
         if (location.x > maximumPos.x)
         {
             location.x -= maximumPos.x - minimumPos.x;
+            acceleration = Vector2.zero;
+            velocity = Vector2.zero;
         }
         else if (location.x < minimumPos.x)
         {
             location.x += maximumPos.x - minimumPos.x;
+            acceleration = Vector2.zero;
+            velocity = Vector2.zero;
         }
         if (location.y > maximumPos.y)
         {
             location.y -= maximumPos.y - minimumPos.y;
+            acceleration = Vector2.zero;
+            velocity = Vector2.zero;
         }
         else if (location.y < minimumPos.y)
         {
             location.y += maximumPos.y - minimumPos.y;
+            acceleration = Vector2.zero;
+            velocity = Vector2.zero;
         }
     }
 
