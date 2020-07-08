@@ -6,7 +6,7 @@ public class Bloop : MonoBehaviour
 {
     Rigidbody rb; // The bloop's Rigid Body
 
-    DNA dna; // A bloop now has DNA
+    DNAbloop dna; // A bloop now has DNA
 
     float maxSpeed; // Keep the max speed for a Bloop
     float size; // The size of the bloop
@@ -21,7 +21,7 @@ public class Bloop : MonoBehaviour
     void Start()
     {
         findWindowLimits();
-        setDNA(new DNA());
+        setDNA(new DNAbloop());
 
         xoff = Random.Range(-1f, 1f); // Create a seed for the random motion
         yoff = Random.Range(-1f, 1f);
@@ -32,6 +32,8 @@ public class Bloop : MonoBehaviour
         rb.useGravity = false; // and turn off gravity since we wont need it
 
         gameObject.GetComponent<SphereCollider>().isTrigger = true;
+        Renderer r = gameObject.gameObject.GetComponent<Renderer>();
+        r.material = new Material(Shader.Find("Diffuse"));
         color = gameObject.GetComponent<Renderer>().material;
     }
 
@@ -123,7 +125,7 @@ public class Bloop : MonoBehaviour
     {
         if (Random.Range(0f, 1f) < 0.20) // a 20% chance of executine the code. i.e. a 20% chance of reproducing
         {
-            DNA childDNA = dna.copy(); // make a copy of the DNA
+            DNAbloop childDNA = dna.copy(); // make a copy of the DNA
             childDNA.mutate(0.001f); // 0.1% mutation rate
 
             GameObject bloopObj = GameObject.CreatePrimitive(PrimitiveType.Sphere); // Make an object
@@ -148,7 +150,7 @@ public class Bloop : MonoBehaviour
             return false;
     }
 
-    public void setDNA(DNA newDNA)
+    public void setDNA(DNAbloop newDNA)
     {
         dna = newDNA;
         maxSpeed = map(dna.genes[0], 0, 1, 10, 0); // MaxSpeed an Size are now mapped to values according to the DNA
@@ -171,10 +173,10 @@ public class Bloop : MonoBehaviour
 }
 
 
-public class DNA 
+public class DNAbloop 
 {
     public float[] genes;
-    public DNA() 
+    public DNAbloop() 
     {
         /*
          * It may seem absurd to use an array when all we have 
@@ -188,7 +190,7 @@ public class DNA
         }
     }
 
-    public DNA(float[] genes_) 
+    public DNAbloop(float[] genes_) 
     {
         genes = genes_;
     }
@@ -201,10 +203,10 @@ public class DNA
         }
     }
 
-    public DNA copy() 
+    public DNAbloop copy() 
     {
         float[] newgenes = new float[genes.Length];
         newgenes = (float[])genes.Clone();
-        return new DNA(newgenes);
+        return new DNAbloop(newgenes);
     }
 }

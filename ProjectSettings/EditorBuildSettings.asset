@@ -200,7 +200,22 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Chapter 8/Example 8.9/Chapter 8 Figure 9.unity
     guid: b75574c777631f14bad36bd2105c8df6
-  - enabled: 1
+  - enabled: 0
     path: Assets/Chapter 8/Example 8.10/Chapter 8 Figure 10.unity
     guid: 3cab53cad0138f24dae6c8dfb25df547
+  - enabled: 0
+    path: Assets/Chapter 9/Example 9.2/Chapter 9 Figure 2.unity
+    guid: 98dd9313b288a6a429d62ba6115950da
+  - enabled: 0
+    path: Assets/Chapter 9/Example 9.3/Chapter 9 Figure 3.unity
+    guid: e255bfff5a611cf4985921c478272838
+  - enabled: 0
+    path: Assets/Chapter 9/Example 9.4/Example9_4.unity
+    guid: 7b8e5d0ede0d76948a48cab834be39ab
+  - enabled: 0
+    path: Assets/Chapter 9/Example 9.5/Example 9.5.unity
+    guid: 47b5a36c395f44d4aa44b9af557aab96
+  - enabled: 1
+    path: Assets/Chapter 9/Example 9.1/Chapter 9 Figure 1.unity
+    guid: 22800d37db5c397428fb9b7920755d04
   m_configObjects: {}
