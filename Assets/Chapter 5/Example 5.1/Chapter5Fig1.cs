@@ -92,7 +92,7 @@ public class gravityMover
         //D = Cd * .5 * rho * V^2 * A
         //Where D is equal to the drag, rho is the air density, V is the velocity squared , A is a reference area, and Cd is the drag coefficient.
         //In this instance, since we are making the mass equal to volume we can use body.mass. For other shapes, you may not be able do this.
-        body.drag = .47f * .5f * 1.225f * (body.velocity.y * body.velocity.y) * body.mass;
+        body.drag = .47f * .5f * 1.225f * ((body.velocity.y * body.velocity.y)/2) * body.mass;
     }
 
     //If any of the objects passes either the max or negative position, change gravity

@@ -39,7 +39,7 @@ public class Chapter5Fig4 : MonoBehaviour
         }
 
         //Let's also change the gravity that impacts cloth in the scene
-        Physics.clothGravity = new Vector3(0f, .01f, 0f);
+        //Physics.clothGravity = new Vector3(0f, .01f, 0f);
         Physics.gravity = new Vector3(0f, .1f, 0f);
     }
 
