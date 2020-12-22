@@ -29,9 +29,14 @@ public class WalkerIntro5
     // The window limits
     private Vector2 minimumPos, maximumPos;
 
-    //Perlin
-     float heightScale = 2;
-     float widthScale = 1;
+    // Range over which height varies.
+    float heightScale = .7f;
+    float widthScale = 1.0f;
+
+    // Distance covered per second along X axis of Perlin plane.
+    float xScale = 1.0f;
+    float yScale = .5f;
+
 
     // Start is called before the first frame update
     // Gives the class a GameObject to draw on the screen
@@ -48,15 +53,17 @@ public class WalkerIntro5
 
     public void step()
     {
-        widthScale += .02f;
-        heightScale += .001f;
+        xScale += .1f;
 
-        float height = heightScale * Mathf.PerlinNoise(Time.time * .5f, 0.0f);
-        float width = widthScale * Mathf.PerlinNoise(Time.time * 1, 0.0f);
+
+        float width = widthScale * Mathf.PerlinNoise(Time.time * xScale, 0.0f);
+        float height = heightScale * Mathf.PerlinNoise(0.0f, Time.time * yScale);
         Vector3 pos = mover.transform.position;
         pos.y = height;
         pos.x = width;
         mover.transform.position = pos;
+
+   
     }
 
     public void CheckEdges()

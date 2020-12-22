@@ -9,7 +9,7 @@ public class IntroductionFig4 : MonoBehaviour
     void FixedUpdate()
     {
         //To create a Gaussian distribution in Unity we can actually use Random.Range() on two separate Random.Ranges
-        float num = Random.Range(Random.Range(-10, 10), Random.Range(-10, 10));
+        float num = Random.Range(Random.Range(-10f, 10f), Random.Range(-10f, 10f));
         float sd = 30;
         float mean = 5;
 
@@ -26,8 +26,6 @@ public class IntroductionFig4 : MonoBehaviour
         //to draw the path
         sphere.transform.position = new Vector3(x, 0F, 0F) * Time.deltaTime;
     }
-
-    //We won't do this often. But this is how you create a transparent materal on the fly
     
-    }
+}
  

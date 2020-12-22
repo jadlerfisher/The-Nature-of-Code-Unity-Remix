@@ -52,30 +52,30 @@ public class WalkerIntro3
 
         //Each frame choose a new Random number 0-1;
         //If the number is less than the the float take a step
-        if (num < 0.4F)
-        {
-            x++;
-        }
-        else if (num < 0.6F)
-        {
-            x--;
-        }
-        else if (num < .8F)
+        if (num < 0.2F)
         {
             y++;
         }
-        else
+        else if (num > 0.2F && num < 0.4F)
         {
             y--;
         }
-        walkerGO.transform.position = new Vector3(x, y, 0F);
+        else if (num > 0.4F && num < .6F)
+        {
+            x--;
+        }
+        else if (num > .6f)
+        {
+            x--;
+        }
+        walkerGO.transform.position = new Vector3(x, y, 0F) * Time.time;
     }
 
     //Now let's draw the path of the Mover by creating spheres in its position in the most recent frame.
     public void draw()
     {
  
-        if (walkers.Count <= 60)
+        if (walkers.Count <= 100)
         {
             //This creates a sphere GameObject
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);     //We need to create a new material for WebGL
