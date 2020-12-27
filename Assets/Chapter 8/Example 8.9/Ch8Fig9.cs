@@ -1,5 +1,6 @@
 ﻿using System.Text; // Required to use StringBuilder
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Chapter 8 Figure 9: Simple L-System sentence generation
@@ -7,15 +8,20 @@ using UnityEngine;
 
 public class Ch8Fig9 : MonoBehaviour
 {
+    [SerializeField]
+    Text CanvasText;
     // Start with "A"
     private string current = "A";
 
     // Number of generations
     private int count = 0;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
+        CanvasText.text = "Generation " + count + ": " + current;
         print("Generation " + count + ": " + current);
     }
 
@@ -49,6 +55,7 @@ public class Ch8Fig9 : MonoBehaviour
             count++;
 
             // Print to console
+            CanvasText.text = "Generation " + count + ": " + current;
             print("Generation " + count + ": " + current);
         }
     }

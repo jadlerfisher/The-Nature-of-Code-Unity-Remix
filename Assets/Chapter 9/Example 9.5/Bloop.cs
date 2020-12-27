@@ -30,11 +30,12 @@ public class Bloop : MonoBehaviour
 
         rb = gameObject.AddComponent<Rigidbody>(); // Add a RigidBody for physics
         rb.useGravity = false; // and turn off gravity since we wont need it
-
+        gameObject.AddComponent<SphereCollider>();
         gameObject.GetComponent<SphereCollider>().isTrigger = true;
-        Renderer r = gameObject.gameObject.GetComponent<Renderer>();
+        MeshRenderer r = gameObject.gameObject.GetComponent<MeshRenderer>();
         r.material = new Material(Shader.Find("Diffuse"));
-        color = gameObject.GetComponent<Renderer>().material;
+        r.material.color = Color.red;
+        color = gameObject.GetComponent<MeshRenderer>().material;
     }
 
     void Update()
