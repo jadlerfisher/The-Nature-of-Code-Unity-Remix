@@ -62,7 +62,7 @@ public class vehicleChapter6_2 : MonoBehaviour
         Debug.Log(d);
         if (d < 3)
         {
-            float m = ExtensionMethods.Remap(d, 0f, 3f, 0, maxspeed);
+            float m = ExtensionMethods.map(d, 0f, 3f, 0, maxspeed);
             desired *= m;
             Debug.Log("near" + desired);
 

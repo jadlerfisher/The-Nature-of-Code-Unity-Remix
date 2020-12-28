@@ -162,11 +162,7 @@ public class Chapter9Fig2Population
         // A lower fitness = fewer entries to mating pool = less likely to be picked as a parent
         for (int i = 0; i < population.Length; i++)
         {
-            // A C# recreation of Processing's Map function, which re-maps
-            // A number from one range to another. 
-            // https://processing.org/reference/map_.html
             float fitnessNormal = 0 + (population[i].Fitness - 0) * (1 - 0) / (maxfitness - 0);
-            // float fitnessNormal = 0 + (1 - 0) * ((population[i].Fitness - 0) / (maxFitness - 0));
             int n = (int)fitnessNormal * 100; // Arbitary multiplier
             for (int j = 0; j < n; j++)
             {

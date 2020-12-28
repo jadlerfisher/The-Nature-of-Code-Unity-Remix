@@ -173,17 +173,17 @@ public class Connection10_4
             // Move our position a step closer to the target.
             float step = 2.0f * Time.deltaTime;
             sender = Vector2.MoveTowards(sender, b.position, step);
-            float d = Vector2.SqrMagnitude(sender - b.position);
 
+            //How far we we from neuron b?
+            float d = Vector2.SqrMagnitude(sender - b.position);
+            //If we are flose enough, stop sending
             if (d < 1)
             {
                 //Pass along the output!
                 b.feedforward(output);
                 sending = false;
             }
-
         }
-
     }
 
     //Draw as a Line

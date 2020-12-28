@@ -40,8 +40,8 @@ public class Bloop : MonoBehaviour
 
     void Update()
     {
-        float vx = map(Mathf.PerlinNoise(xoff, 0), 0, 1, -maxSpeed, maxSpeed);
-        float vy = map(Mathf.PerlinNoise(0, yoff), 0, 1, -maxSpeed, maxSpeed);
+        float vx = ExtensionMethods.map(Mathf.PerlinNoise(xoff, 0), 0, 1, -maxSpeed, maxSpeed);
+        float vy = ExtensionMethods.map(Mathf.PerlinNoise(0, yoff), 0, 1, -maxSpeed, maxSpeed);
         Vector2 velocity = new Vector2(vx, vy); // a little Perlin noise algorithm to calculate a velocity;
         xoff += 0.01f;
         yoff += 0.01f;
@@ -57,27 +57,27 @@ public class Bloop : MonoBehaviour
         // This blob of code makes the spheres fade from red, to blue, to green, to white as it gains more health
         float healthRed;
         if (health < 500)
-            healthRed = map(health, 0, 500, 0, 255);
+            healthRed = ExtensionMethods.map(health, 0, 500, 0, 255);
         else if (health < 2000)
-            healthRed = map(health, 500, 1000, 255, 0);
+            healthRed = ExtensionMethods.map(health, 500, 1000, 255, 0);
         else
-            healthRed = map(health, 2000, 2500, 0, 255);
+            healthRed = ExtensionMethods.map(health, 2000, 2500, 0, 255);
         if (healthRed > 255)
             healthRed = 255;
         else if (healthRed < 0)
             healthRed = 0;
         float healthBlue;
         if (health < 1000)
-            healthBlue = map(health, 500, 1000, 0, 255);
+            healthBlue = ExtensionMethods.map(health, 500, 1000, 0, 255);
         else if(health < 2000)
-            healthBlue = map(health, 1000, 1500, 255, 0);
+            healthBlue = ExtensionMethods.map(health, 1000, 1500, 255, 0);
         else
-            healthBlue = map(health, 2000, 2500, 0, 255);
+            healthBlue = ExtensionMethods.map(health, 2000, 2500, 0, 255);
         if (healthBlue > 255)
             healthBlue = 255;
         else if (healthBlue < 0)
             healthBlue = 0;
-        float healthGreen = map(health, 1000, 1500, 0, 255);
+        float healthGreen = ExtensionMethods.map(health, 1000, 1500, 0, 255);
 
         if (healthGreen > 255)
             healthGreen = 255;
@@ -154,16 +154,10 @@ public class Bloop : MonoBehaviour
     public void setDNA(DNAbloop newDNA)
     {
         dna = newDNA;
-        maxSpeed = map(dna.genes[0], 0, 1, 10, 0); // MaxSpeed an Size are now mapped to values according to the DNA
-        size = map(dna.genes[0], 0, 1, 0, 2);
+        maxSpeed = ExtensionMethods.map(dna.genes[0], 0, 1, 10, 0); // MaxSpeed an Size are now mapped to values according to the DNA
+        size = ExtensionMethods.map(dna.genes[0], 0, 1, 0, 2);
 
         gameObject.transform.localScale *= size;
-    }
-
-    // Remap's Value from range 1 to range 2
-    public float map(float value, float from1, float to1, float from2, float to2)
-    {
-        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 
     private void findWindowLimits()

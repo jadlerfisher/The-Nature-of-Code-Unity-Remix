@@ -75,7 +75,7 @@ public class vehicleChapter6_9 : MonoBehaviour
         Debug.Log(d);
         if (d < 1)
         {
-            float m = ExtensionMethods.Remap(d, 0f, 1f, 0, maxspeed);
+            float m = ExtensionMethods.map(d, 0f, 1f, 0, maxspeed);
             desired *= m;
 
         } else
