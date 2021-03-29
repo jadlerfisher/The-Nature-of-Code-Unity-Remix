@@ -23,7 +23,8 @@ public class IntroductionFig1 : MonoBehaviour
 public class introMover
 {
     // The basic properties of a mover class
-    private Vector3 location;
+    // x, y, z 
+    private Vector3 location; 
 
     // The window limits
     private Vector2 minimumPos, maximumPos;
