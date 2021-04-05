@@ -96,6 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -145,8 +146,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 60518631}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 1
+  m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
@@ -223,6 +225,10 @@ PrefabInstance:
       value: FPSController
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 92.49877
       objectReference: {fileID: 0}
@@ -233,6 +239,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalPosition.z
       value: 89.489815
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.92454606
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalRotation.x
@@ -247,14 +257,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.92454606
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
@@ -267,24 +269,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
-      propertyPath: far clip plane
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_ClearFlags
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0.49750802
+      propertyPath: far clip plane
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.8113208
       objectReference: {fileID: 0}
     - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_BackGroundColor.g
       value: 0.6195463
       objectReference: {fileID: 0}
     - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0.8113208
+      propertyPath: m_BackGroundColor.r
+      value: 0.49750802
       objectReference: {fileID: 0}
     - target: {fileID: 5400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_IsKinematic
@@ -317,8 +319,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1055878162}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 1
+  m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
@@ -447,29 +450,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 1886539393}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ac60da24e2f0be4891dd97edd4175e4, type: 3}
+  m_Script: {fileID: 11500000, guid: ef277241e9b4a480b9e9e56eac86e0da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Insects: []
-  fly: {fileID: 1907220204383741982, guid: ad90fa2fe79cb714da480ac588d9b4bc, type: 3}
-  flyTotal: 30
-  ant: {fileID: 6837061601441502663, guid: 68ec1d54a2924514ead0ca0f0e2079df, type: 3}
-  antTotal: 30
-  Birds: []
-  blueBird: {fileID: 3874548089328421425, guid: a77d1f6cf84798a45b8362502bb7dc29,
+  chapterOneCreatures: []
+  chapterOneCreature: {fileID: 7061339316724580992, guid: ea38844a385f3485e80f4eef216a2ad3,
     type: 3}
-  blueBirdTotal: 10
-  hawk: {fileID: 2044596522712116988, guid: 0d5d171668baece4ba8e2b375ff8e359, type: 3}
-  hawkTotal: 4
-  bear: {fileID: 3887646857004349117, guid: dc8aaa5c74a0bd34194f292ed1d44081, type: 3}
-  bearTotal: 10
+  chapterOneCreaturePopulation: 20
+  chapterTwoCreatures: []
+  chapterTwoCreature: {fileID: 0}
+  chapterTwoCreaturePopulation: 0
+  chapterThreeCreatures: []
+  chapterThreeCreature: {fileID: 0}
+  chapterThreeCreaturePopulation: 0
+  chapterSixCreatures: []
+  chapterSixCreature: {fileID: 0}
+  chapterSixCreaturePopulation: 0
+  chapterSevenCreatures: []
+  chapterSevenCreature: {fileID: 0}
+  chapterSevenCreaturePopulation: 0
+  chapterEightCreatures: []
+  chapterEightCreature: {fileID: 0}
+  chapterEightCreaturePopulation: 0
   terrain: {fileID: 1886539394}
-  redBirdList: []
-  redBird: {fileID: 3874548089328421425, guid: 313a41d7017d1d5418d66597e1007287, type: 3}
-  redBirdTotal: 40
-  food: []
-  seed: {fileID: 6106050306018664447, guid: ec3f8a08a8f8aa84f99be6599ca2fe69, type: 3}
-  seedTotal: 30
-  berryList: []
-  berry: {fileID: 1528719886615985514, guid: 72ab594dc2e95df48ba204106002f3df, type: 3}
-  berryTotal: 50
+  terrainMin: 10

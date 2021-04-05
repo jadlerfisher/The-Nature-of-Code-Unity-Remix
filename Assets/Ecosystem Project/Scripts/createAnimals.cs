@@ -161,7 +161,7 @@ public class createAnimals : MonoBehaviour
             }
             
         }
-        else if (prey.name == "berry(Clone)" || prey.name == "berry") ;
+        else if (prey.name == "berry(Clone)" || prey.name == "berry") 
         {
             if (berryList.Count <= berryTotal)
             {

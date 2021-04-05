@@ -16,15 +16,11 @@ public class antAnimal : MonoBehaviour
             location = this.gameObject.transform.position;
             velocity = new Vector3(0F, 0F, 0F);
             acceleration = new Vector3(.0F, .0F, .0F);
-
-
         }
 
         // Update is called once per frame
         void FixedUpdate()
         {
-
-
 
             if (velocity.magnitude <= topSpeed.magnitude)
             {
