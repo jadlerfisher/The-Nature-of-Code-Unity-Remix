@@ -2,95 +2,88 @@
 
 public class IntroductionFig5 : MonoBehaviour
 {
-    //And then we need to create a walker
-    private WalkerIntro5 walkeri5;
+    // Give the script an IntroMover
+    private IntroMover mover;
 
     // Start is called before the first frame update
     void Start()
     {
-        // Create the walker
-        walkeri5 = new WalkerIntro5();
+        // Create the mover instance
+        mover = new IntroMover();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Have the walker move
-        walkeri5.step();
-        walkeri5.CheckEdges();
+        // Have the mover step and check edges
+        mover.Step();
+        mover.CheckEdges();
     }
 }
 
-public class WalkerIntro5
+public class IntroMover
 {
-    //GameObject
+    // The location of the mover
     Vector2 location;
 
     // The window limits
-    private Vector2 minimumPos, maximumPos;
+    private Vector2 maximumPos;
 
-    // Range over which height varies.
+    // Range over which height and width varies.
     float heightScale = .7f;
     float widthScale = 1.0f;
 
-    // Distance covered per second along X axis of Perlin plane.
+    // Distance covered per second along X and Y axis of Perlin plane.
     float xScale = 1.0f;
     float yScale = .5f;
 
-
-    // Start is called before the first frame update
     // Gives the class a GameObject to draw on the screen
-    public GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+    public GameObject moverGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-    public WalkerIntro5()
+    public IntroMover()
     {
-        findWindowLimits();
+        FindWindowLimits();
         location = Vector2.zero;
-        //We need to create a new material for WebGL
-        Renderer r = mover.GetComponent<Renderer>();
+        // Create a new material for WebGL
+        Renderer r = moverGO.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
     }
 
-    public void step()
+    public void Step()
     {
-
         float width = widthScale * Mathf.PerlinNoise(Time.time * xScale, 0.0f);
         float height = heightScale * Mathf.PerlinNoise(0.0f, Time.time * yScale);
-        Vector3 pos = mover.transform.position;
+        Vector3 pos = moverGO.transform.position;
         pos.y = height;
         pos.x = width;
-        mover.transform.position = pos;
-
-   
+        moverGO.transform.position = pos;
     }
 
     public void CheckEdges()
     {
-        location = mover.transform.position;
-            if ((location.x > maximumPos.x) || (location.x < minimumPos.x))
+        location = moverGO.transform.position;
+            if (location.x > maximumPos.x || location.x < -maximumPos.x)
             {
-                reset();
+                Reset();
             }
         
-            if ((location.y > maximumPos.y) || (location.y < minimumPos.y))
+            if (location.y > maximumPos.y || location.y < -maximumPos.y)
             {
-                reset();
+                Reset();
             }     
-        mover.transform.position = location;
+        moverGO.transform.position = location;
     }
 
-    void reset() {
+    void Reset() 
+    {
         location = Vector2.zero;
-        heightScale = 2;
-        widthScale = 1;
     }
 
-    private void findWindowLimits()
+    private void FindWindowLimits()
     {
         // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
-        // Next we grab the minimum and maximum position for the screen
-        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
+        // Next we grab the maximum position for the screen
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
