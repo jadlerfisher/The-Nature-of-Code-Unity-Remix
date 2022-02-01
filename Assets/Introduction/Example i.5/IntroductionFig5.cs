@@ -4,6 +4,7 @@ public class IntroductionFig5 : MonoBehaviour
 {
     // Give the script an IntroMover
     private IntroMover mover;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +16,7 @@ public class IntroductionFig5 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        mover.timeSinceReset = Time.time - mover.resetTime;
         // Have the mover step and check edges
         mover.Step();
         mover.CheckEdges();
@@ -40,6 +42,9 @@ public class IntroMover
     // Gives the class a GameObject to draw on the screen
     public GameObject moverGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
+    public float timeSinceReset;
+    public float resetTime;
+
     public IntroMover()
     {
         FindWindowLimits();
@@ -51,8 +56,8 @@ public class IntroMover
 
     public void Step()
     {
-        float width = widthScale * Mathf.PerlinNoise(Time.time * xScale, 0.0f);
-        float height = heightScale * Mathf.PerlinNoise(0.0f, Time.time * yScale);
+        float width = widthScale * Mathf.PerlinNoise(Time.time * xScale, 0.0f) * timeSinceReset;
+        float height = heightScale * Mathf.PerlinNoise(0.0f, Time.time * yScale) * timeSinceReset;
         Vector3 pos = moverGO.transform.position;
         pos.y = height;
         pos.x = width;
@@ -77,6 +82,9 @@ public class IntroMover
     void Reset() 
     {
         location = Vector2.zero;
+        resetTime = Time.time;
+        heightScale = Random.Range(-1f, 1f);
+        widthScale = Random.Range(-1f, 1f);
     }
 
     private void FindWindowLimits()
