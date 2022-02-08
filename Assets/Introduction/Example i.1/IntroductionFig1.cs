@@ -91,8 +91,6 @@ public class IntroMover
     {
         // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
-        // Ensure the camera is positioned in the center of the scene
-        Camera.main.transform.position = Vector2.zero;
         // Next we grab the maximum position for the screen
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
         // The maximum position can be attributed to the minimum bounds by setting it negative
