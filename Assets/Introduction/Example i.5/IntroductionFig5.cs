@@ -3,14 +3,14 @@
 public class IntroductionFig5 : MonoBehaviour
 {
     // Give the script an IntroMover
-    private IntroMover mover;
+    private IntroMoverI5 mover;
     
 
     // Start is called before the first frame update
     void Start()
     {
         // Create the mover instance
-        mover = new IntroMover();
+        mover = new IntroMoverI5();
     }
 
     // Update is called once per frame
@@ -23,7 +23,7 @@ public class IntroductionFig5 : MonoBehaviour
     }
 }
 
-public class IntroMover
+public class IntroMoverI5
 {
     // The location of the mover
     Vector2 location;
@@ -45,7 +45,7 @@ public class IntroMover
     public float timeSinceReset;
     public float resetTime;
 
-    public IntroMover()
+    public IntroMoverI5()
     {
         FindWindowLimits();
         location = Vector2.zero;
