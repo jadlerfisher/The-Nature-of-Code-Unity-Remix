@@ -17,45 +17,42 @@ public class Chapter1Fig1 : MonoBehaviour
     // A Variable to represent our mover in the scene
     private GameObject mover;
 
-
     // Start is called before the first frame update
     void Start()
     {
         // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
-
         // Next we grab the minimum and maximum position for the screen
         Vector2 minimumPosition = Camera.main.ScreenToWorldPoint(Vector2.zero);
         Vector2 maximumPosition = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
 
-        // We can now properly assign the Min and Max for out scene
-        xMin = minimumPosition.x;
+        // We can now properly assign the Min and Max for the scene
+        xMin = -maximumPosition.x;
         xMax = maximumPosition.x;
-        yMin = minimumPosition.y;
+        yMin = -maximumPosition.y;
         yMax = maximumPosition.y;
 
         // We now can set the mover as a primitive sphere in unity
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        //We need to create a new material for WebGL
+        // We need to create a new material for WebGL
         Renderer r = mover.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
     }
 
-    // Update is called once per frame forever and ever (until you quit).
+    // Update is called once per frame
     void Update()
     {
-        // Each frame, we will check to see if the mover has touched a boarder
+        // Each frame, we will check to see if the mover has touched a border
         // We check if the X/Y position is greater than the max position OR if it's less than the minimum position
-        bool xHitBoarder = x > xMax || x < xMin;
-        bool yHitBoarder = y > yMax || y < yMin;
+        bool xHitBorder = x > xMax || x < xMin;
+        bool yHitBorder = y > yMax || y < yMin;
 
         // If the mover has hit at all, we will mirror it's speed with the corrisponding boarder
-
-        if (xHitBoarder) {
+        if (xHitBorder) {
             xSpeed = -xSpeed;
         }
 
-        if (yHitBoarder) {
+        if (yHitBorder) {
             ySpeed = -ySpeed;
         }
 
