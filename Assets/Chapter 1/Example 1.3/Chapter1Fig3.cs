@@ -33,7 +33,7 @@ public class Chapter1Fig3 : MonoBehaviour
         // Vector2 toSubtract = new Vector2(2, 3);
 
         // Subtract the two vectors to get the follower's position
-        Vector2 followerPosition = subtractVectors(mousePos, centerSphere.transform.position);
+        Vector2 followerPosition = SubtractVectors(mousePos, centerSphere.transform.position);
 
         // Begin rendering the line between the two objects. Set the first point (0) at the centerSphere position
         // Make sure the end of the line (1) appears at the new Vector3 we are creating via the method "subtractVector" 
@@ -46,8 +46,8 @@ public class Chapter1Fig3 : MonoBehaviour
     }
     
     // This method calculates A - B component wise
-    // subtractVectors(vectorA, vectorB) will yield the same output as Unity's built in operator: vectorA - vectorB
-    Vector2 subtractVectors(Vector2 vectorA, Vector2 vectorB)
+    // SubtractVectors(vectorA, vectorB) will yield the same output as Unity's built in operator: vectorA - vectorB
+    Vector2 SubtractVectors(Vector2 vectorA, Vector2 vectorB)
     {
         float newX = vectorA.x - vectorB.x;
         float newY = vectorA.y - vectorB.y;
