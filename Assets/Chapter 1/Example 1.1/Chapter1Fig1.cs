@@ -48,11 +48,12 @@ public class Chapter1Fig1 : MonoBehaviour
         bool yHitBorder = y > yMax || y < yMin;
 
         // If the mover has hit at all, we will mirror it's speed with the corrisponding boarder
-        if (xHitBorder) {
+        if (xHitBorder) 
+        {
             xSpeed = -xSpeed;
         }
-
-        if (yHitBorder) {
+        if (yHitBorder) 
+        {
             ySpeed = -ySpeed;
         }
 
