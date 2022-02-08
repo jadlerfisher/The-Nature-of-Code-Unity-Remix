@@ -10,7 +10,7 @@ public class Chapter1Fig3 : MonoBehaviour
     // [SerializeField] is used to make private variables visible in the Unity inspector
     [SerializeField] private Camera cam;
     [SerializeField] private GameObject centerSphere;
-    [SerializeField] private GameObject followerSphere;
+    [SerializeField] private GameObject cursorSphere;
 
     // A LineRenderer component will draw a line along our vector
     private LineRenderer lineRender;
@@ -42,7 +42,7 @@ public class Chapter1Fig3 : MonoBehaviour
 
         // Update the positions of the spheres in the scene to our vectors
         // centerSphere.transform.position = Vector2.zero;
-        followerSphere.transform.position = followerPosition;
+        cursorSphere.transform.position = followerPosition;
     }
     
     // This method calculates A - B component wise
