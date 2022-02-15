@@ -18,8 +18,8 @@ public class Chapter1Fig10 : MonoBehaviour
     void Update()
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 dir = mover.subtractVectors(mousePos, mover.location);
-        mover.acceleration = mover.multiplyVector(dir.normalized, .5f);
+        Vector2 dir = mover.SubtractVectors(mousePos, mover.location);
+        mover.acceleration = mover.ScaleVector(dir.normalized, .5f);
         mover.Step();
         mover.CheckEdges();
     }
@@ -121,17 +121,17 @@ public class Mover1_10
     }
 
     // This method calculates A - B component wise
-    // subtractVectors(vecA, vecB) will yield the same output as Unity's built in operator: vecA - vecB
-    public Vector2 subtractVectors(Vector2 vectorA, Vector2 vectorB)
+    // SubtractVectors(vecA, vecB) will yield the same output as Unity's built in operator: vecA - vecB
+    public Vector2 SubtractVectors(Vector2 vectorA, Vector2 vectorB)
     {
         float newX = vectorA.x - vectorB.x;
         float newY = vectorA.y - vectorB.y;
         return new Vector2(newX, newY);
     }
 
-    // This method calculates A * b component wise
-    // multiplyVector(vector, factor) will yield the same output as Unity's built in operator: vector * factor
-    public Vector2 multiplyVector(Vector2 toMultiply, float scaleFactor)
+    // This method calculates a vector scaled by a factor component wise
+    // ScaleVector(vector, factor) will yield the same output as Unity's built in operator: vector * factor
+    public Vector2 ScaleVector(Vector2 toMultiply, float scaleFactor)
     {
         float x = toMultiply.x * scaleFactor;
         float y = toMultiply.y * scaleFactor;
