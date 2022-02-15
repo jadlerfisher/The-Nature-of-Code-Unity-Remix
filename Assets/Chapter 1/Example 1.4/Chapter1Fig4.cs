@@ -12,7 +12,7 @@ public class Chapter1Fig4 : MonoBehaviour
     [SerializeField] private GameObject centerSphere;
     [SerializeField] private GameObject cursorSphere;
 
-    //Create variables for rendering the line between two vectors
+    // Create variables for rendering the line between two vectors
     private LineRenderer lineRender;
 
     // Start is called before the first frame update
@@ -21,7 +21,7 @@ public class Chapter1Fig4 : MonoBehaviour
         // Add the Unity Component "LineRenderer" to the GameObject this script is attached to
         lineRender = gameObject.AddComponent<LineRenderer>();
 
-        //We need to create a new material for WebGL
+        // We need to create a new material for WebGL
         lineRender.material = new Material(Shader.Find("Diffuse"));
     }
 
