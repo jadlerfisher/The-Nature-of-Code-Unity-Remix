@@ -12,6 +12,7 @@ public class Chapter1Fig1 : MonoBehaviour
     private float ySpeed = 0.1F;
 
     // Variables to limit the mover within the screen space
+    private Vector2 maximumPos;
     private float xMin, yMin, xMax, yMax;
 
     // A Variable to represent our mover in the scene
@@ -20,18 +21,14 @@ public class Chapter1Fig1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // We want to start by setting the camera's projection to Orthographic mode
-        Camera.main.orthographic = true;
-
-        // Next we grab the minimum and maximum position for the screen
-        Vector2 minimumPosition = Camera.main.ScreenToWorldPoint(Vector2.zero);
-        Vector2 maximumPosition = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        // Call FindWindowLimits() on start
+        FindWindowLimits();
 
         // We can now properly assign the Min and Max for the scene
-        xMin = -maximumPosition.x;
-        xMax = maximumPosition.x;
-        yMin = -maximumPosition.y;
-        yMax = maximumPosition.y;
+        xMin = -maximumPos.x;
+        xMax = maximumPos.x;
+        yMin = -maximumPos.y;
+        yMax = maximumPos.y;
 
         // We now can set the mover as a primitive sphere in unity
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -65,6 +62,18 @@ public class Chapter1Fig1 : MonoBehaviour
 
         // Now we apply the positions to the mover to put it in it's place
         mover.transform.position = new Vector2(x, y);
+    }
+
+    private void FindWindowLimits()
+    {
+        // We want to start by setting the camera's projection to Orthographic mode
+        Camera.main.orthographic = true;
+
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        // Next we grab the maximum position for the screen
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 
 }
