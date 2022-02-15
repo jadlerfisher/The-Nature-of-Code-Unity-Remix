@@ -20,6 +20,7 @@ public class Chapter1Fig6 : MonoBehaviour
     {
         // Create the line renderer component on this script's GameObject
         lineRender = gameObject.AddComponent<LineRenderer>();
+
         // We need to create a new material for WebGL
         lineRender.material = new Material(Shader.Find("Diffuse"));
     }
