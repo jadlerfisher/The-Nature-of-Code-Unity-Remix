@@ -20,6 +20,7 @@ public class Chapter1Fig4 : MonoBehaviour
     {
         // Add the Unity Component "LineRenderer" to the GameObject this script is attached to
         lineRender = gameObject.AddComponent<LineRenderer>();
+
         //We need to create a new material for WebGL
         lineRender.material = new Material(Shader.Find("Diffuse"));
     }
@@ -30,13 +31,16 @@ public class Chapter1Fig4 : MonoBehaviour
         // Track the Vector2 of the mouse position and the center sphere position
         Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 centerPos = centerSphere.transform.position;
+
         // Define a scaling coefficient to multiply x and y by
         float scaleFactor = 0.5f;
 
         // Get a vector for the distance between the two spheres
         Vector2 differenceVector = SubtractVectors(mousePos, centerPos);
+
         // Scale the vector
         Vector2 scaledVector = ScaleVector(differenceVector, scaleFactor);
+
         // Add the scaled vector back to the center position
         Vector2 scaledMousePos = AddVectors(centerPos, scaledVector);
         
@@ -44,6 +48,7 @@ public class Chapter1Fig4 : MonoBehaviour
         // Make sure the end of the line (1) appears at the new Vector3 we are creating
         lineRender.SetPosition(0, centerSphere.transform.position);
         lineRender.SetPosition(1, scaledMousePos);
+
         // Move the cursor to that same Vector3 we created
         cursorSphere.transform.position = scaledMousePos;
     }
