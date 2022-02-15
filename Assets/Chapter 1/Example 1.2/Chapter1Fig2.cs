@@ -37,7 +37,7 @@ public class Chapter1Fig2 : MonoBehaviour
         bool xHitBorder = location.x > maximumPos.x || location.x < -maximumPos.x;
         bool yHitBorder = location.y > maximumPos.y || location.y < -maximumPos.y;
 
-        // If the mover has hit a border, we will mirror it's speed along the corresponding border axis
+        // If the mover has hit a border, we will mirror its speed along the corresponding border axis
         if (xHitBorder)
         {
             velocity.x = -velocity.x;
@@ -50,7 +50,7 @@ public class Chapter1Fig2 : MonoBehaviour
         // Lets now update the location of the mover
         location += velocity;
 
-        // Now we apply the positions to the mover update it's place
+        // Now we apply the updated position to the mover
         mover.transform.position = new Vector2(location.x, location.y);
     }
 
