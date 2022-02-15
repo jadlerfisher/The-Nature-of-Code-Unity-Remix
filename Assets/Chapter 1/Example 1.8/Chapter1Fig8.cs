@@ -62,7 +62,6 @@ public class Mover1_8
         // Moves the mover
         location += velocity * Time.deltaTime;
 
-
         // Updates the GameObject of this movement
         mover.transform.position = new Vector2(location.x, location.y);
     }
