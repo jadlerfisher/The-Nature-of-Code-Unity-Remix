@@ -120,7 +120,6 @@ public class Mover1_10
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 
-
     // This method calculates A - B component wise
     // subtractVectors(vecA, vecB) will yield the same output as Unity's built in operator: vecA - vecB
     public Vector2 subtractVectors(Vector2 vectorA, Vector2 vectorB)
