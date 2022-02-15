@@ -7,9 +7,6 @@ public class Chapter1Fig7 : MonoBehaviour
     // Declare a mover object
     private Mover1_7 mover;
 
-    // Variables to limit the mover within the screen space
-    private float xMin, yMin, xMax, yMax;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -49,7 +46,7 @@ public class Mover1_7
 
     public void Step()
     {
-        // Moves the mover, Time.deltaTime is the time passed since the last frame and ties movement to a fixed rate instead of framerate.
+        // Moves the mover, Time.deltaTime is the time passed since the last frame and ties movement to a fixed rate instead of framerate
         location += velocity * Time.deltaTime; 
 
         // Updates the GameObject to the new position
