@@ -36,6 +36,7 @@ public class Mover1_7
     public Mover1_7()
     {
         FindWindowLimits();
+
         location = new Vector2(Random.Range(-maximumPos.x, maximumPos.x), Random.Range(-maximumPos.y, maximumPos.y));
         velocity = new Vector2(Random.Range(-2f, 2f), Random.Range(-2f, 2f));
 
