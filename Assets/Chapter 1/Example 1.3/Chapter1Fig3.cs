@@ -20,6 +20,7 @@ public class Chapter1Fig3 : MonoBehaviour
     {
         // Add the Unity Component "lineRenderer" to the GameObject this script is attached to
         lineRender = gameObject.AddComponent<LineRenderer>();
+
         // We need to create a new material for WebGL
         lineRender.material = new Material(Shader.Find("Diffuse"));
     }
@@ -29,28 +30,13 @@ public class Chapter1Fig3 : MonoBehaviour
     {
         // Track the Vector2 of the mouse's position and the center sphere's position
         Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-        // Define a set distance that the follower will be offset by
-        // Vector2 toSubtract = new Vector2(2, 3);
-
-        // Subtract the two vectors to get the follower's position
-        Vector2 followerPosition = SubtractVectors(mousePos, centerSphere.transform.position);
 
         // Begin rendering the line between the two objects. Set the first point (0) at the centerSphere position
-        // Make sure the end of the line (1) appears at the new Vector3 we are creating via the method "subtractVector" 
+        // Make sure the end of the line (1) appears at the position of the mouse 
         lineRender.SetPosition(0, centerSphere.transform.position);
-        lineRender.SetPosition(1, followerPosition);
+        lineRender.SetPosition(1, mousePos);
 
-        // Update the positions of the spheres in the scene to our vectors
-        // centerSphere.transform.position = Vector2.zero;
-        cursorSphere.transform.position = followerPosition;
-    }
-    
-    // This method calculates A - B component wise
-    // SubtractVectors(vectorA, vectorB) will yield the same output as Unity's built in operator: vectorA - vectorB
-    Vector2 SubtractVectors(Vector2 vectorA, Vector2 vectorB)
-    {
-        float newX = vectorA.x - vectorB.x;
-        float newY = vectorA.y - vectorB.y;
-        return new Vector2(newX, newY);
+        // Update the positions of the cursor sphere in the scene to our mouse position
+        cursorSphere.transform.position = mousePos;
     }
 }
