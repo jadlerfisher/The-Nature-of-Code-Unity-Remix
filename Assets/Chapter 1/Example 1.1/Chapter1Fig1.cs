@@ -22,6 +22,7 @@ public class Chapter1Fig1 : MonoBehaviour
     {
         // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
+
         // Next we grab the minimum and maximum position for the screen
         Vector2 minimumPosition = Camera.main.ScreenToWorldPoint(Vector2.zero);
         Vector2 maximumPosition = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
@@ -34,6 +35,7 @@ public class Chapter1Fig1 : MonoBehaviour
 
         // We now can set the mover as a primitive sphere in unity
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
         // We need to create a new material for WebGL
         Renderer r = mover.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
@@ -64,4 +66,5 @@ public class Chapter1Fig1 : MonoBehaviour
         // Now we apply the positions to the mover to put it in it's place
         mover.transform.position = new Vector2(x, y);
     }
+
 }
