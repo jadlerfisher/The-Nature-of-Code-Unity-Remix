@@ -46,7 +46,7 @@ public class Mover1_9
         // Set top speed to 2f
         topSpeed = 2f;
 
-        //We need to create a new material for WebGL
+        // We need to create a new material for WebGL
         Renderer r = mover.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
     }
