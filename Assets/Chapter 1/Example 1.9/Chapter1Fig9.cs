@@ -62,7 +62,7 @@ public class Mover1_9
         // Now we can scale the magnitude as we wish
         acceleration *= Random.Range(5f, 10f);
 
-        // Speeds up the mover, Time.deltaTime is the time passed since the last frame and ties acceleration to a fixed rate instead of framerate.
+        // Speeds up the mover, Time.deltaTime is the time passed since the last frame and ties acceleration to a fixed rate instead of framerate
         velocity += acceleration * Time.deltaTime;
 
         // Limit Velocity to the top speed
