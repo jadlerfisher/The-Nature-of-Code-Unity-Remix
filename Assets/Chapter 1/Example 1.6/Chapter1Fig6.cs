@@ -60,14 +60,14 @@ public class Chapter1Fig6 : MonoBehaviour
     }
 
     // This method finds the length of a vector using the pythagorean theorem
-    // magnitudeOf(vec) will yield the same output as Unity's built in property vect.magnitude
+    // MagnitudeOf(vec) will yield the same output as Unity's built in property vect.magnitude
     float MagnitudeOf(Vector2 vector)
     {
         return Mathf.Sqrt(vector.x * vector.x + vector.y * vector.y);
     }
 
     // This method calculates A - B component wise
-    // subtractVectors(vecA, vecB) will yield the same output as Unity's built in operator: vecA - vecB
+    // SubtractVectors(vecA, vecB) will yield the same output as Unity's built in operator: vecA - vecB
     Vector2 SubtractVectors(Vector2 vectorA, Vector2 vectorB)
     {
         float newX = vectorA.x - vectorB.x;
