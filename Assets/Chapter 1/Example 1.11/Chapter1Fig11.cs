@@ -138,7 +138,7 @@ public class Mover1_11
         return new Vector2(newX, newY);
     }
 
-    // This method calculates A * b component wise
+    // This method calculates a vector scaled by a factor component wise
     // ScaleVector(vector, factor) will yield the same output as Unity's built in operator: vector * factor
     public Vector2 ScaleVector(Vector2 toMultiply, float scaleFactor)
     {
