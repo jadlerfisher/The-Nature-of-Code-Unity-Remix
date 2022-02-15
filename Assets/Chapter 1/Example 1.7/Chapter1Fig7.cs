@@ -34,7 +34,7 @@ public class Mover1_7
     private Vector2 maximumPos;
 
     // Gives the class a GameObject to draw on the screen
-    private GameObject moverGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+    private GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
     public Mover1_7()
     {
@@ -43,7 +43,7 @@ public class Mover1_7
         velocity = new Vector2(Random.Range(-2f, 2f), Random.Range(-2f, 2f));
 
         // We need to create a new material for WebGL
-        Renderer r = moverGO.GetComponent<Renderer>();
+        Renderer r = mover.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
     }
 
@@ -53,7 +53,7 @@ public class Mover1_7
         location += velocity * Time.deltaTime; 
 
         // Updates the GameObject to the new position
-        moverGO.transform.position = new Vector2(location.x, location.y);
+        mover.transform.position = new Vector2(location.x, location.y);
     }
 
     public void CheckEdges()
