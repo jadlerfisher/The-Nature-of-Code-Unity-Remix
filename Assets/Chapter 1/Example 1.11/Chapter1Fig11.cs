@@ -4,19 +4,16 @@ using UnityEngine;
 
 public class Chapter1Fig11 : MonoBehaviour
 {
-
-    public List<Mover1_11> Movers = new List<Mover1_11>();
-    private int amountMovers = 30;
-
+    // Create an array of 10 movers
+    private Mover1_11[] movers = new Mover1_11[10];
 
     // Start is called before the first frame update
     void Start()
     {
-        // We need to instantiate our Movers and add them to a list
-        while (Movers.Count < 10)
+        // Instantiate each mover in the array as a new mover
+        for (int i = 0; i < movers.Length; i++)
         {
-
-            Movers.Add(new Mover1_11());
+            movers[i] = new Mover1_11();
         }
 
     }
@@ -26,45 +23,48 @@ public class Chapter1Fig11 : MonoBehaviour
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        for (int i = 0; i < Movers.Count; i++)
+        for (int i = 0; i < movers.Length; i++)
         {
-            Vector2 dir = Movers[i].subtractVectors(mousePos, Movers[i].location);
-            Movers[i].acceleration = Movers[i].multiplyVector(dir.normalized, .5f);
-            Movers[i].Update();
+            Vector2 dir = movers[i].SubtractVectors(mousePos, movers[i].location);
+            movers[i].acceleration = movers[i].ScaleVector(dir.normalized, .5f);
+            movers[i].Step();
+            movers[i].CheckEdges();
         }
     }
-
 }
 
 public class Mover1_11
 {
-
     // The basic properties of a mover class
     public Vector2 location, velocity, acceleration;
     private float topSpeed;
 
     // The window limits
-    private Vector2 minimumPos, maximumPos;
+    private Vector2 maximumPos;
 
     // Gives the class a GameObject to draw on the screen
     private GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
     public Mover1_11()
     {
-        findWindowLimits();
-        location = new Vector2(Random.Range(-4f, 4f), Random.Range(-4f, 4f)); 
-        velocity = Vector2.zero;
-        acceleration = Vector2.zero; // Vector2.zero is a (0, 0) vector
-        topSpeed = 1;
+        FindWindowLimits();
 
-        //We need to create a new material for WebGL
+        location = new Vector2(Random.Range(-4f, 4f), Random.Range(-4f, 4f));
+
+        // Vector2.zero is shorthand for a (0, 0) vector
+        velocity = Vector2.zero;
+        acceleration = Vector2.zero;
+
+        // Set top speed to 1f
+        topSpeed = 1f;
+
+        // We need to create a new material for WebGL
         Renderer r = mover.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
     }
 
-    public void Update()
+    public void Step()
     {
-        CheckEdges();
         if (velocity.magnitude <= topSpeed)
         {
             // Speeds up the mover
@@ -78,7 +78,6 @@ public class Mover1_11
 
             // Updates the GameObject of this movement
             mover.transform.position = new Vector3(location.x, location.y, 0);
-
         }
         else
         {
@@ -92,45 +91,47 @@ public class Mover1_11
     {
         if (location.x > maximumPos.x)
         {
-            location.x -= maximumPos.x - minimumPos.x;
-            acceleration =  Vector2.zero;
-            velocity = Vector2.zero;
+            location.x = -maximumPos.x;
+            ResetMovementVariables();
         }
-        else if (location.x < minimumPos.x)
+        else if (location.x < -maximumPos.x)
         {
-            location.x += maximumPos.x - minimumPos.x;
-            acceleration = Vector2.zero;
-            velocity = Vector2.zero;
+            location.x = maximumPos.x;
+            ResetMovementVariables();
         }
         if (location.y > maximumPos.y)
         {
-            location.y -= maximumPos.y - minimumPos.y;
-            acceleration = Vector2.zero;
-            velocity = Vector2.zero;
+            location.y = -maximumPos.y;
+            ResetMovementVariables();
         }
-        else if (location.y < minimumPos.y)
+        else if (location.y < -maximumPos.y)
         {
-            location.y += maximumPos.y - minimumPos.y;
-            acceleration = Vector2.zero;
-            velocity = Vector2.zero;
+            location.y = maximumPos.y;
+            ResetMovementVariables();
         }
     }
 
-    private void findWindowLimits()
+    private void ResetMovementVariables()
     {
-        // The code to find the information on the camera as seen in Figure 1.2
+        acceleration = Vector2.zero;
+        velocity = Vector2.zero;
+    }
 
+    private void FindWindowLimits()
+    {
         // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
-        // Next we grab the minimum and maximum position for the screen
-        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
+
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0 for x and y. We will use -10 for z in this example
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        // Next we grab the maximum position for the screen
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 
-
     // This method calculates A - B component wise
-    // subtractVectors(vecA, vecB) will yield the same output as Unity's built in operator: vecA - vecB
-    public Vector2 subtractVectors(Vector2 vectorA, Vector2 vectorB)
+    // SubtractVectors(vecA, vecB) will yield the same output as Unity's built in operator: vecA - vecB
+    public Vector2 SubtractVectors(Vector2 vectorA, Vector2 vectorB)
     {
         float newX = vectorA.x - vectorB.x;
         float newY = vectorA.y - vectorB.y;
@@ -138,8 +139,8 @@ public class Mover1_11
     }
 
     // This method calculates A * b component wise
-    // multiplyVector(vector, factor) will yield the same output as Unity's built in operator: vector * factor
-    public Vector2 multiplyVector(Vector2 toMultiply, float scaleFactor)
+    // ScaleVector(vector, factor) will yield the same output as Unity's built in operator: vector * factor
+    public Vector2 ScaleVector(Vector2 toMultiply, float scaleFactor)
     {
         float x = toMultiply.x * scaleFactor;
         float y = toMultiply.y * scaleFactor;
