@@ -61,7 +61,12 @@ public class Chapter1Fig5 : MonoBehaviour
     // MagnitudeOf(vec) will yield the same output as Unity's built in property vect.magnitude
     float MagnitudeOf(Vector2 vector)
     {
-        return Mathf.Sqrt(vector.x * vector.x + vector.y * vector.y);
+        float aSquared = vector.x * vector.x;
+        float bSquared = vector.y * vector.y;
+
+        float magnitude = Mathf.Sqrt(aSquared + bSquared);
+
+        return magnitude;
     }
 
     // This method calculates A - B component wise
