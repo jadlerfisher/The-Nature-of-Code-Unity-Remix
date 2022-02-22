@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Chapter2Fig1 : MonoBehaviour
 {
-    // Geometry defined in the inspector.
-    public float floorY;
-    public float leftWallX;
-    public float rightWallX;
-    public Transform moverSpawnTransform;
+    // Geometry defined in the inspector. [SerializeField] makes the variable avaialable in the inspector
+    [SerializeField] float floorY;
+    [SerializeField] float leftWallX;
+    [SerializeField] float rightWallX;
+    [SerializeField] Transform moverSpawnTransform;
 
     Mover2_1 mover;
 
@@ -18,6 +18,7 @@ public class Chapter2Fig1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Instantiate the mover and pass in the spawn location, x bounds of the walls and the y location of the floor
         mover = new Mover2_1(moverSpawnTransform.position,leftWallX,rightWallX,floorY);   
     }
 
@@ -47,11 +48,12 @@ public class Mover2_1
         this.xMax = xMax;
         this.yMin = yMin;
 
-        // Create the components required for the mover
+        // Initialize the components required for the mover
         gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         body = gameObject.AddComponent<Rigidbody>();
+
         // Remove functionality that come with the primitive that we don't want
-        gameObject.GetComponent<SphereCollider>().enabled = false;
+        // Destroy() is a built in Unity function that removes a GameObject
         Object.Destroy(gameObject.GetComponent<SphereCollider>());
 
         // Generate a radius of 1f for this mover
@@ -68,13 +70,14 @@ public class Mover2_1
         // We need to calculate the mass of the sphere.
         // Assuming the sphere is of even density throughout,
         // the mass will be proportional to the volume.
-        body.mass = (4f / 3f) * Mathf.PI * radius * radius * radius;
+        body.mass = (4f / 3f) * Mathf.PI * (radius * radius * radius);
     }
 
     // Checks to ensure the body stays within the boundaries
     public void CheckBoundaries()
     {
         Vector3 restrainedVelocity = body.velocity;
+        // We add or subtract the radius to ensure the sphere bounces off the boundary instead of sinking halfway through
         if (body.position.y - radius < yMin)
         {
             // Using the absolute value here is an important safe
