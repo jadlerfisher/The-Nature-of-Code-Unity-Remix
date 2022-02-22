@@ -31,6 +31,9 @@ public class Chapter1Fig3 : MonoBehaviour
         // Track the Vector2 of the mouse's position and the center sphere's position
         Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
+        // Subtract the two vectors to get the follower's position
+        Vector2 followerPosition = SubtractVectors(mousePos, centerSphere.transform.position);
+
         // Begin rendering the line between the two objects. Set the first point (0) at the centerSphere position
         // Make sure the end of the line (1) appears at the position of the mouse 
         lineRender.SetPosition(0, centerSphere.transform.position);
@@ -38,5 +41,14 @@ public class Chapter1Fig3 : MonoBehaviour
 
         // Update the positions of the cursor sphere in the scene to our mouse position
         cursorSphere.transform.position = mousePos;
+    }
+
+    // This method calculates A - B component wise
+    // subtractVectors(vecA, vecB) will yield the same output as Unity's built in operator: vecA - vecB
+    Vector2 SubtractVectors(Vector2 vectorA, Vector2 vectorB)
+    {
+        float newX = vectorA.x - vectorB.x;
+        float newY = vectorA.y - vectorB.y;
+        return new Vector2(newX, newY);
     }
 }
