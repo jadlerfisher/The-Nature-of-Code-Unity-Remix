@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class Chapter2Fig2 : MonoBehaviour
 {
-    // Geometry defined in the inspector.
-    public float floorY;
-    public float leftWallX;
-    public float rightWallX;
-    public Transform moverSpawnTransform;
+    // Geometry defined in the inspector. [SerializeField] makes the variable avaialable in the inspector
+    [SerializeField] float floorY;
+    [SerializeField] float leftWallX;
+    [SerializeField] float rightWallX;
+    [SerializeField] Transform moverSpawnTransform;
 
-    private List<Mover2_2> Movers = new List<Mover2_2>();
+    // Create a list of movers
+    private List<Mover2_2> movers = new List<Mover2_2>();
+
     // Define constant forces in our environment
     private Vector3 wind = new Vector3(0.004f, 0f, 0f);
     private Vector3 gravity = new Vector3(0, -0.04f, 0f);
@@ -19,26 +21,20 @@ public class Chapter2Fig2 : MonoBehaviour
     void Start()
     {
         // Create copys of our mover and add them to our list
-        while (Movers.Count < 30)
+        while (movers.Count < 30)
         {
-
-            Movers.Add(new Mover2_2(
-                        moverSpawnTransform.position,
-                        leftWallX,
-                        rightWallX,
-                        floorY
-                    ));
+            // Instantiate the mover and add it to our list. Pass in the spawn location, x bounds of the walls and the y location of the floor
+            movers.Add(new Mover2_2(moverSpawnTransform.position,leftWallX,rightWallX,floorY));
         }
-
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         // Apply the forces to each of the Movers
-        foreach (Mover2_2 mover in Movers)
+        foreach (Mover2_2 mover in movers)
         {
-            // ForceMode.Impulse takes mass into account
+            // ForceMode.Impulse and Forcemode.Force take mass into account
             mover.body.AddForce(wind, ForceMode.Impulse);
             mover.body.AddForce(gravity, ForceMode.Force);
 
@@ -66,11 +62,11 @@ public class Mover2_2
         // Create the components required for the mover
         gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         body = gameObject.AddComponent<Rigidbody>();
-        // Remove functionality that come with the primitive that we don't want
-        gameObject.GetComponent<SphereCollider>().enabled = false;
+
+        // Remove functionality that comes with the primitive that we don't want
         Object.Destroy(gameObject.GetComponent<SphereCollider>());
         
-        //using our own version of gravity
+        // We are using the gravity force we defined above so we do not want to use built in gravity
         body.useGravity = false;
 
         // Generate random properties for this mover
@@ -87,7 +83,7 @@ public class Mover2_2
         // We need to calculate the mass of the sphere.
         // Assuming the sphere is of even density throughout,
         // the mass will be proportional to the volume.
-        body.mass = (4f / 3f) * Mathf.PI * radius * radius * radius;
+        body.mass = (4f / 3f) * Mathf.PI * (radius * radius * radius);
     }
 
     // Checks to ensure the body stays within the boundaries
@@ -111,7 +107,6 @@ public class Mover2_2
         else if (body.position.x + radius > xMax)
         {
             restrainedVelocity.x = -Mathf.Abs(restrainedVelocity.x);
-
         }
         body.velocity = restrainedVelocity;
     }
