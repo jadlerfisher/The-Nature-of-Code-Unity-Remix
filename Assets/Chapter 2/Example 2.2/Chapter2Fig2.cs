@@ -64,6 +64,7 @@ public class Mover2_2
         body = gameObject.AddComponent<Rigidbody>();
 
         // Remove functionality that comes with the primitive that we don't want
+        gameObject.GetComponent<SphereCollider>().enabled = false;
         Object.Destroy(gameObject.GetComponent<SphereCollider>());
         
         // We are using the gravity force we defined above so we do not want to use built in gravity
@@ -98,7 +99,9 @@ public class Mover2_2
             // The intuitive solution of flipping the velocity may result
             // in the mover not returning to the boundaries and flipping
             // direction on every tick.
+            
             restrainedVelocity.y = Mathf.Abs(restrainedVelocity.y);
+            body.position = new Vector3(body.position.x, yMin, body.position.z) + Vector3.up * radius;
         }
         if (body.position.x - radius < xMin)
         {
