@@ -37,7 +37,7 @@ public class Chapter1Fig3 : MonoBehaviour
         // Begin rendering the line between the two objects. Set the first point (0) at the centerSphere position
         // Make sure the end of the line (1) appears at the position of the mouse 
         lineRender.SetPosition(0, centerSphere.transform.position);
-        lineRender.SetPosition(1, mousePos);
+        lineRender.SetPosition(1, followerPosition);
 
         // Update the positions of the cursor sphere in the scene to our mouse position
         cursorSphere.transform.position = mousePos;
