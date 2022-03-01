@@ -38,7 +38,7 @@ public class Chapter2Fig2 : MonoBehaviour
             mover.body.AddForce(wind, ForceMode.Impulse);
             mover.body.AddForce(gravity, ForceMode.Force);
 
-            mover.CheckBoundaries();
+            mover.CheckEdges();
         }
     }
 }
@@ -88,7 +88,7 @@ public class Mover2_2
     }
 
     // Checks to ensure the body stays within the boundaries
-    public void CheckBoundaries()
+    public void CheckEdges()
     {
         Vector3 restrainedVelocity = body.velocity;
         if (body.position.y - radius < yMin)
