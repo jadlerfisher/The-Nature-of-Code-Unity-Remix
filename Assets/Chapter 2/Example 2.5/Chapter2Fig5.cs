@@ -5,16 +5,16 @@ using UnityEngine;
 public class Chapter2Fig5 : MonoBehaviour
 {
     // Geometry defined in the inspector
-    public float floorY;
-    public float leftWallX;
-    public float rightWallX;
-    public Transform moverSpawnTransform;
+    [SerializeField] float floorY;
+    [SerializeField] float leftWallX;
+    [SerializeField] float rightWallX;
+    [SerializeField] Transform moverSpawnTransform;
 
-    // Expose the components required to create the water
-    public Transform fluidCornerA;
-    public Transform fluidCornerB;
-    public Material waterMaterial;
-    public float fluidDrag;
+    // Serialize the components required to create the water
+    [SerializeField] Transform fluidCornerA;
+    [SerializeField] Transform fluidCornerB;
+    [SerializeField] Material waterMaterial;
+    [SerializeField] float fluidDrag;
 
     // Create our lists
     private List<Mover2_5> Movers = new List<Mover2_5>();
