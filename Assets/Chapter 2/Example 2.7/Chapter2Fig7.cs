@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Chapter2Fig7 : MonoBehaviour
 {
-    List<Mover2_7> movers = new List<Mover2_7>(); // Now we have multiple Movers!
+    // Create a list to store multiple Movers
+    List<Mover2_7> movers = new List<Mover2_7>(); 
     Attractor2_7 a;
 
     // Start is called before the first frame update
@@ -30,7 +31,7 @@ public class Chapter2Fig7 : MonoBehaviour
             Vector2 force = a.Attract(body); // Apply the attraction from the Attractor on each Mover object
 
             m.ApplyForce(force);
-            m.Update();
+            m.CalculatePosition();
         }
     }
 }
@@ -38,18 +39,21 @@ public class Chapter2Fig7 : MonoBehaviour
 
 public class Attractor2_7
 {
-    public float mass;
-    private Vector2 location;
-    private float G;
-    public Rigidbody body;
-    private GameObject attractor;
     private float radius;
+    private float mass;
+    private float G;
+
+    private Vector2 location;
+    
+    private Rigidbody body;
+    private GameObject attractor;
 
     public Attractor2_7()
     {
         attractor = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        GameObject.Destroy(attractor.GetComponent<SphereCollider>());
+        Object.Destroy(attractor.GetComponent<SphereCollider>());
         Renderer renderer = attractor.GetComponent<Renderer>();
+
         body = attractor.AddComponent<Rigidbody>();
         body.position = Vector2.zero;
 
@@ -95,21 +99,22 @@ public class Attractor2_7
 public class Mover2_7
 {
     // The basic properties of a mover class
-    public Transform transform;
     public Rigidbody body;
-
-    private Vector2 minimumPos, maximumPos;
-
+    private Transform transform;
     private GameObject mover;
+
+    private Vector2 maximumPos;
 
     public Mover2_7(float randomMass, Vector2 initialVelocity, Vector2 initialPosition)
     {
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        GameObject.Destroy(mover.GetComponent<SphereCollider>());
+        Object.Destroy(mover.GetComponent<SphereCollider>());
         transform = mover.transform;
+
         mover.AddComponent<Rigidbody>();
         body = mover.GetComponent<Rigidbody>();
         body.useGravity = false;
+
         Renderer renderer = mover.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Diffuse"));
         mover.transform.localScale = new Vector3(randomMass, randomMass, randomMass);
@@ -117,12 +122,7 @@ public class Mover2_7
         body.mass = 1;
         body.position = initialPosition; // Default location
         body.velocity = initialVelocity; // The extra velocity makes the mover orbit
-        findWindowLimits();
-
-
-
-
-
+        FindWindowLimits();
     }
 
     public void ApplyForce(Vector2 force)
@@ -130,30 +130,29 @@ public class Mover2_7
         body.AddForce(force, ForceMode.Force);
     }
 
-    public void Update()
+    public void CalculatePosition()
     {
         CheckEdges();
     }
 
-    public void CheckEdges()
+    private void CheckEdges()
     {
         Vector2 velocity = body.velocity;
-        if (transform.position.x > maximumPos.x || transform.position.x < minimumPos.x)
+        if (transform.position.x > maximumPos.x || transform.position.x < -maximumPos.x)
         {
             velocity.x *= -1 * Time.deltaTime;
         }
-        if (transform.position.y > maximumPos.y || transform.position.y < minimumPos.y)
+        if (transform.position.y > maximumPos.y || transform.position.y < -maximumPos.y)
         {
             velocity.y *= -1 * Time.deltaTime;
         }
         body.velocity = velocity;
     }
 
-    private void findWindowLimits()
+    private void FindWindowLimits()
     {
         Camera.main.orthographic = true;
-        Camera.main.orthographicSize = 10;
-        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
+        Camera.main.transform.position = new Vector3(0, 0, -10);
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
