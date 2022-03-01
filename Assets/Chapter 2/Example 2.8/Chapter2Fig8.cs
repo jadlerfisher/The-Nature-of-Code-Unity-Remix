@@ -32,8 +32,7 @@ public class Chapter2Fig8 : MonoBehaviour
     void FixedUpdate()
     {
         // We want to create two groups of movers to iterate through.
-        // We do this so that an Mover[i] never tries to attract itself
-        // This is seen on line 51.
+        // We do this so that a mover never tries to attract itself
         for (int i = 0; i < movers.Count; i++)
         {
             for (int j = 0; j < movers.Count; j++)
