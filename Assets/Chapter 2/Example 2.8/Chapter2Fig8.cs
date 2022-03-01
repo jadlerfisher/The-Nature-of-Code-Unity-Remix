@@ -39,16 +39,16 @@ public class Chapter2Fig8 : MonoBehaviour
             {
                 if (i != j)
                 {
-                    //Now that we are sure that our Mover will not attract itself, we need it to attract a different Mover
-                    //We do that by directing a Mover[j] to use their attract() meothd on a Movers[i] Rigidbody
+                    // Now that we are sure that our Mover will not attract itself, we need it to attract a different Mover
+                    // We do that by directing a mover] to use their Attract() method on other mover Rigidbodys
                     Vector2 attractedMover = movers[j].Attract(movers[i].body);
 
-                    //We then apply that force the Movers[i] with the Rigidbody's Addforce method
+                    // We then apply that force the Movers[i] with the Rigidbody's Addforce method
                     movers[i].body.AddForce(attractedMover, ForceMode.Impulse);
                 }
             }
-            //Now we check the boundaries of our scene to make sure the movers don't fly off
-            //When we use gravity, the Movers will naturally fall out of the camera's view
+            // Now we check the boundaries of our scene to make sure the movers don't fly off
+            // When we use gravity, the Movers will naturally fall out of the camera's view
             // This stops that.
             movers[i].CheckEdges();
         }
