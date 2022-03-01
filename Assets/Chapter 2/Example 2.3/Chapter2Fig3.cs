@@ -5,10 +5,10 @@ using UnityEngine;
 public class Chapter2Fig3 : MonoBehaviour
 {
     // Geometry defined in the inspector.
-    public float floorY;
-    public float leftWallX;
-    public float rightWallX;
-    public Transform moverSpawnTransform;
+    [SerializeField] float floorY;
+    [SerializeField] float leftWallX;
+    [SerializeField] float rightWallX;
+    [SerializeField] Transform moverSpawnTransform;
 
     private List<Mover2_3> Movers = new List<Mover2_3>();
     // Define constant forces in our environment
