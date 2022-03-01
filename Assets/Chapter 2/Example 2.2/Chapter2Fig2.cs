@@ -52,6 +52,7 @@ public class Mover2_2
     private float xMin;
     private float xMax;
     private float yMin;
+    private float xSpawn;
 
     public Mover2_2(Vector3 position, float xMin, float xMax, float yMin)
     {
@@ -73,9 +74,12 @@ public class Mover2_2
         // Generate random properties for this mover
         radius = Random.Range(0.1f, 0.4f);
 
-        // Place our mover at the specified spawn position relative
+        // Generate a random x value within the bundaries
+        xSpawn = Random.Range(xMin, xMax);
+
+        // Place our mover at a randomized spawn position relative
         // to the bottom of the sphere
-        gameObject.transform.position = position + Vector3.up * radius;
+        gameObject.transform.position = new Vector3(xSpawn, position.y, position.z) + Vector3.up * radius;
 
         // The default diameter of the sphere is one unit
         // This means we have to multiple the radius by two when scaling it up
