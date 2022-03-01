@@ -40,10 +40,10 @@ public class Chapter2Fig8 : MonoBehaviour
                 if (i != j)
                 {
                     // Now that we are sure that our Mover will not attract itself, we need it to attract a different Mover
-                    // We do that by directing a mover] to use their Attract() method on other mover Rigidbodys
+                    // We do that by directing a mover to use their Attract() method on another mover Rigidbodys
                     Vector2 attractedMover = movers[j].Attract(movers[i].body);
 
-                    // We then apply that force the Movers[i] with the Rigidbody's Addforce method
+                    // We then apply that force the mover with the Rigidbody's Addforce() method
                     movers[i].body.AddForce(attractedMover, ForceMode.Impulse);
                 }
             }
