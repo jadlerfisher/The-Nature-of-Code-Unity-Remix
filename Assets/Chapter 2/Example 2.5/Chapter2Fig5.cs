@@ -17,30 +17,30 @@ public class Chapter2Fig5 : MonoBehaviour
     [SerializeField] float fluidDrag;
 
     // Create our lists
-    private List<Mover2_5> Movers = new List<Mover2_5>();
-    private List<Fluid2_5> Fluids = new List<Fluid2_5>();
+    private List<Mover2_5> movers = new List<Mover2_5>();
+    private List<Fluid2_5> fluids = new List<Fluid2_5>();
 
     // Start is called before the first frame update
     void Start()
     {
         // Create copys of our mover and add them to our list
-        while (Movers.Count < 30)
+        while (movers.Count < 30)
         {
-            Movers.Add(new Mover2_5(moverSpawnTransform.position,leftWallX,rightWallX,floorY));
+            movers.Add(new Mover2_5(moverSpawnTransform.position,leftWallX,rightWallX,floorY));
         }
 
         // Add the fluid to our scene
-        Fluids.Add(new Fluid2_5(fluidCornerA.position,fluidCornerB.position,fluidDrag,waterMaterial));
+        fluids.Add(new Fluid2_5(fluidCornerA.position,fluidCornerB.position,fluidDrag,waterMaterial));
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         // Apply the forces to each of the Movers
-        foreach (Mover2_5 mover in Movers)
+        foreach (Mover2_5 mover in movers)
         {
             // Check for interaction with any of our fluids
-            foreach(Fluid2_5 fluid in Fluids)
+            foreach(Fluid2_5 fluid in fluids)
             {
                 if(mover.IsInside(fluid))
                 {
