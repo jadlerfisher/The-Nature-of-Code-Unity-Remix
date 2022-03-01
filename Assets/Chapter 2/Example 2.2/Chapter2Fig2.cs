@@ -106,10 +106,12 @@ public class Mover2_2
         if (body.position.x - radius < xMin)
         {
             restrainedVelocity.x = Mathf.Abs(restrainedVelocity.x);
+            body.position = new Vector3(xMin, body.position.y, body.position.z) + Vector3.right * radius;
         }
         else if (body.position.x + radius > xMax)
         {
             restrainedVelocity.x = -Mathf.Abs(restrainedVelocity.x);
+            body.position = new Vector3(xMax, body.position.y, body.position.z) + Vector3.left * radius;
         }
         body.velocity = restrainedVelocity;
     }
