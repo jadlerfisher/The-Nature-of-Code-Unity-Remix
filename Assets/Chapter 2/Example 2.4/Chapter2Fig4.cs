@@ -5,10 +5,10 @@ using UnityEngine;
 public class Chapter2Fig4 : MonoBehaviour
 {
     // Geometry defined in the inspector.
-    public float floorY;
-    public float leftWallX;
-    public float rightWallX;
-    public Transform moverSpawnTransform;
+    [SerializeField] float floorY;
+    [SerializeField] float leftWallX;
+    [SerializeField] float rightWallX;
+    [SerializeField] Transform moverSpawnTransform;
 
     // Create a list of movers
     private List<Mover2_4> movers = new List<Mover2_4>();
