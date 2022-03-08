@@ -7,9 +7,6 @@ public class Chapter1Fig7 : MonoBehaviour
     // Declare a mover object
     private Mover1_7 mover;
 
-    // Variables to limit the mover within the screen space
-    private float xMin, yMin, xMax, yMax;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -34,26 +31,27 @@ public class Mover1_7
     private Vector2 maximumPos;
 
     // Gives the class a GameObject to draw on the screen
-    private GameObject moverGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+    private GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
     public Mover1_7()
     {
         FindWindowLimits();
+
         location = new Vector2(Random.Range(-maximumPos.x, maximumPos.x), Random.Range(-maximumPos.y, maximumPos.y));
         velocity = new Vector2(Random.Range(-2f, 2f), Random.Range(-2f, 2f));
 
         // We need to create a new material for WebGL
-        Renderer r = moverGO.GetComponent<Renderer>();
+        Renderer r = mover.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
     }
 
     public void Step()
     {
-        // Moves the mover, Time.deltaTime is the time passed since the last frame and ties movement to a fixed rate instead of framerate.
+        // Moves the mover, Time.deltaTime is the time passed since the last frame and ties movement to a fixed rate instead of framerate
         location += velocity * Time.deltaTime; 
 
         // Updates the GameObject to the new position
-        moverGO.transform.position = new Vector2(location.x, location.y);
+        mover.transform.position = new Vector2(location.x, location.y);
     }
 
     public void CheckEdges()
