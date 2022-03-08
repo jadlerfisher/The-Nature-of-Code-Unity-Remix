@@ -25,9 +25,9 @@ public class Chapter1Fig5 : MonoBehaviour
         GameObject newB = new GameObject();
         lineRender = newA.AddComponent<LineRenderer>();
         magLineRender = newB.AddComponent<LineRenderer>();
-        // We need to create a new material for WebGL
+
+        // We need to create a new material for WebGL on each rendered line
         lineRender.material = new Material(Shader.Find("Diffuse"));
-        // We need to create a new material for WebGL
         magLineRender.material = new Material(Shader.Find("Diffuse"));
     }
 
@@ -37,6 +37,7 @@ public class Chapter1Fig5 : MonoBehaviour
         // Track the Vector2 of the mouse's position and the center sphere's position
         Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 centerPos = centerSphere.transform.position;
+
         // Move the cursor sphere directly to the mouse
         cursorSphere.transform.position = mousePos;
 
@@ -51,19 +52,25 @@ public class Chapter1Fig5 : MonoBehaviour
         // Render a bar in the top left of the screen with the same length as the vector
         Vector2 cameraTopLeft = cam.ScreenToWorldPoint(new Vector2(0, Screen.height));
         magLineRender.SetPosition(0, cameraTopLeft);
+
         // Use of Unity's built in Vector2 operators, Vector2.right and scale by magnitude
         magLineRender.SetPosition(1, cameraTopLeft + Vector2.right * magnitude);
     }
 
-    // This method finds the length of a vector using pythagoras theorem
-    // magnitudeOf(vec) will yield the same output as Unity's built in property vect.magnitude
+    // This method finds the length of a vector using the pythagorean theorem
+    // MagnitudeOf(vec) will yield the same output as Unity's built in property vect.magnitude
     float MagnitudeOf(Vector2 vector)
     {
-        return Mathf.Sqrt(vector.x * vector.x + vector.y * vector.y);
+        float aSquared = vector.x * vector.x;
+        float bSquared = vector.y * vector.y;
+
+        float magnitude = Mathf.Sqrt(aSquared + bSquared);
+
+        return magnitude;
     }
 
     // This method calculates A - B component wise
-    // subtractVectors(vecA, vecB) will yield the same output as Unity's built in operator: vecA - vecB
+    // SubtractVectors(vecA, vecB) will yield the same output as Unity's built in operator: vecA - vecB
     Vector2 SubtractVectors(Vector2 vectorA, Vector2 vectorB)
     {
         float newX = vectorA.x - vectorB.x;
