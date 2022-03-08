@@ -26,7 +26,7 @@ public class Chapter3Fig4 : MonoBehaviour
         // Make the sphere as a primitive sphere type.
         sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-        //Add the Unity Component "LineRenderer" to the GameObject lineDrawing. We will see a bright pink line.
+        //Add the Unity Component "LineRenderer" to the GameObject lineDrawing. We will see a black line.
         lineRender = lineDrawing.AddComponent<LineRenderer>();
 
         //Make the line smaller for aesthetics
