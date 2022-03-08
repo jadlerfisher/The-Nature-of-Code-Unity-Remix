@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 862698dfe07b62d41b370cc54a8e0baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amplitude: 10
+  amplitude: 5
   angle: 0
   aVelocity: 0.05
 --- !u!4 &241808473
