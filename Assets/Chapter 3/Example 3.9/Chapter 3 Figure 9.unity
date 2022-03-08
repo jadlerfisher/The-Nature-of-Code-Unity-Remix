@@ -96,6 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -154,7 +155,7 @@ MonoBehaviour:
   amplitude: 0.5
   waverPrefab: {fileID: 2174462357296961444, guid: 19945421656e96144a7fc710985c843d,
     type: 3}
-  amountWavers: 150
+  amountWavers: 200
 --- !u!4 &241808473
 Transform:
   m_ObjectHideFlags: 0
@@ -194,8 +195,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 257585644}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 1
+  m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
