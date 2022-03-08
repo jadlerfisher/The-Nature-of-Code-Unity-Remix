@@ -5,6 +5,7 @@ using UnityEngine;
 public class Chapter3Fig3 : MonoBehaviour
 {
     Mover mover;
+
     //Mouse coordinates
     Vector2 inWorldMousePosition;
 
