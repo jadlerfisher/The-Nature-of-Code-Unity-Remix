@@ -18,20 +18,18 @@ public class Chapter1Fig2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // We want to start by setting the camera's projection to Orthographic mode
-        Camera.main.orthographic = true;
-
-        // Next we grab the maximum position for the screen
-        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        // On start we run our FindWindowLimits() method
+        FindWindowLimits();
 
         // We now can set the mover as a primitive sphere in unity
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
         //We need to create a new material for WebGL
         Renderer r = mover.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
     }
 
-    // Update is called once per frame forever and ever (until you quit).
+    // Update is called once per frame
     void Update()
     {
         // Each frame, we will check to see if the mover has touched a border
@@ -39,7 +37,7 @@ public class Chapter1Fig2 : MonoBehaviour
         bool xHitBorder = location.x > maximumPos.x || location.x < -maximumPos.x;
         bool yHitBorder = location.y > maximumPos.y || location.y < -maximumPos.y;
 
-        // If the mover has hit a border, we will mirror it's speed along the corresponding border axis
+        // If the mover has hit a border, we will mirror its speed along the corresponding border axis
         if (xHitBorder)
         {
             velocity.x = -velocity.x;
@@ -52,7 +50,19 @@ public class Chapter1Fig2 : MonoBehaviour
         // Lets now update the location of the mover
         location += velocity;
 
-        // Now we apply the positions to the mover to put it in it's place
+        // Now we apply the updated position to the mover
         mover.transform.position = new Vector2(location.x, location.y);
+    }
+
+    private void FindWindowLimits()
+    {
+        // We want to start by setting the camera's projection to Orthographic mode
+        Camera.main.orthographic = true;
+
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        // Next we grab the maximum position for the screen
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
