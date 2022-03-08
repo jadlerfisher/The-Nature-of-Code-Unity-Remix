@@ -44,7 +44,7 @@ public class Mover1_8
 
         // Assign a random acceleration between -.1f and 1f
         acceleration = new Vector2(-0.1f, 1f);
-        topSpeed = 10F;
+        topSpeed = 10f;
 
         // We need to create a new material for WebGL
         Renderer r = mover.GetComponent<Renderer>();
