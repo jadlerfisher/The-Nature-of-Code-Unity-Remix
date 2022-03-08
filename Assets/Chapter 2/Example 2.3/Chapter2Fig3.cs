@@ -17,18 +17,11 @@ public class Chapter2Fig3 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Create copys of our mover and add them to our list
+        // Create copies of our mover and add them to our list
         while (Movers.Count < 30)
         {
-
-            Movers.Add(new Mover2_3(
-                        moverSpawnTransform.position,
-                        leftWallX,
-                        rightWallX,
-                        floorY
-                    ));
+            Movers.Add(new Mover2_3(moverSpawnTransform.position,leftWallX,rightWallX,floorY));
         }
-
     }
 
     // Update is called once per frame
@@ -40,7 +33,7 @@ public class Chapter2Fig3 : MonoBehaviour
             // ForceMode.Impulse takes mass into account
             mover.body.AddForce(wind, ForceMode.Impulse);
 
-            mover.CheckBoundaries();
+            mover.CheckEdges();
         }
     }
 }
@@ -54,6 +47,7 @@ public class Mover2_3
     private float xMin;
     private float xMax;
     private float yMin;
+    private float xSpawn;
 
     public Mover2_3(Vector3 position, float xMin, float xMax, float yMin)
     {
@@ -64,6 +58,7 @@ public class Mover2_3
         // Create the components required for the mover
         gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         body = gameObject.AddComponent<Rigidbody>();
+
         // Remove functionality that come with the primitive that we don't want
         gameObject.GetComponent<SphereCollider>().enabled = false;
         Object.Destroy(gameObject.GetComponent<SphereCollider>());
@@ -71,9 +66,12 @@ public class Mover2_3
         // Generate random properties for this mover
         radius = Random.Range(0.1f, 0.4f);
 
-        // Place our mover at the specified spawn position relative
+        // Generate a random x value within the bundaries
+        xSpawn = Random.Range(xMin, xMax);
+
+        // Place our mover at a randomized spawn position relative
         // to the bottom of the sphere
-        gameObject.transform.position = position + Vector3.up * radius;
+        gameObject.transform.position = new Vector3(xSpawn, position.y, position.z) + Vector3.up * radius;
 
         // The default diameter of the sphere is one unit
         // This means we have to multiple the radius by two when scaling it up
@@ -86,26 +84,30 @@ public class Mover2_3
     }
 
     // Checks to ensure the body stays within the boundaries
-    public void CheckBoundaries()
+    public void CheckEdges()
     {
         Vector3 restrainedVelocity = body.velocity;
         if (body.position.y - radius < yMin)
         {
-            // Using the absolute value here is and important safe
-            // guard for the scenario that it takes multiple ticks
+            // Using the absolute value here is an important safeguard
+            // for the scenario because it takes multiple ticks
             // of FixedUpdate for the mover to return to its boundaries.
             // The intuitive solution of flipping the velocity may result
             // in the mover not returning to the boundaries and flipping
             // direction on every tick.
+
             restrainedVelocity.y = Mathf.Abs(restrainedVelocity.y);
+            body.position = new Vector3(body.position.x, yMin, body.position.z) + Vector3.up * radius;
         }
         if (body.position.x - radius < xMin)
         {
             restrainedVelocity.x = Mathf.Abs(restrainedVelocity.x);
+            body.position = new Vector3(xMin, body.position.y, body.position.z) + Vector3.right * radius;
         }
-        else if(body.position.x + radius > xMax)
+        else if (body.position.x + radius > xMax)
         {
             restrainedVelocity.x = -Mathf.Abs(restrainedVelocity.x);
+            body.position = new Vector3(xMax, body.position.y, body.position.z) + Vector3.left * radius;
         }
         body.velocity = restrainedVelocity;
     }

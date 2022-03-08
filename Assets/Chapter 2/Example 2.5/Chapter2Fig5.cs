@@ -6,13 +6,17 @@ public class Chapter2Fig5 : MonoBehaviour
 {
     // Geometry defined in the inspector
     public float floorY;
+    public float leftWallX;
+    public float rightWallX;
     public Transform moverSpawnTransform;
+
     // Expose the components required to create the water
     public Transform fluidCornerA;
     public Transform fluidCornerB;
     public Material waterMaterial;
     public float fluidDrag;
 
+    // Create our lists
     private List<Mover2_5> Movers = new List<Mover2_5>();
     private List<Fluid2_5> Fluids = new List<Fluid2_5>();
 
@@ -22,19 +26,11 @@ public class Chapter2Fig5 : MonoBehaviour
         // Create copys of our mover and add them to our list
         while (Movers.Count < 30)
         {
-            Vector3 moverSpawnPosition = moverSpawnTransform.position + Vector3.right * Random.Range(-7,7);
-            Movers.Add(new Mover2_5(
-                moverSpawnPosition,
-                floorY
-            ));
+            Movers.Add(new Mover2_5(moverSpawnTransform.position,leftWallX,rightWallX,floorY));
         }
+
         // Add the fluid to our scene
-        Fluids.Add(new Fluid2_5(
-            fluidCornerA.position,
-            fluidCornerB.position,
-            fluidDrag,
-            waterMaterial
-        ));
+        Fluids.Add(new Fluid2_5(fluidCornerA.position,fluidCornerB.position,fluidDrag,waterMaterial));
     }
 
     // Update is called once per frame
@@ -49,15 +45,13 @@ public class Chapter2Fig5 : MonoBehaviour
                 if(mover.IsInside(fluid))
                 {
                     // Apply a friction force that directly opposes the current motion
-                    Vector3 friction = mover.body.velocity;
-
+                    Vector3 friction = -mover.body.velocity;
                     friction.Normalize();
-                    friction *= -fluid.dragCoefficient;
+                    friction *= fluid.dragCoefficient;
                     mover.body.AddForce(friction, ForceMode.Force);
                 }
             }
-
-            mover.CheckBoundaries();
+            mover.CheckEdges();
         }
     }
 }
@@ -68,15 +62,21 @@ public class Mover2_5
     private GameObject gameObject;
     private float radius;
 
+    private float xMin;
+    private float xMax;
     private float yMin;
+    private float xSpawn;
 
-    public Mover2_5(Vector3 position, float yMin)
+    public Mover2_5(Vector3 position, float xMin, float xMax, float yMin)
     {
+        this.xMin = xMin;
+        this.xMax = xMax;
         this.yMin = yMin;
-
+        
         // Create the components required for the mover
         gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         body = gameObject.AddComponent<Rigidbody>();
+
         // Remove functionality that come with the primitive that we don't want
         gameObject.GetComponent<SphereCollider>().enabled = false;
         Object.Destroy(gameObject.GetComponent<SphereCollider>());
@@ -84,9 +84,12 @@ public class Mover2_5
         // Generate random properties for this mover
         radius = Random.Range(0.2f, 0.6f);
 
-        // Place our mover at the specified spawn position relative
+        // Generate a random x value within the bundaries
+        xSpawn = Random.Range(xMin, xMax);
+
+        // Place our mover at a randomized spawn position relative
         // to the bottom of the sphere
-        gameObject.transform.position = position + Vector3.up * radius;
+        gameObject.transform.position = new Vector3(xSpawn, position.y, position.z) + Vector3.up * radius;
 
         // The default diameter of the sphere is one unit
         // This means we have to multiple the radius by two when scaling it up
@@ -99,12 +102,13 @@ public class Mover2_5
     }
 
     // Checks to ensure the body stays within the boundaries
-    public void CheckBoundaries()
+    public void CheckEdges()
     {
         Vector3 restrainedVelocity = body.velocity;
         if (body.position.y - radius < yMin)
         {
             restrainedVelocity.y = Mathf.Abs(restrainedVelocity.y);
+            body.position = new Vector3(body.position.x, yMin, body.position.z) + Vector3.up * radius;
         }
         body.velocity = restrainedVelocity;
     }
@@ -154,9 +158,11 @@ public class Fluid2_5
         // Create the presence of the object in 3D space
         GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
         obj.GetComponent<Renderer>().material = material;
+
         // Remove undesired components that come with the primitive
         obj.GetComponent<BoxCollider>().enabled = false;
         Object.Destroy(obj.GetComponent<BoxCollider>());
+
         // Position and scale the new cube to match the boundaries.
         obj.transform.position = (corner1 + corner2) / 2;
         obj.transform.localScale = new Vector3(

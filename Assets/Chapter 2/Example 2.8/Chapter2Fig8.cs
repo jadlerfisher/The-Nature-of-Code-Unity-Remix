@@ -6,31 +6,25 @@ using UnityEngine;
 public class Chapter2Fig8 : MonoBehaviour
 {
     // Geometry defined in the inspector.
-    public float ceilingY;
-    public float floorY;
-    public float leftWallX;
-    public float rightWallX;
+    [SerializeField] float ceilingY;
+    [SerializeField] float floorY;
+    [SerializeField] float leftWallX;
+    [SerializeField] float rightWallX;
+    [SerializeField] Transform moverSpawnTransform;
 
-    // Movers 
-    private List<Mover2_8> Movers = new List<Mover2_8>();
-    public Transform moverSpawnTransform;
-
+    // Create a list of Movers 
+    private List<Mover2_8> movers = new List<Mover2_8>();
+    
     // Start is called before the first frame update
     void Start()
     {
         // Create copys of our mover and add them to our list
-        while (Movers.Count < 30)
+        while (movers.Count < 30)
         {
-            // Instantiate them at random vectors from the left to the right wall and from our floor to ceiling.
+            // Instantiate the movers at random vectors from the left to the right wall and from our floor to ceiling.
             moverSpawnTransform.position = new Vector2(UnityEngine.Random.Range(leftWallX, rightWallX), UnityEngine.Random.Range(floorY, ceilingY));
 
-            Movers.Add(new Mover2_8(
-                        moverSpawnTransform.position,
-                        leftWallX,
-                        rightWallX,
-                        ceilingY,
-                        floorY
-                    ));
+            movers.Add(new Mover2_8(moverSpawnTransform.position,leftWallX,rightWallX,ceilingY,floorY));
         }
     }
 
@@ -38,25 +32,25 @@ public class Chapter2Fig8 : MonoBehaviour
     void FixedUpdate()
     {
         // We want to create two groups of movers to iterate through.
-        // We do this so that an Mover[i] never tries to attract itself
-        // This is seen on line 51.
-        for (int i = 0; i < Movers.Count; i++)
+        // We do this so that a mover never tries to attract itself
+        for (int i = 0; i < movers.Count; i++)
         {
-            for (int j = 0; j < Movers.Count; j++)
+            for (int j = 0; j < movers.Count; j++)
             {
                 if (i != j)
                 {
-                    //Now that we are sure that our Mover will not attract itself, we need it to attract a different Mover
-                    //We do that by directing a Mover[j] to use their attract() meothd on a Movers[i] Rigidbody
-                    Vector2 attractedMover = Movers[j].attract(Movers[i].body);
-                    //We then apply that force the Movers[i] with the Rigidbody's Addforce method
-                    Movers[i].body.AddForce(attractedMover, ForceMode.Impulse);
+                    // Now that we are sure that our Mover will not attract itself, we need it to attract a different Mover
+                    // We do that by directing a mover to use their Attract() method on another mover Rigidbodys
+                    Vector2 attractedMover = movers[j].Attract(movers[i].body);
+
+                    // We then apply that force the mover with the Rigidbody's Addforce() method
+                    movers[i].body.AddForce(attractedMover, ForceMode.Impulse);
                 }
             }
-            //Now we check the boundaries of our scene to make sure the movers don't fly off
-            //When we use gravity, the Movers will naturally fall out of the camera's view
+            // Now we check the boundaries of our scene to make sure the movers don't fly off
+            // When we use gravity, the Movers will naturally fall out of the camera's view
             // This stops that.
-            Movers[i].CheckBoundaries();
+            movers[i].CheckEdges();
         }
     }
 }
@@ -82,10 +76,12 @@ public class Mover2_8
 
         // Create the components required for the mover
         gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        body = gameObject.AddComponent<Rigidbody>();
+
         //We need to create a new material for WebGL
         Renderer r = gameObject.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
-        body = gameObject.AddComponent<Rigidbody>();
+        
         // Remove functionality that come with the primitive that we don't want
         gameObject.GetComponent<SphereCollider>().enabled = false;
         UnityEngine.Object.Destroy(gameObject.GetComponent<SphereCollider>());
@@ -105,13 +101,15 @@ public class Mover2_8
         // Assuming the sphere is of even density throughout,
         // the mass will be proportional to the volume.
         body.mass = (4f / 3f) * Mathf.PI * radius * radius * radius;
+
         //Make sure the regular gravity is on
         body.useGravity = true;
+
         //Turn off the angular drag as well
         body.angularDrag = 0f;
     }
 
-    public Vector2 attract(Rigidbody m)
+    public Vector2 Attract(Rigidbody m)
     {
         Vector2 force = body.position - m.position;
         float distance = force.magnitude;
@@ -126,7 +124,7 @@ public class Mover2_8
     }
 
     //Checks to ensure the body stays within the boundaries
-    public void CheckBoundaries()
+    public void CheckEdges()
     {
         Vector2 velocity = body.velocity;
         if (body.position.x > xMax || body.position.x < xMin)
