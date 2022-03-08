@@ -46,7 +46,7 @@ public class Mover1_9
         // Set top speed to 2f
         topSpeed = 2f;
 
-        //We need to create a new material for WebGL
+        // We need to create a new material for WebGL
         Renderer r = mover.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
     }
@@ -62,7 +62,7 @@ public class Mover1_9
         // Now we can scale the magnitude as we wish
         acceleration *= Random.Range(5f, 10f);
 
-        // Speeds up the mover, Time.deltaTime is the time passed since the last frame and ties acceleration to a fixed rate instead of framerate.
+        // Speeds up the mover, Time.deltaTime is the time passed since the last frame and ties acceleration to a fixed rate instead of framerate
         velocity += acceleration * Time.deltaTime;
 
         // Limit Velocity to the top speed
