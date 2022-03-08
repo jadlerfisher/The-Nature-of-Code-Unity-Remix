@@ -343,7 +343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floorY: -4.5
-  leftWallX: -10
+  leftWallX: -8
   rightWallX: 8
   moverSpawnTransform: {fileID: 267608}
 --- !u!4 &414228585
