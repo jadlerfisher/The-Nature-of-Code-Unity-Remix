@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Chapter3Fig6 : MonoBehaviour
 {
-    public float amplitude = 5f;
-    public float angle = 0f;
-    public float aVelocity = 0.05f;
+    [SerializeField] float amplitude = 5f;
+    [SerializeField] float angle = 0f;
+    [SerializeField] float aVelocity = 0.05f;
 
     //Create variables for rendering the line between two vectors
     GameObject lineDrawing;
