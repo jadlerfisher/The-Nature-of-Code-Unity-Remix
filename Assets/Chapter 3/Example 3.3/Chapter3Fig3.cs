@@ -21,7 +21,6 @@ public class Chapter3Fig3 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         inWorldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         float gotoX = inWorldMousePosition.x - mover.location.x;
@@ -41,13 +40,14 @@ public class Mover
     public Vector2 location, velocity, acceleration;
     public float mass;
 
-    private Vector2 minimumPos, maximumPos;
+    private Vector2 maximumPos;
 
     private GameObject mover;
 
     public Mover()
     {
         mover = GameObject.CreatePrimitive(PrimitiveType.Cube);
+
         Renderer renderer = mover.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Diffuse"));
         renderer.material.color = Color.black;
@@ -55,10 +55,12 @@ public class Mover
         mover.transform.localScale = new Vector3(0.5f, 1, 0.5f);
 
         mass = 1;
+
         location = Vector2.zero;
         velocity = Vector2.zero;
         acceleration = Vector2.zero;
-        findWindowLimits();
+
+        FindWindowLimits();
     }
 
     public void Translate(float speed)
@@ -66,9 +68,10 @@ public class Mover
         velocity = (Vector2) mover.transform.up * speed;
     }
 
-    public void Rotate(float radiansAngle, float turnSpeed) {
-        float eularAngle = (-radiansAngle * Mathf.Rad2Deg) + 180;
-        float toSpin = eularAngle - ((mover.transform.eulerAngles.z + 180) % 360);
+    public void Rotate(float radiansAngle, float turnSpeed) 
+    {
+        float eulerAngle = (-radiansAngle * Mathf.Rad2Deg) + 180;
+        float toSpin = eulerAngle - ((mover.transform.eulerAngles.z + 180) % 360);
         if (toSpin > 180 || toSpin < -180) {
             toSpin %= 180;
             toSpin *= -1;
@@ -85,8 +88,8 @@ public class Mover
 
         acceleration = Vector2.zero;
 
-
         mover.transform.position = location;
+
         CheckEdges();
     }
 
@@ -94,27 +97,27 @@ public class Mover
     {
         if (location.x > maximumPos.x)
         {
-            location.x = minimumPos.x;
+            location.x = -maximumPos.x;
         }
-        else if(location.x < minimumPos.x)
+        else if(location.x < -maximumPos.x)
         {
             location.x = maximumPos.x;
         }
         if (location.y > maximumPos.y)
         {
-            location.y = minimumPos.y;
+            location.y = -maximumPos.y;
         } 
-        else if (location.y < minimumPos.y) 
+        else if (location.y < -maximumPos.y) 
         {
             location.y = maximumPos.y;
         }
     }
 
-    private void findWindowLimits()
+    private void FindWindowLimits()
     {
         Camera.main.orthographic = true;
         Camera.main.orthographicSize = 8;
-        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
+        Camera.main.transform.position = new Vector3(0, 0, -10);
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
