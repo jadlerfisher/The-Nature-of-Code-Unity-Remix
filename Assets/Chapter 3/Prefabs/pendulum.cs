@@ -10,6 +10,7 @@ public class Pendulum : MonoBehaviour
     public float angle = 0;
     public float damping = 1;
     public float gravity = 0;
+
     // Other scripts cannot see private variables
     LineRenderer lineRenderer;
     Transform bobTransform;
@@ -26,10 +27,14 @@ public class Pendulum : MonoBehaviour
         // Add the Unity Component "LineRenderer" to the GameObject lineDrawing. We will see a bright pink line.
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Diffuse"));
+        lineRenderer.startWidth = .5f;
+        lineRenderer.endWidth = .5f;
+
         // Create a sphere for the bob of the pendulum
         GameObject pendulumBob = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         pendulumBob.GetComponent<SphereCollider>().enabled = false;
         Destroy(pendulumBob.GetComponent<SphereCollider>());
+
         // Support for WebGL
         Renderer r = pendulumBob.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
@@ -43,14 +48,12 @@ public class Pendulum : MonoBehaviour
         aAcceleration = -gravity * Mathf.Sin(angle);
         aVelocity += aAcceleration * Time.deltaTime;
         angle += aVelocity;
+
         // Apply damping to slow down the velocity over time
         aVelocity *= damping;
 
         // Reposition the bob by converting from polar coordinates
-        bobTransform.position = pivot + new Vector2(
-            radius * Mathf.Sin(angle),
-            radius * Mathf.Cos(angle)
-        );
+        bobTransform.position = pivot + new Vector2(radius * Mathf.Sin(angle), radius * Mathf.Cos(angle));
         lineRenderer.SetPosition(0, pivot);
         lineRenderer.SetPosition(1, bobTransform.position);
     }
