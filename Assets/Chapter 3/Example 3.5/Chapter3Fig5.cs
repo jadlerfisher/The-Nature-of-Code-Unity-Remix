@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Chapter3Fig5 : MonoBehaviour
 {
-    public float period = 5f;
-    public float amplitude = 5f;
+    [SerializeField] float period = 5f;
+    [SerializeField] float amplitude = 5f;
 
     private GameObject sphere;
     private MeshRenderer sphereRenderer;
