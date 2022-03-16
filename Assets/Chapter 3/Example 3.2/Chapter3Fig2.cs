@@ -6,7 +6,7 @@ public class Chapter3Fig2 : MonoBehaviour
 {
     // A list of multiple Movers
     List<Mover3_2> movers = new List<Mover3_2>(); 
-    Attractor2_7 a;
+    Attractor2_7 attractor;
 
     // Start is called before the first frame update
     void Start()
@@ -18,25 +18,25 @@ public class Chapter3Fig2 : MonoBehaviour
             Vector2 randomLocation = new Vector2(Random.Range(-7, 7f), Random.Range(-7f, 7f));
             Vector2 randomVelocity = new Vector2(Random.Range(0f, 5f), Random.Range(0f, 5f));
             float randomMass = Random.Range(.4f, 1f);
-            Mover3_2 m = new Mover3_2(randomMass, randomVelocity, randomLocation); 
-            movers.Add(m);
+            Mover3_2 mover = new Mover3_2(randomMass, randomVelocity, randomLocation); 
+            movers.Add(mover);
         }
-        a = new Attractor2_7();
+        attractor = new Attractor2_7();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        foreach (Mover3_2 m in movers)
+        foreach (Mover3_2 mover in movers)
         {
-            Rigidbody body = m.body;
+            Rigidbody body = mover.body;
 
             // Apply the attraction from the Attractor on each Mover object
-            Vector2 force = a.Attract(body); 
-            m.body.AddForce(force, ForceMode.Force);
+            Vector2 force = attractor.Attract(body); 
+            mover.body.AddForce(force, ForceMode.Force);
             // Apply rotation to the mover based on the currently applied force
-            m.ApplyRotation(force);
-            m.CheckEdges();
+            mover.ApplyRotation(force);
+            mover.CheckEdges();
         }
     }
 }
