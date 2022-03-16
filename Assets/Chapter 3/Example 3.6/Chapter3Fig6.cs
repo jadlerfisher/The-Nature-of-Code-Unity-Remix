@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Chapter3Fig6 : MonoBehaviour
 {
-    public float amplitude = 100f;
+    public float amplitude = 5f;
     public float angle = 0f;
     public float aVelocity = 0.05f;
 
@@ -16,18 +16,29 @@ public class Chapter3Fig6 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Set the camera to orthographic with a size of 5
+        Camera.main.orthographic = true;
+        Camera.main.orthographicSize = 5;
+
         // Create a GameObject that will be the line
         lineDrawing = new GameObject();
+
         //Add the Unity Component "LineRenderer" to the GameObject lineDrawing.
         lineRender = lineDrawing.AddComponent<LineRenderer>();
         lineRender.material = new Material(Shader.Find("Diffuse"));
-        //Begin rendering the line between the two objects. Set the first point (0) at the centerSphere Position
-        //Make sure the end of the line (1) appears at the new Vector3
+
+        //Make the line smaller for aesthetics
+        lineRender.startWidth = 0.1f;
+        lineRender.endWidth = 0.1f;
+
+        //Begin rendering the line between the two objects. Set the first point (0) at the center Position
+        //Make sure the end of the line (1) appears at the new Vector3 in FixedUpdate()
         Vector2 center = new Vector2(0f, 0f);
         lineRender.SetPosition(0, center);
 
         //Create the sphere at the end of the line
         sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
         //We need to create a new material for WebGL
         Renderer r = sphere.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
@@ -37,6 +48,7 @@ public class Chapter3Fig6 : MonoBehaviour
     void FixedUpdate()
     {
         float x = amplitude * Mathf.Cos(angle);
+
         //Using the concept of angular velocity to increment an angle variable
         //Admittedly, in this example we are not really using this variable as an angle, but we will next
         angle += aVelocity;
