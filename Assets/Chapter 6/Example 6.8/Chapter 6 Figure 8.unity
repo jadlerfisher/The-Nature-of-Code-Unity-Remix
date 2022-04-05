@@ -251,6 +251,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 7
   maxForce: 5
+  separationScale: 3.5
+  seekScale: 1.5
 --- !u!4 &267248050
 Transform:
   m_ObjectHideFlags: 0

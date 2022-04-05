@@ -4,21 +4,23 @@ using UnityEngine;
 
 public class Chapter6Fig8 : MonoBehaviour
 {
-    public float maxSpeed = 2, maxForce = 2;
+    [SerializeField] float maxSpeed = 2, maxForce = 2;
+    [SerializeField] float separationScale;
+    [SerializeField] float seekScale;
 
     private List<Vehicle6_8> vehicles; // Declare a List of Vehicle objects.
-    private Vector2 minimumPos, maximumPos;
+    private Vector2 maximumPos;
 
     // Start is called before the first frame update
     void Start()
     {
-        findWindowLimits();
+        FindWindowLimits();
         vehicles = new List<Vehicle6_8>(); // Initilize and fill the List with a bunch of Vehicles
         for (int i = 0; i < 100; i++)
         {
-            float ranX = Random.Range(minimumPos.x, maximumPos.x);
-            float ranY = Random.Range(minimumPos.y, maximumPos.y);
-            vehicles.Add(new Vehicle6_8(new Vector2(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce));
+            float ranX = Random.Range(-maximumPos.x, maximumPos.x);
+            float ranY = Random.Range(-maximumPos.y, maximumPos.y);
+            vehicles.Add(new Vehicle6_8(new Vector2(ranX, ranY), -maximumPos, maximumPos, maxSpeed, maxForce));
         }
     }
 
@@ -33,9 +35,9 @@ public class Chapter6Fig8 : MonoBehaviour
             Vector2 seperate = v.Separate(vehicles);
             Vector2 seek = v.Seek(mousePos);
 
-            /* These values can be whatever you want. */
-            seperate *= 3.5f;
-            seek *= 1.0f;
+            /* These values can be whatever you want. Modify in the inspector*/
+            seperate *= separationScale;
+            seek *= seekScale;
 
             v.ApplyForce(seperate);
             v.ApplyForce(seek);
@@ -43,15 +45,19 @@ public class Chapter6Fig8 : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            vehicles.Add(new Vehicle6_8(mousePos, minimumPos, maximumPos, maxSpeed, maxForce));
+            vehicles.Add(new Vehicle6_8(mousePos, -maximumPos, maximumPos, maxSpeed, maxForce));
         }
     }
 
-    private void findWindowLimits()
+    private void FindWindowLimits()
     {
+        // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
-        Camera.main.orthographicSize = 10;
-        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
+
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        // Next we grab the maximum position for the screen
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
