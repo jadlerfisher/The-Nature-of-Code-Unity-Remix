@@ -34,15 +34,15 @@ public class Chapter6Fig3 : MonoBehaviour
     {
         // Instantiate vehicle at origin. Use exposed variable for distance, or how far from the wall before we steer.
         // Instantiate make a copy of our cone prefab
-        GameObject vehicleRepresentation = Instantiate(vehiclePrefab, Vector2.zero, Quaternion.identity);        
-        vehicle = new Ch6Fig3Vehicle(vehicleRepresentation, startingAcceleration, distance, maxSpeed, maxForce);
+        GameObject vehicleObject = Instantiate(vehiclePrefab, Vector2.zero, Quaternion.identity);        
+        vehicle = new Ch6Fig3Vehicle(vehicleObject, startingAcceleration, distance, maxSpeed, maxForce);
     }
 
     // FixedUpdate is called 50 times per second per project default
     void FixedUpdate()
     {
         // Update vehicle behavior
-        vehicle.Update();
+        vehicle.UpdatePosition();
 
         // Stays within screen bounds
         vehicle.StayWithinWalls(); 
@@ -66,9 +66,6 @@ public class Ch6Fig3Vehicle
     // Top right of the screen
     private Vector2 maximumPos;
 
-    // Bottom left of the screen
-    private Vector2 minimumPos;
-
     // How far away from each wall before we start steering away, in meters
     private float distance; 
 
@@ -80,7 +77,7 @@ public class Ch6Fig3Vehicle
         vehicleObject = _vehicle;
 
         // Gives us min and max Pos, or the edges of the screen
-        findWindowLimits();
+        FindWindowLimits();
 
         // Let's assign our initial position to origin
         location = Vector2.zero;
@@ -101,12 +98,11 @@ public class Ch6Fig3Vehicle
         maxForce = _maxForce;
     }
 
-    public void Update() // Gets called every FixedUpdate
+    public void UpdatePosition() // Gets called every FixedUpdate
     {
         // We multiplay these values with Time.fixedDelaTime to ensure frame rate independence.
         // Although FixedUpdate is fixed, environments that can't keep up with 50 Frames Per Second 
         // will experience different behavior unless we do this.
-
         velocity += acceleration * Time.fixedDeltaTime;
 
         // We clamp velocity's magnitude so its values don't exceed maxSpeed
@@ -131,7 +127,7 @@ public class Ch6Fig3Vehicle
         // Maximum speed in the opposite direction of the wall.
 
         // Left side of the screen
-        if (location.x < minimumPos.x + distance)
+        if (location.x < -maximumPos.x + distance)
         {
             // Make a desired vector that wants to go in the opposite direction of the wall
             // as fast as possible (maxSpeed);
@@ -139,7 +135,7 @@ public class Ch6Fig3Vehicle
             Vector2 steer = desired - velocity;
             // But can only steer away from the wall as much as maxForce will let us
             Vector2.ClampMagnitude(steer, maxForce);
-            applyForce(steer);
+            ApplyForce(steer);
         }
         // Right side of the screen
         else if (location.x > maximumPos.x - distance)
@@ -147,16 +143,15 @@ public class Ch6Fig3Vehicle
             Vector2 desired = new Vector2(-maxSpeed, velocity.y);
             Vector2 steer = desired - velocity;
             Vector2.ClampMagnitude(steer, maxForce);
-            applyForce(steer);
+            ApplyForce(steer);
         }
-
         // Bottom of the screen
-        if (location.y < minimumPos.y + distance)
+        if (location.y < -maximumPos.y + distance)
         {
             Vector2 desired = new Vector2(velocity.x, maxSpeed);
             Vector2 steer = desired - velocity;
             Vector2.ClampMagnitude(steer, maxForce);
-            applyForce(steer);
+            ApplyForce(steer);
         }
         // Top of the screen
         else if (location.y > maximumPos.y - distance)
@@ -164,24 +159,25 @@ public class Ch6Fig3Vehicle
             Vector2 desired = new Vector2(velocity.x, -maxSpeed);
             Vector2 steer = desired - velocity;
             Vector2.ClampMagnitude(steer, maxForce);
-            applyForce(steer);
+            ApplyForce(steer);
         }
     }
     
-    private void applyForce(Vector2 force)
+    private void ApplyForce(Vector2 force)
     {
         // Newton's second law with force accumulation.
         acceleration += force;
     }
 
-    private void findWindowLimits()
+    private void FindWindowLimits()
     {
-        // Set camera settings
+        // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
-        Camera.main.orthographicSize = 10;
 
-        // Finds the space of the screen (in pixels), translates them into space of the screen in meters or Unity Units
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        // Next we grab the maximum position for the screen
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-        minimumPos = -maximumPos;        
     }
 }
