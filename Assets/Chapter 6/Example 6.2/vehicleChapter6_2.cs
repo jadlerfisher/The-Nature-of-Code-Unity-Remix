@@ -17,13 +17,11 @@ public class VehicleChapter6_2 : MonoBehaviour
     {
         vehicle = this.gameObject;
         body = vehicle.AddComponent<Rigidbody>();
-        // Assign the mover's GameObject to the varaible
         
         maxspeed = 1.0f;
         maxforce = 1f;
 
         r = 3.0f;
-        mass = (4 / 3) * Mathf.PI * (Mathf.Pow(r, 3));
 
         body.mass = mass;
         body.drag = 0;
@@ -39,19 +37,6 @@ public class VehicleChapter6_2 : MonoBehaviour
             Mathf.Clamp(body.velocity.z, -maxspeed, maxspeed));
 
         vehicle.transform.rotation = Quaternion.LookRotation(body.velocity);
-    }
-
-    public void Seek(Vector3 target)
-    {
-        Vector3 desired = target - body.transform.position;
-        desired.Normalize();
-        desired *= maxspeed;
-        Vector3 steer = desired - body.velocity;
-        Debug.Log(desired);
-        steer.x = Mathf.Clamp(steer.x, -maxforce, maxforce);
-        steer.y = Mathf.Clamp(steer.y, -maxforce, maxforce);
-        steer.z = Mathf.Clamp(steer.z, -maxforce, maxforce);
-        ApplyForce(steer);
     }
 
     public void Arrive(Vector3 target)

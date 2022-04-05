@@ -190,6 +190,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78bc2f761ab8d0e46aceadd8b0628465, type: 3}
+--- !u!20 &588151271 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7592401324802019509, guid: 78bc2f761ab8d0e46aceadd8b0628465,
+    type: 3}
+  m_PrefabInstance: {fileID: 18433973}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &602055947
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -395,7 +401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a8e41f80150e974b98f5405de796a50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 0}
+  cam: {fileID: 588151271}
   vehicle: {fileID: 5584890451184551033, guid: 1f06b2d4baed5bc44a602312da4a2fb5, type: 3}
   target: {fileID: 2028209937}
 --- !u!1 &2028209937 stripped
