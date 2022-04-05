@@ -12,8 +12,8 @@ public class Chapter7Figure2 : MonoBehaviour
     void Start()
     {
         gol = new Chapter7Fig2GameOfLife();
-        setOrthographicCamera();
-        limitFrameRate();
+        SetOrthographicCamera();
+        LimitFrameRate();
     }
 
     // Update is called once per frame
@@ -28,13 +28,13 @@ public class Chapter7Figure2 : MonoBehaviour
         gol.Display();        
     }
 
-    private void setOrthographicCamera()
+    private void SetOrthographicCamera()
     {
         Camera.main.orthographic = true;
         Camera.main.orthographicSize = 10;
     }
 
-    private void limitFrameRate()
+    private void LimitFrameRate()
     {
         Application.targetFrameRate = 24;
         QualitySettings.vSyncCount = 0;
@@ -60,11 +60,11 @@ public class Chapter7Fig2GameOfLife
         rows = 41;
         unityBoard = new GameObject[columns, rows];
         board = new int[columns, rows];
-        spawnUnityBoard();
-        innit();
+        SpawnUnityBoard();
+        Innit();
     }
 
-    private void spawnUnityBoard() // Very inneficient to spawn new GO every frame, so we just change the color instead
+    private void SpawnUnityBoard() // Very inneficient to spawn new GO every frame, so we just change the color instead
     {
         for (int i = 0; i < columns; i++)
         {
@@ -87,7 +87,7 @@ public class Chapter7Fig2GameOfLife
         }
     }
 
-    private void innit()
+    private void Innit()
     {
         for (int i = 1; i < columns - 1; i++)
         {
@@ -100,7 +100,7 @@ public class Chapter7Fig2GameOfLife
 
     public void Restart()
     {
-        innit();
+        Innit();
     }
 
     // The process of creating the new generation
