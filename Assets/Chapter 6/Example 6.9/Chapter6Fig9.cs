@@ -4,23 +4,26 @@ using UnityEngine;
 
 public class Chapter6Fig9 : MonoBehaviour
 {
-    public float maxSpeed = 2, maxForce = 2;
+    [SerializeField] float maxSpeed = 2, maxForce = 2;
+    [SerializeField] float separationScale;
+    [SerializeField] float cohesionScale;
+    [SerializeField] float alignmentScale;
 
-    public Mesh coneMesh; // If you want to use your own cone mesh, drop it into the editor here.
+    [SerializeField] Mesh coneMesh; // If you want to use your own cone mesh, drop it into the editor here.
 
     private List<Boid> boids; // Declare a List of Vehicle objects.
-    private Vector2 minimumPos, maximumPos;
+    private Vector2 maximumPos;
 
     // Start is called before the first frame update
     void Start()
     {
-        findWindowLimits();
+        FindWindowLimits();
         boids = new List<Boid>(); // Initilize and fill the List with a bunch of Vehicles
         for (int i = 0; i < 100; i++)
         {
             float ranX = Random.Range(-1.0f, 1.0f);
             float ranY = Random.Range(-1.0f, 1.0f);
-            boids.Add(new Boid(new Vector2(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce, coneMesh));
+            boids.Add(new Boid(new Vector2(ranX, ranY), -maximumPos, maximumPos, maxSpeed, maxForce, coneMesh, separationScale, cohesionScale, alignmentScale));
         }
     }
 
@@ -37,15 +40,19 @@ public class Chapter6Fig9 : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            boids.Add(new Boid(mousePos, minimumPos, maximumPos, maxSpeed, maxForce, coneMesh));
+            boids.Add(new Boid(mousePos, -maximumPos, maximumPos, maxSpeed, maxForce, coneMesh, separationScale, cohesionScale, alignmentScale));
         }
     }
 
-    private void findWindowLimits()
+    private void FindWindowLimits()
     {
+        // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
-        Camera.main.orthographicSize = 20;
-        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
+
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        // Next we grab the maximum position for the screen
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
@@ -65,22 +72,26 @@ class Boid
     }
 
     private float maxSpeed, maxForce;
+    private float separationScale, cohesionScale, alignmentScale;
     private Vector2 minPos, maxPos;
     private GameObject myVehicle;
     private Rigidbody rb;
 
-    public Boid(Vector2 initPos, Vector2 _minPos, Vector2 _maxPos, float _maxSpeed, float _maxForce, Mesh coneMesh)
+    public Boid(Vector2 initPos, Vector2 _minPos, Vector2 _maxPos, float _maxSpeed, float _maxForce, Mesh coneMesh, float _separationScale, float _cohesionScale, float _alignmentScale)
     {
-        minPos = _minPos - Vector2.one;
-        maxPos = _maxPos + Vector2.one;
+        minPos = _minPos;
+        maxPos = _maxPos;
         maxSpeed = _maxSpeed;
         maxForce = _maxForce;
+        separationScale = _separationScale;
+        cohesionScale = _cohesionScale;
+        alignmentScale = _alignmentScale;
 
         myVehicle = GameObject.CreatePrimitive(PrimitiveType.Cube);
         Renderer renderer = myVehicle.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Diffuse"));
         renderer.material.color = Color.red;
-        GameObject.Destroy(myVehicle.GetComponent<BoxCollider>());
+        Object.Destroy(myVehicle.GetComponent<BoxCollider>());
 
         myVehicle.transform.position = new Vector2(initPos.x, initPos.y);
 
@@ -104,7 +115,8 @@ class Boid
         }
     }
 
-    private void checkBounds() {
+    private void CheckEdges() 
+    {
         if (location.x > maxPos.x) 
         {
             location = new Vector2(minPos.x, location.y);
@@ -122,7 +134,7 @@ class Boid
         }
     }
 
-    private void lookForward() 
+    private void LookForward() 
     {
         /* We want our boids to face the same direction
          * that they're going. To do that, we take our location
@@ -132,8 +144,8 @@ class Boid
 
         /* In the case our model is facing the wrong direction,
          * we can adjust it using Eular Angles. */
-        Vector3 eular = myVehicle.transform.rotation.eulerAngles;
-        myVehicle.transform.rotation = Quaternion.Euler(eular.x + 90, eular.y + 0, eular.z + 0); // Adjust these numbers to make the boids face different directions!
+        Vector3 euler = myVehicle.transform.rotation.eulerAngles;
+        myVehicle.transform.rotation = Quaternion.Euler(euler.x + 90, euler.y + 0, euler.z + 0); // Adjust these numbers to make the boids face different directions!
     }
 
     public void Flock(List<Boid> boids) 
@@ -150,8 +162,8 @@ class Boid
         ApplyForce(ali);
         ApplyForce(coh);
 
-        checkBounds(); // To loop the world to the other side of the screen.
-        lookForward(); // Make the boids face forward.
+        CheckEdges(); // To loop the world to the other side of the screen.
+        LookForward(); // Make the boids face forward.
     }
 
     public Vector2 Align(List<Boid> boids) 
