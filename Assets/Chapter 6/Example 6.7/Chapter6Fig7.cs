@@ -16,7 +16,7 @@ public class Chapter6Fig7 : MonoBehaviour
         for (int i = 0; i < 100; i++) {
             float ranX = Random.Range(-maximumPos.x, maximumPos.x);
             float ranY = Random.Range(-maximumPos.y, maximumPos.y);
-            vehicles.Add(new Vehicle(new Vector2(ranX, ranY), maximumPos, maximumPos, maxSpeed, maxForce));
+            vehicles.Add(new Vehicle(new Vector2(ranX, ranY), -maximumPos, maximumPos, maxSpeed, maxForce));
         }
     }
 
