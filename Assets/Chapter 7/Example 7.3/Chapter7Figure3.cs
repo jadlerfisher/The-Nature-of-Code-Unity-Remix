@@ -10,15 +10,14 @@ using UnityEngine.SceneManagement;
 public class Chapter7Figure3 : MonoBehaviour
 {
     // Each cell is now an object!
-
     private Chapter7Figure3GOL gol;
 
     // Start is called before the first frame update
     void Start()
     {
         gol = new Chapter7Figure3GOL();
-        setOrthographicCamera();
-        limitFrameRate();
+        SetOrthographicCamera();
+        LimitFrameRate();
     }
 
     // Update is called once per frame
@@ -32,13 +31,13 @@ public class Chapter7Figure3 : MonoBehaviour
         gol.Display();
     }
 
-    private void setOrthographicCamera()
+    private void SetOrthographicCamera()
     {
         Camera.main.orthographic = true;
         Camera.main.orthographicSize = 10;
     }
 
-    private void limitFrameRate()
+    private void LimitFrameRate()
     {        
         QualitySettings.vSyncCount = 0;
     }
@@ -69,11 +68,11 @@ public class Chapter7Figure3Cell
         // How big our screen is in World Units
         screenSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
         xScreenOffset = 9f;
-        yScreenOffset = 3f;
+        yScreenOffset = 5f;
 
         State = Random.Range(0, 2);
         Previous = State;
-        createGameObject();
+        CreateGameObject();
     }   
 
     public void SavePrevious()
@@ -109,7 +108,7 @@ public class Chapter7Figure3Cell
                                                  (y * cellRep.transform.localScale.x) - screenSize.y - yScreenOffset);
     }
 
-    private void createGameObject()
+    private void CreateGameObject()
     {
         cellRep = GameObject.CreatePrimitive(PrimitiveType.Quad);
 
@@ -134,10 +133,10 @@ public class Chapter7Figure3GOL
         columns = 72;
         rows = 41;
         board = new Chapter7Figure3Cell[columns, rows];
-        innit();
+        Innit();
     }
 
-    private void innit()
+    private void Innit()
     {
         for (int i = 0; i < columns; i++)
         {
@@ -164,7 +163,6 @@ public class Chapter7Figure3GOL
         {
             for (int y = 0; y < rows; y++)
             {
-
                 // Add up all the states in a 3x3 surrounding grid
                 int neighbors = 0;
                 for (int i = -1; i <= 1; i++)
