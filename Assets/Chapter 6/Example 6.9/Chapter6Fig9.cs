@@ -6,8 +6,8 @@ public class Chapter6Fig9 : MonoBehaviour
 {
     [SerializeField] float maxSpeed = 2, maxForce = 2;
     [SerializeField] float separationScale;
-    [SerializeField] float cohesionScale;
     [SerializeField] float alignmentScale;
+    [SerializeField] float cohesionScale;
 
     [SerializeField] Mesh coneMesh; // If you want to use your own cone mesh, drop it into the editor here.
 
@@ -154,9 +154,9 @@ class Boid
         Vector2 ali = Align(boids);
         Vector2 coh = Cohesion(boids);
 
-        sep *= 5.0f; // Arbitrary weights for these forces (Try different ones!)
-        ali *= 1.5f;
-        coh *= 0.5f;
+        sep *= separationScale; // Arbitrary weights for these forces (Try different ones!)
+        ali *= alignmentScale;
+        coh *= cohesionScale;
 
         ApplyForce(sep); // Applying all the forces
         ApplyForce(ali);
@@ -188,7 +188,7 @@ class Boid
         {
             sum /= count;
 
-            sum = sum.normalized * maxSpeed; // We desite to go in that direction at maximum speed.
+            sum = sum.normalized * maxSpeed; // We desire to go in that direction at maximum speed.
 
             Vector2 steer = sum - velocity; // Reynolds's steering force formula.
             steer = Vector2.ClampMagnitude(steer, maxForce);
@@ -218,7 +218,7 @@ class Boid
         {
             sum /= count;
             /* Here we make use of the Seek() function we wrote in
-             * Example 6.8. The target we seek is thr average
+             * Example 6.8. The target we seek is the average
              * location of our neighbors. */
             return Seek(sum);
         }

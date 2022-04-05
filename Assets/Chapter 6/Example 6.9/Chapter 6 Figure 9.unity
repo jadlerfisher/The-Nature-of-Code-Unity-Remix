@@ -258,9 +258,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 20
   maxForce: 10
-  separationScale: 0
-  cohesionScale: 0
-  alignmentScale: 0
+  separationScale: 5.5
+  alignmentScale: 2.5
+  cohesionScale: 0.5
   coneMesh: {fileID: -2432090755550338912, guid: ddfc14ec5b1b9444395c732f431b1d3f,
     type: 3}
 --- !u!1 &1254276751
