@@ -30,7 +30,7 @@ public class Ch6Fig4 : MonoBehaviour
     private void FixedUpdate()
     {        
         vehicle.Follow(field);
-        vehicle.Update();
+        vehicle.UpdatePosition();
     }
 }
 
@@ -76,7 +76,7 @@ public class Ch6Fig4Vehicle
         acceleration += forceToAdd;
     }
 
-    public void Update()
+    public void UpdatePosition()
     {
         velocity += acceleration * Time.fixedDeltaTime;
         Vector2.ClampMagnitude(velocity, maxSpeed);
@@ -96,10 +96,10 @@ public class Ch6Fig4Vehicle
         vehicleRepresentation.transform.position = location;
 
         // If the representation goes off screen, representation and location gets reset
-        stayWithinScreen();
+        CheckEdges();
     }
 
-    private void stayWithinScreen()
+    private void CheckEdges()
     {
         if (location.x > maximumPos.x || location.x < minimumPos.x
          || location.y > maximumPos.y || location.y < minimumPos.y)
