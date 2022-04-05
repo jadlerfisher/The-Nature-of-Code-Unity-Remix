@@ -20,6 +20,7 @@ public class Vehicle6_5 : MonoBehaviour
     {
         // Get a vector pointing from our location to the target.
         Vector2 desired = target - body.position;
+
         // Scale our desired vector by our maximum speed.
         desired = desired.normalized * maxspeed;
 
