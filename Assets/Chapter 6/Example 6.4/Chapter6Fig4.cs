@@ -6,10 +6,11 @@ using UnityEngine;
 /// Example 6.4: Flow Field Following
 /// </summary>
 
-public class Ch6Fig4 : MonoBehaviour
+public class Chapter6Fig4 : MonoBehaviour
 {
     // Our cone object will be our vehicle, found in our extended primitives folder
     [SerializeField] private GameObject vehicleRepresentation;
+    [SerializeField] private GameObject flowArrow;
 
     private Ch6Fig4Vehicle vehicle;
     private Ch6Fig4FlowField field;
@@ -23,15 +24,21 @@ public class Ch6Fig4 : MonoBehaviour
         vehicle = new Ch6Fig4Vehicle(vehicleObject);
 
         // Makes a grid of random vectors that moves our vehicle around
-        field = new Ch6Fig4FlowField();
+        field = new Ch6Fig4FlowField(flowArrow);
     }
 
-    // FixedUpdate runs 50 times a second per project default
+    void Update()
+    {
+        field.ShowFlowField();
+    }
+
+    // FixedUpdate runs 50 times a second per project by default
     private void FixedUpdate()
     {        
         vehicle.Follow(field);
         vehicle.UpdatePosition();
     }
+
 }
 
 public class Ch6Fig4Vehicle
@@ -46,7 +53,6 @@ public class Ch6Fig4Vehicle
 
     // How much force to put into steering
     private float maxForce;    
-    private Vector2 minimumPos;
     private Vector2 maximumPos;
 
     public Ch6Fig4Vehicle(GameObject _vehicleObject)
@@ -57,7 +63,7 @@ public class Ch6Fig4Vehicle
         acceleration = Vector2.zero;
         maxSpeed = 4f;
         maxForce = 0.1f;
-        findWindowBounds();
+        FindWindowLimits();
     }
 
     public void Follow(Ch6Fig4FlowField flow)
@@ -67,10 +73,10 @@ public class Ch6Fig4Vehicle
         desiredVelocity *= maxSpeed;        
         Vector2 steerVelocity = desiredVelocity - velocity; // Steering is desired minus velocity
         Vector2.ClampMagnitude(steerVelocity, maxForce);
-        applyForce(steerVelocity);
+        ApplyForce(steerVelocity);
     }
 
-    private void applyForce(Vector2 forceToAdd)
+    private void ApplyForce(Vector2 forceToAdd)
     {
         // Newton's second law, force gets accumulated
         acceleration += forceToAdd;
@@ -101,21 +107,34 @@ public class Ch6Fig4Vehicle
 
     private void CheckEdges()
     {
-        if (location.x > maximumPos.x || location.x < minimumPos.x
-         || location.y > maximumPos.y || location.y < minimumPos.y)
-        {            
-            location = vehicleRepresentation.transform.position = Vector2.zero;            
+        if (location.x > maximumPos.x)
+        {
+            location.x = -maximumPos.x;
+        }
+        else if (location.x < -maximumPos.x)
+        {
+            location.x = maximumPos.x;
+        }
+        if (location.y > maximumPos.y)
+        {
+            location.y = -maximumPos.y;
+        }
+        else if (location.y < -maximumPos.y)
+        {
+            location.y = maximumPos.y;
         }
     }
 
-    private void findWindowBounds()
+    private void FindWindowLimits()
     {
+        // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
-        Camera.main.orthographicSize = 10;
 
-        // Translates screen bounds (in pixels) into meters or Unity Units
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        // Next we grab the maximum position for the screen
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-        minimumPos = -maximumPos;
     }
 }
 
@@ -124,22 +143,27 @@ public class Ch6Fig4FlowField
     // Declaring a 2D array of Vector2's
     private Vector2[,] field;
 
+    public List<GameObject> flowIndicators = new List<GameObject>();
+
     // How many columns and how many rows in the grid?
     private int columns, rows;
 
     // Resolution of grid relative to window width and height in pixels
     private int resolution;
 
-    public Ch6Fig4FlowField()
+    private Vector3 maximumPos;
+
+    public Ch6Fig4FlowField(GameObject flowArrow)
     {
-        resolution = 10;
+        FindWindowLimits();
+        resolution = 30;
         columns = Screen.width / resolution; // Total columns equals width divided by resolution
         rows = Screen.height / resolution; // Total rows equals height divided by resolution
         field = new Vector2[columns, rows];
-        initializeFlowField();        
+        InitializeFlowField(flowArrow);        
     }
 
-    private void initializeFlowField()
+    private void InitializeFlowField(GameObject flowArrow)
     {
         float xOff = 0;
         for (int i = 0; i < columns; i++) // Using a nested loop to hit every column and every row of the flow field
@@ -157,6 +181,16 @@ public class Ch6Fig4FlowField
                 Vector2 v = new Vector2(Mathf.Cos(theta), Mathf.Sin(theta));
                                               
                 field[i,j] = v;
+
+                float x = -maximumPos.x + (i - 0) * ((maximumPos.x - -maximumPos.x) / ((columns - 1) - 0));
+                float y = -maximumPos.y + (j - 0) * ((maximumPos.y - -maximumPos.y) / ((rows - 1) - 0));
+
+                GameObject flowIndicator = Object.Instantiate(flowArrow);
+                flowIndicator.transform.localScale = new Vector3(.3f, .3f, .3f);
+                flowIndicator.transform.position = new Vector2(x, y);
+                flowIndicator.transform.rotation = Quaternion.LookRotation(v);
+                flowIndicators.Add(flowIndicator);
+
                 yOff += 0.1f;
             }
             xOff += 0.1f;
@@ -165,9 +199,42 @@ public class Ch6Fig4FlowField
 
     public Vector2 Lookup(Vector2 _lookUp)
     {
+        float x = 0 + (_lookUp.x - -maximumPos.x) * ((columns - 1 - 0) / (maximumPos.x - -maximumPos.x));
+        float y = 0 + (_lookUp.y - -maximumPos.y) * ((rows - 1 - 0) / (maximumPos.y - -maximumPos.y));
+
         // A method to return a Vector2 based on a location
-        int column = (int)Mathf.Clamp(_lookUp.x, 0, columns - 1);
-        int row = (int)Mathf.Clamp(_lookUp.y, 0, rows - 1);
+        int column = (int)Mathf.Clamp(x, 0, columns - 1);
+        int row = (int)Mathf.Clamp(y, 0, rows - 1);
         return field[column, row];
+    }
+
+    private void FindWindowLimits()
+    {
+        // We want to start by setting the camera's projection to Orthographic mode
+        Camera.main.orthographic = true;
+
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        // Next we grab the maximum position for the screen
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+    }
+
+    public void ShowFlowField()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            foreach (var i in flowIndicators)
+            {
+                i.SetActive(true);
+            }
+        }
+        else
+        {
+            foreach (var i in flowIndicators)
+            {
+                i.SetActive(false);
+            }
+        }
     }
 }

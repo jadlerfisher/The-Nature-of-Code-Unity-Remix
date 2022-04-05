@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Chapter6Fig4 : MonoBehaviour
+public class Ch6Fig4 : MonoBehaviour
 {
     public GameObject vehicle;
     public flowFieldChapter6_4 flowField;
