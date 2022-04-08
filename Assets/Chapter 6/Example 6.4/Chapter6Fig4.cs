@@ -38,7 +38,6 @@ public class Chapter6Fig4 : MonoBehaviour
         vehicle.Follow(field);
         vehicle.UpdatePosition();
     }
-
 }
 
 public class Ch6Fig4Vehicle
@@ -63,8 +62,7 @@ public class Ch6Fig4Vehicle
         velocity = Vector2.zero;
         acceleration = Vector2.zero;
         maxSpeed = 4f;
-        maxForce = 1.5f;
-        
+        maxForce = 0.1f;
     }
 
     public void Follow(Ch6Fig4FlowField flow)
@@ -185,17 +183,17 @@ public class Ch6Fig4FlowField
                                               
                 field[i,j] = v;
 
+                // Map values i and j to minimum and maximum bounds of viewport
                 float x = -maximumPos.x + (i - 0) * ((maximumPos.x - -maximumPos.x) / ((columns - 1) - 0));
                 float y = -maximumPos.y + (j - 0) * ((maximumPos.y - -maximumPos.y) / ((rows - 1) - 0));
 
+                // Instantiate flow indicator at each point in grid
                 GameObject flowIndicator = Object.Instantiate(flowArrow);
                 flowIndicator.name = $"Indicator{i}_{j}_{v}";
                 flowIndicator.transform.localScale = new Vector3(.3f, .3f, .3f);
                 flowIndicator.transform.position = new Vector2(x, y);
                 
-                
-                //flowIndicator.transform.LookAt(v);
-                //flowIndicator.transform.LookAt(flowIndicator.transform.position + (Vector3)v);
+                // Set rotation of flow indicator to match the vector at each position
                 flowIndicator.transform.rotation = Quaternion.LookRotation(v);
                 Vector3 indicatorEulerAngles = flowIndicator.transform.rotation.eulerAngles;
                 flowIndicator.transform.rotation = Quaternion.Euler(indicatorEulerAngles.x + 90, indicatorEulerAngles.y, indicatorEulerAngles.z);
@@ -205,15 +203,6 @@ public class Ch6Fig4FlowField
             }
             xOff += 0.1f;
         }
-
-        //foreach (var i in flowIndicators)
-        //{
-        //    var direction = Lookup(i.transform.position);
-        //    i.transform.LookAt(i.transform.position - (Vector3)direction);
-        //    Vector3 indicatorEularAngles = i.transform.rotation.eulerAngles;
-        //    i.transform.rotation = Quaternion.Euler(indicatorEularAngles.x - 90, indicatorEularAngles.y, indicatorEularAngles.z);
-        //    i.SetActive(true);
-        //}
     }
 
     public Vector2 Lookup(Vector2 _lookUp)
@@ -242,6 +231,7 @@ public class Ch6Fig4FlowField
 
     public void ShowFlowField()
     {
+        // Set indicators active if holding space, set inactive if not
         if (Input.GetKey(KeyCode.Space))
         {
             foreach (var i in flowIndicators)
