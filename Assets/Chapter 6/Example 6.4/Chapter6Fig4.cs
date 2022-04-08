@@ -20,7 +20,7 @@ public class Chapter6Fig4 : MonoBehaviour
     {
         // Instantiate our vehicle, location doesn't matter as it will get overwritten
         // Instantiate makes a copy of our cone
-        GameObject vehicleObject = Instantiate(vehicleRepresentation, Vector3.zero, Quaternion.identity);
+        GameObject vehicleObject = Instantiate(vehicleRepresentation);
         vehicle = new Ch6Fig4Vehicle(vehicleObject);
 
         // Makes a grid of random vectors that moves our vehicle around
@@ -34,7 +34,7 @@ public class Chapter6Fig4 : MonoBehaviour
 
     // FixedUpdate runs 50 times a second per project by default
     private void FixedUpdate()
-    {        
+    {
         vehicle.Follow(field);
         vehicle.UpdatePosition();
     }
@@ -57,19 +57,22 @@ public class Ch6Fig4Vehicle
 
     public Ch6Fig4Vehicle(GameObject _vehicleObject)
     {
+        FindWindowLimits();
         vehicleRepresentation = _vehicleObject;        
         location = Vector2.zero;
         velocity = Vector2.zero;
         acceleration = Vector2.zero;
         maxSpeed = 4f;
-        maxForce = 0.1f;
-        FindWindowLimits();
+        maxForce = 1.5f;
+        
     }
 
     public void Follow(Ch6Fig4FlowField flow)
-    {        
+    {
         // What is the vector at the place we're standing in?
+        //Debug.Log(location);
         Vector2 desiredVelocity = flow.Lookup(location);
+        Debug.Log(desiredVelocity);
         desiredVelocity *= maxSpeed;        
         Vector2 steerVelocity = desiredVelocity - velocity; // Steering is desired minus velocity
         Vector2.ClampMagnitude(steerVelocity, maxForce);
@@ -92,8 +95,8 @@ public class Ch6Fig4Vehicle
         vehicleRepresentation.transform.LookAt(vehicleRepresentation.transform.position + (Vector3)velocity);
 
         // Adjust the x rotation of the object by 90 degrees
-        Vector3 vehicleEularAngles = vehicleRepresentation.transform.rotation.eulerAngles;
-        vehicleRepresentation.transform.rotation = Quaternion.Euler(vehicleEularAngles.x + 90, vehicleEularAngles.y, vehicleEularAngles.z);
+        Vector3 vehicleEulerAngles = vehicleRepresentation.transform.rotation.eulerAngles;
+        vehicleRepresentation.transform.rotation = Quaternion.Euler(vehicleEulerAngles.x + 90, vehicleEulerAngles.y, vehicleEulerAngles.z);
 
         // Acceleration gets reset every update
         acceleration *= 0;
@@ -186,15 +189,31 @@ public class Ch6Fig4FlowField
                 float y = -maximumPos.y + (j - 0) * ((maximumPos.y - -maximumPos.y) / ((rows - 1) - 0));
 
                 GameObject flowIndicator = Object.Instantiate(flowArrow);
+                flowIndicator.name = $"Indicator{i}_{j}_{v}";
                 flowIndicator.transform.localScale = new Vector3(.3f, .3f, .3f);
                 flowIndicator.transform.position = new Vector2(x, y);
+                
+                
+                //flowIndicator.transform.LookAt(v);
+                //flowIndicator.transform.LookAt(flowIndicator.transform.position + (Vector3)v);
                 flowIndicator.transform.rotation = Quaternion.LookRotation(v);
+                Vector3 indicatorEulerAngles = flowIndicator.transform.rotation.eulerAngles;
+                flowIndicator.transform.rotation = Quaternion.Euler(indicatorEulerAngles.x + 90, indicatorEulerAngles.y, indicatorEulerAngles.z);
                 flowIndicators.Add(flowIndicator);
 
                 yOff += 0.1f;
             }
             xOff += 0.1f;
         }
+
+        //foreach (var i in flowIndicators)
+        //{
+        //    var direction = Lookup(i.transform.position);
+        //    i.transform.LookAt(i.transform.position - (Vector3)direction);
+        //    Vector3 indicatorEularAngles = i.transform.rotation.eulerAngles;
+        //    i.transform.rotation = Quaternion.Euler(indicatorEularAngles.x - 90, indicatorEularAngles.y, indicatorEularAngles.z);
+        //    i.SetActive(true);
+        //}
     }
 
     public Vector2 Lookup(Vector2 _lookUp)
@@ -205,6 +224,7 @@ public class Ch6Fig4FlowField
         // A method to return a Vector2 based on a location
         int column = (int)Mathf.Clamp(x, 0, columns - 1);
         int row = (int)Mathf.Clamp(y, 0, rows - 1);
+        Debug.Log($"column:{column}, row:{row}");
         return field[column, row];
     }
 
