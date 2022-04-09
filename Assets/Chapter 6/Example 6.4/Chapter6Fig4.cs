@@ -106,15 +106,18 @@ public class Ch6Fig4Vehicle
         CheckEdges();
     }
 
+    // Check if location crosses any border of the screen, relocate location to opposite border
     private void CheckEdges()
     {
         if (location.x > maximumPos.x)
         {
             location.x = -maximumPos.x;
+            
         }
         else if (location.x < -maximumPos.x)
         {
             location.x = maximumPos.x;
+            location.y = Random.Range(-maximumPos.y, maximumPos.y);
         }
         if (location.y > maximumPos.y)
         {
@@ -197,6 +200,8 @@ public class Ch6Fig4FlowField
                 flowIndicator.transform.rotation = Quaternion.LookRotation(v);
                 Vector3 indicatorEulerAngles = flowIndicator.transform.rotation.eulerAngles;
                 flowIndicator.transform.rotation = Quaternion.Euler(indicatorEulerAngles.x + 90, indicatorEulerAngles.y, indicatorEulerAngles.z);
+
+                // Add newly instantiated indicator to a list
                 flowIndicators.Add(flowIndicator);
 
                 yOff += 0.1f;
@@ -234,16 +239,17 @@ public class Ch6Fig4FlowField
         // Set indicators active if holding space, set inactive if not
         if (Input.GetKey(KeyCode.Space))
         {
-            foreach (var i in flowIndicators)
+            // Loop through flowIndicators list and set active state for each item
+            for (int i = 0; i < flowIndicators.Count; i++)
             {
-                i.SetActive(true);
+                flowIndicators[i].SetActive(true);
             }
         }
         else
         {
-            foreach (var i in flowIndicators)
+            for (int i = 0; i < flowIndicators.Count; i++)
             {
-                i.SetActive(false);
+                flowIndicators[i].SetActive(false);
             }
         }
     }
