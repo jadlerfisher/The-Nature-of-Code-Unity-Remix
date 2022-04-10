@@ -70,7 +70,6 @@ public class Ch6Fig4Vehicle
         // What is the vector at the place we're standing in?
         //Debug.Log(location);
         Vector2 desiredVelocity = flow.Lookup(location);
-        Debug.Log(desiredVelocity);
         desiredVelocity *= maxSpeed;        
         Vector2 steerVelocity = desiredVelocity - velocity; // Steering is desired minus velocity
         Vector2.ClampMagnitude(steerVelocity, maxForce);
@@ -218,7 +217,6 @@ public class Ch6Fig4FlowField
         // A method to return a Vector2 based on a location
         int column = (int)Mathf.Clamp(x, 0, columns - 1);
         int row = (int)Mathf.Clamp(y, 0, rows - 1);
-        Debug.Log($"column:{column}, row:{row}");
         return field[column, row];
     }
 
