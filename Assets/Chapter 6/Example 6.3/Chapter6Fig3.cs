@@ -45,7 +45,7 @@ public class Chapter6Fig3 : MonoBehaviour
         vehicle.UpdatePosition();
 
         // Stays within screen bounds
-        vehicle.StayWithinWalls(); 
+        vehicle.CheckEdges(); 
     }
 }
 
@@ -121,7 +121,7 @@ public class Ch6Fig3Vehicle
         acceleration *= 0;        
     }
 
-    public void StayWithinWalls() 
+    public void CheckEdges() 
     {
         // If the vehicle comes within distance of a wall, it desires to move at 
         // Maximum speed in the opposite direction of the wall.
