@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class Chapter6Fig7 : MonoBehaviour
 {
-    public float maxSpeed = 2, maxForce = 2;
+    [SerializeField] float maxSpeed = 2, maxForce = 2;
 
     private List<Vehicle> vehicles; // Declare a List of Vehicle objects.
-    private Vector2 minimumPos, maximumPos;
+    private Vector2 maximumPos;
 
     void Start()
     {
-        findWindowLimits();
+        FindWindowLimits();
         vehicles = new List<Vehicle>(); // Initilize and fill the List with a bunch of Vehicles
         for (int i = 0; i < 100; i++) {
-            float ranX = Random.Range(minimumPos.x, maximumPos.x);
-            float ranY = Random.Range(minimumPos.y, maximumPos.y);
-            vehicles.Add(new Vehicle(new Vector2(ranX, ranY), minimumPos, maximumPos, maxSpeed, maxForce));
+            float ranX = Random.Range(-maximumPos.x, maximumPos.x);
+            float ranY = Random.Range(-maximumPos.y, maximumPos.y);
+            vehicles.Add(new Vehicle(new Vector2(ranX, ranY), -maximumPos, maximumPos, maxSpeed, maxForce));
         }
     }
 
@@ -33,15 +33,19 @@ public class Chapter6Fig7 : MonoBehaviour
             Vector2 mousePos = Input.mousePosition;
             mousePos = Camera.main.ScreenToWorldPoint(mousePos);
 
-            vehicles.Add(new Vehicle(mousePos, minimumPos, maximumPos, maxSpeed, maxForce));
+            vehicles.Add(new Vehicle(mousePos, -maximumPos, maximumPos, maxSpeed, maxForce));
         }
     }
 
-    private void findWindowLimits()
+    private void FindWindowLimits()
     {
+        // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
-        Camera.main.orthographicSize = 10;
-        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
+
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -5);
+
+        // Next we grab the maximum position for the screen
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
@@ -80,7 +84,7 @@ class Vehicle
         myVehicle.transform.position = new Vector2(initPos.x, initPos.y); // Set the vehicle's initial position.
         myVehicle.AddComponent<Rigidbody>(); // Add rigidbody so we can add forces to the vehicle.
 
-        GameObject.Destroy (myVehicle.GetComponent<SphereCollider>());
+        Object.Destroy(myVehicle.GetComponent<SphereCollider>());
 
         rb = myVehicle.GetComponent<Rigidbody>();
         rb.useGravity = false; // Remember to ignore gravity!
@@ -117,12 +121,12 @@ class Vehicle
 
         foreach (Vehicle other in vehicles) 
         {
-            // What is the distance between me and another Vehicle?
+            // What is the distance between this vehicle and another Vehicle?
             float d = Vector2.Distance(other.location, location);
 
             if ((d > 0) && (d < desiredSeperation)) 
             {
-                // Any code here will be executed if the Vehicle is within 0.5 Meters.
+                // Any code here will be executed if the Vehicle is within desired seperation.
                 Vector2 diff = location - other.location; // A Vector2 pointing away from the other’s location.
                 diff.Normalize();
 
@@ -144,7 +148,7 @@ class Vehicle
         {
             sum /= count;
 
-            sum *= maxSpeed; // Scale averate to maxSpeed (this becomes desired).
+            sum *= maxSpeed; // Scale average to maxSpeed (this becomes desired).
 
             Vector2 steer = sum - velocity; // Reynold's steering formula
             steer = Vector2.ClampMagnitude(steer, maxForce); // Clamp to the maximum force.

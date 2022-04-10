@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Path6_6 : MonoBehaviour
 {
-    public Transform[] points;
-    public float radius;
-    public Material pathMaterial;
+    [SerializeField] public Transform[] points;
+    [SerializeField] public float radius;
+    [SerializeField] Material pathMaterial;
 
     private LineRenderer pathRenderer;
 

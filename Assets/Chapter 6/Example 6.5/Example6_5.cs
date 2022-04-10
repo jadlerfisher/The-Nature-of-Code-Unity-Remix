@@ -5,21 +5,20 @@ using UnityEngine;
 public class Example6_5 : MonoBehaviour
 {
     // Get scene references:
-    public GameObject vehiclePrefab;
-    public Path6_5 path;
+    [SerializeField] GameObject vehiclePrefab;
+    [SerializeField] Path6_5 path;
+
     // Get example parameters:
-    public int vehicleCount;
-    public float minSpeed, maxSpeed;
+    [SerializeField] int vehicleCount;
+    [SerializeField] float minSpeed, maxSpeed;
 
     private Vehicle6_5[] vehicles;
-    private float screenLeft, screenRight;
+    private Vector3 maximumPos;
 
     // Start is called before the first frame update
     void Start()
     {
-        // Get the left and right screen bounds for screen-wrapping logic.
-        screenLeft = Camera.main.ScreenToWorldPoint(Vector2.zero).x;
-        screenRight = Camera.main.ScreenToWorldPoint(Vector2.right * Screen.width).x;
+        FindWindowLimits();
 
         // Spawn the vehicles into the scene.
         vehicles = new Vehicle6_5[vehicleCount];
@@ -41,10 +40,10 @@ public class Example6_5 : MonoBehaviour
         foreach(Vehicle6_5 vehicle in vehicles)
         {
             // When the vehicle passes the right edge, wrap back to the left edge.
-            if(vehicle.transform.position.x > screenRight)
+            if(vehicle.transform.position.x > maximumPos.x)
             {
                 vehicle.transform.position = new Vector3(
-                    screenLeft,
+                    -maximumPos.x,
                     vehicle.transform.position.y,
                     vehicle.transform.position.z
                 );
@@ -52,5 +51,17 @@ public class Example6_5 : MonoBehaviour
             // Attempt to follow the path.
             vehicle.FollowPath(path);
         }
+    }
+
+    private void FindWindowLimits()
+    {
+        // We want to start by setting the camera's projection to Orthographic mode
+        Camera.main.orthographic = true;
+
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -5);
+
+        // Next we grab the maximum position for the screen
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }

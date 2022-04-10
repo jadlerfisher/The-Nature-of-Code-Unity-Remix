@@ -9,16 +9,16 @@ using UnityEngine.SceneManagement;
 public class Chapter7Fig1 : MonoBehaviour 
 {
     // A list to store ruleset arrays
-    public List<int[]> rulesetList = new List<int[]>();
-    
+    [SerializeField] List<int[]> rulesetList = new List<int[]>();
+
     // Custom Rulesets
-    public int[] ruleSet0 = { 0, 1, 0, 1, 1, 0, 1, 0 };
-    public int[] ruleSet1 = { 1, 0, 1, 0, 1, 0, 1, 0 };
-    public int[] ruleSet2 = { 0, 1, 0, 1, 1, 0, 1, 0 };
-    public int[] ruleSet3 = { 1, 1, 0, 0, 1, 0, 1, 1 };
-    public int[] ruleSet4 = { 0, 0, 0, 1, 1, 0, 1, 0 };
-    public int[] ruleSet5 = { 1, 0, 0, 1, 1, 0, 1, 0 };
-    public int[] ruleSet6 = { 0, 1, 1, 0, 1, 0, 1, 1 };
+    [SerializeField] int[] ruleSet0 = { 0, 1, 0, 1, 1, 0, 1, 0 };
+    [SerializeField] int[] ruleSet1 = { 1, 0, 1, 0, 1, 0, 1, 0 };
+    [SerializeField] int[] ruleSet2 = { 0, 1, 0, 1, 1, 0, 1, 0 };
+    [SerializeField] int[] ruleSet3 = { 1, 1, 0, 0, 1, 0, 1, 1 };
+    [SerializeField] int[] ruleSet4 = { 0, 0, 0, 1, 1, 0, 1, 0 };
+    [SerializeField] int[] ruleSet5 = { 1, 0, 0, 1, 1, 0, 1, 0 };
+    [SerializeField] int[] ruleSet6 = { 0, 1, 1, 0, 1, 0, 1, 1 };
     
     private int rulesChosen;
 
@@ -31,15 +31,15 @@ public class Chapter7Fig1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        addRuleSetsToList();
+        AddRuleSetsToList();
 
         // Choosing a random rule set using Random.Range
         rulesChosen = Random.Range(0, rulesetList.Count);
         int[] ruleset = rulesetList[rulesChosen]; 
         ca = new Chapter7Fig1CA(ruleset); // Initialize CA
 
-        limitFrameRate();
-        setOrthographicCamera();
+        LimitFrameRate();
+        SetOrthographicCamera();
     }    
 
     private void Update() 
@@ -62,7 +62,7 @@ public class Chapter7Fig1 : MonoBehaviour
         }           
     }
 
-    private void addRuleSetsToList()
+    private void AddRuleSetsToList()
     {
         rulesetList.Add(ruleSet0);
         rulesetList.Add(ruleSet1);
@@ -73,13 +73,13 @@ public class Chapter7Fig1 : MonoBehaviour
         rulesetList.Add(ruleSet6);
     }
 
-    private void setOrthographicCamera()
+    private void SetOrthographicCamera()
     {
         Camera.main.orthographic = true;
         Camera.main.orthographicSize = 10;
     }
 
-    private void limitFrameRate()
+    private void LimitFrameRate()
     {
         Application.targetFrameRate = 30; 
         QualitySettings.vSyncCount = 0;
@@ -101,16 +101,16 @@ public class Chapter7Fig1CA
     public Chapter7Fig1CA(int[] ruleSetToUse)
     {
         rowWidth = 17;
-        cellCapacity = 650;
-        yScreenOffset = 2.5f;
-        xScreenOffset = 1.25f;
+        cellCapacity = 700;
+        yScreenOffset = 0.5f;
+        xScreenOffset = -0.5f;
 
         // How big our screen is in World Units
         screenSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));        
         numberOfCells = 0;
         ruleset = ruleSetToUse;
         cells = new int[cellCapacity / rowWidth];
-        restart();
+        Restart();
     }
 
     public void Randomize() // If we wanted to make a random Ruleset
@@ -121,7 +121,7 @@ public class Chapter7Fig1CA
         }
     }
 
-    private void restart()
+    private void Restart()
     {
         for (int i = 0; i < cells.Length; i++)
         {
@@ -144,7 +144,7 @@ public class Chapter7Fig1CA
             int left = cells[i - 1]; // Left neighbor state
             int me = cells[i]; // Current state
             int right = cells[i + 1]; // Right neighbor state
-            nextGen[i] = rules(left, me, right); // Compute next generation state based on ruleset
+            nextGen[i] = Rules(left, me, right); // Compute next generation state based on ruleset
         }
 
         // The current generation is the new generation
@@ -179,7 +179,7 @@ public class Chapter7Fig1CA
         }
     }
 
-    private int rules (int a, int b, int c) // Implementing the Wolfram rules
+    private int Rules (int a, int b, int c) // Implementing the Wolfram rules
     {
         if (a == 1 && b == 1 && c == 1) return ruleset[0];
         if (a == 1 && b == 1 && c == 0) return ruleset[1];
