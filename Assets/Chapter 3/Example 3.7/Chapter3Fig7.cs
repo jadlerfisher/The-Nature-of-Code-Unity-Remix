@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class Chapter3Fig7 : MonoBehaviour
 {
-    List<oscillator> oscilattors = new List<oscillator>();
+    List<Oscillator> oscilattors = new List<Oscillator>();
 
     void Start()
     {
         while (oscilattors.Count < 10)
         {
-            oscilattors.Add(new oscillator());
+            oscilattors.Add(new Oscillator());
         }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        foreach (oscillator o in oscilattors)
+        foreach (Oscillator o in oscilattors)
         {
             //Each oscillator object oscillating on the x-axis
             float x = Mathf.Cos(o.angle.x) * o.amplitude.x;
@@ -37,7 +37,7 @@ public class Chapter3Fig7 : MonoBehaviour
     }
 }
 
-public class oscillator {
+public class Oscillator {
 
     // The basic properties of an oscillator class
     public Vector2 velocity, angle, amplitude;
@@ -51,7 +51,7 @@ public class oscillator {
     // Create variables for rendering the line between two vectors
     public LineRenderer lineRender;
 
-    public oscillator()
+    public Oscillator()
     {    
         FindWindowLimits();
 
