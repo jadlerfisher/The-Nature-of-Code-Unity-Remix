@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Chapter6Fig2 : MonoBehaviour
 {
-    public Camera camera;
-    public GameObject vehicle;
-    public GameObject target;
-
+    [SerializeField] Camera cam;
+    [SerializeField] GameObject vehicle;
+    [SerializeField] GameObject target;
 
     // Start is called before the first frame update
     void Start()
@@ -19,9 +18,9 @@ public class Chapter6Fig2 : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        //set gameObject's position equal to the mouse's;
-        target.transform.position = MousePosition(camera);
-        vehicle.GetComponent<vehicleChapter6_2>().arrive(target.transform.position);
+        // Set gameObject's position equal to the mouse's;
+        target.transform.position = MousePosition(cam);
+        vehicle.GetComponent<VehicleChapter6_2>().Arrive(target.transform.position);
     }
 
     Vector2 MousePosition(Camera camera)

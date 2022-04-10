@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class vehicleChapter6_1 : MonoBehaviour
+public class VehicleChapter6_1 : MonoBehaviour
 {
-    public float r;
-    public float maxforce;
-    public float maxspeed;
-    public float mass;
+    [SerializeField] float r;
+    [SerializeField] float maxforce;
+    [SerializeField] float maxspeed;
+    [SerializeField] float mass;
 
     private GameObject vehicle;
-    public GameObject target;
     private Rigidbody body;
 
     // Start is called before the first frame update
@@ -20,10 +19,13 @@ public class vehicleChapter6_1 : MonoBehaviour
         vehicle = this.gameObject;
         body = vehicle.AddComponent<Rigidbody>();
         
-        r = 3.0f;
         maxspeed = 4.0f;
         maxforce = 1f;
 
+        r = 1.0f;
+        mass = (4 / 3) * Mathf.PI * (Mathf.Pow(r, 3));
+
+        body.mass = mass;
         body.drag = 0;
         body.useGravity = false;
     }
@@ -31,18 +33,15 @@ public class vehicleChapter6_1 : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
         body.velocity = new Vector3(
             Mathf.Clamp(body.velocity.x, -maxspeed, maxspeed),
             Mathf.Clamp(body.velocity.y, -maxspeed, maxspeed),
             Mathf.Clamp(body.velocity.z, -maxspeed, maxspeed));
 
-        //arrive(target.transform.position);
-        vehicle.transform.rotation = Quaternion.LookRotation(body.angularVelocity);
+        vehicle.transform.rotation = Quaternion.LookRotation(body.velocity);
     }
 
-
-    public void seek(Vector3 target)
+    public void Seek(Vector3 target)
     {
         Vector3 desired = target - body.transform.position;
         desired.Normalize();
@@ -52,12 +51,12 @@ public class vehicleChapter6_1 : MonoBehaviour
         steer.x = Mathf.Clamp(steer.x, -maxforce, maxforce);
         steer.y = Mathf.Clamp(steer.y, -maxforce, maxforce);
         steer.z = Mathf.Clamp(steer.z, -maxforce, maxforce);
-        applyForce(steer);
+        ApplyForce(steer);
     }
 
     //Newton's second law
     //Receive a force, divide by mass, and add to acceleration
-    public void applyForce(Vector3 force)
+    public void ApplyForce(Vector3 force)
     {
         body.AddForce(force * Time.fixedDeltaTime, ForceMode.VelocityChange);
     }

@@ -135,6 +135,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7592401324802019510, guid: 78bc2f761ab8d0e46aceadd8b0628465,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592401324802019510, guid: 78bc2f761ab8d0e46aceadd8b0628465,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -150,6 +155,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7592401324802019510, guid: 78bc2f761ab8d0e46aceadd8b0628465,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592401324802019510, guid: 78bc2f761ab8d0e46aceadd8b0628465,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -162,16 +172,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7592401324802019510, guid: 78bc2f761ab8d0e46aceadd8b0628465,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7592401324802019510, guid: 78bc2f761ab8d0e46aceadd8b0628465,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7592401324802019510, guid: 78bc2f761ab8d0e46aceadd8b0628465,
         type: 3}
@@ -190,6 +190,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78bc2f761ab8d0e46aceadd8b0628465, type: 3}
+--- !u!20 &588151271 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7592401324802019509, guid: 78bc2f761ab8d0e46aceadd8b0628465,
+    type: 3}
+  m_PrefabInstance: {fileID: 18433973}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &602055947
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -201,6 +207,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Follower Sphere
+      objectReference: {fileID: 0}
+    - target: {fileID: 4817917821016887076, guid: e704bd4628ede32409c3b43a97b80814,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4817917821016887076, guid: e704bd4628ede32409c3b43a97b80814,
         type: 3}
@@ -219,6 +230,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4817917821016887076, guid: e704bd4628ede32409c3b43a97b80814,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4817917821016887076, guid: e704bd4628ede32409c3b43a97b80814,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -231,16 +247,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4817917821016887076, guid: e704bd4628ede32409c3b43a97b80814,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4817917821016887076, guid: e704bd4628ede32409c3b43a97b80814,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4817917821016887076, guid: e704bd4628ede32409c3b43a97b80814,
         type: 3}
@@ -352,12 +358,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!20 &980252465 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 7592401324802019509, guid: 78bc2f761ab8d0e46aceadd8b0628465,
-    type: 3}
-  m_PrefabInstance: {fileID: 18433973}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1972674396
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,7 +401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a8e41f80150e974b98f5405de796a50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 980252465}
+  cam: {fileID: 588151271}
   vehicle: {fileID: 5584890451184551033, guid: 1f06b2d4baed5bc44a602312da4a2fb5, type: 3}
   target: {fileID: 2028209937}
 --- !u!1 &2028209937 stripped

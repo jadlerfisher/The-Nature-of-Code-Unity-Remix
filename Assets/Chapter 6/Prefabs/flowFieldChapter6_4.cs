@@ -26,7 +26,7 @@ public class flowFieldChapter6_4 : MonoBehaviour
             for (int j = 0; j < rows; j++)
             {
                 //The mathematical concept of Tau ( or 2*PI) is 6.2831855(ish)
-                float theta = ExtensionMethods.map(Mathf.PerlinNoise(xoff, yoff), 0f, 1f, 0f, 6.2831855f);
+                float theta = ExtensionMethods.Map(Mathf.PerlinNoise(xoff, yoff), 0f, 1f, 0f, 6.2831855f);
                 
                 Quaternion perlinRotation = new Quaternion();
                 Vector3 perlinVectors = new Vector3(Mathf.Cos(theta), Mathf.Sin(theta), 0);

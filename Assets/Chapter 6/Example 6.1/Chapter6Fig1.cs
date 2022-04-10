@@ -4,23 +4,25 @@ using UnityEngine;
 
 public class Chapter6Fig1 : MonoBehaviour
 {
-    public Camera camera;
-    public GameObject vehicle;
-    public GameObject target;
+    [SerializeField] Camera cam;
+    [SerializeField] GameObject vehicle;
+    [SerializeField] GameObject target;
 
+    private VehicleChapter6_1 agent;
 
     // Start is called before the first frame update
     void Start()
     {
         Cursor.visible = false;
+        agent = vehicle.GetComponent<VehicleChapter6_1>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         //set gameObject's position equal to the mouse's;
-        target.transform.position = MousePosition(camera);
-        vehicle.GetComponent<vehicleChapter6_1>().seek(target.transform.position);
+        target.transform.position = MousePosition(cam);
+        agent.Seek(target.transform.position);
     }
     Vector2 MousePosition(Camera camera)
     {
