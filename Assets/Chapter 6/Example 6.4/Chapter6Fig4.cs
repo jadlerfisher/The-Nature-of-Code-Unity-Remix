@@ -155,6 +155,7 @@ public class Ch6Fig4FlowField
     // Resolution of grid relative to window width and height in pixels
     private int resolution;
 
+    // Maximum bounds of the screen
     private Vector3 maximumPos;
 
     public Ch6Fig4FlowField(GameObject flowArrow)
@@ -169,8 +170,9 @@ public class Ch6Fig4FlowField
 
     private void InitializeFlowField(GameObject flowArrow)
     {
+        // Using a nested loop to hit every column and every row of the flow field
         float xOff = 0;
-        for (int i = 0; i < columns; i++) // Using a nested loop to hit every column and every row of the flow field
+        for (int i = 0; i < columns; i++)
         {
             float yOff = 0;
             for (int j = 0; j < rows; j++) 
