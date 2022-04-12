@@ -25,7 +25,7 @@ public class Chapter6Fig7 : MonoBehaviour
         foreach (Vehicle v in vehicles) 
         {
             v.Separate(vehicles);
-            v.Update();
+            v.CheckEdges();
         }
 
         if (Input.GetMouseButton(0)) 
@@ -90,7 +90,7 @@ class Vehicle
         rb.useGravity = false; // Remember to ignore gravity!
     }
 
-    public void Update() 
+    public void CheckEdges() 
     {
         if (location.x > maxPos.x)
         {
