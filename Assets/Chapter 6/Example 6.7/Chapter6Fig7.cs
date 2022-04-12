@@ -117,14 +117,14 @@ class Vehicle
         int count = 0; // We have to keep track of how many Vehicles are too close.
 
         // Note how the desired separation is based on the Vehicle's size.
-        float desiredSeperation = myVehicle.transform.localScale.x * 2; 
+        float desiredSeparation = myVehicle.transform.localScale.x * 2; 
 
         foreach (Vehicle other in vehicles) 
         {
             // What is the distance between this vehicle and another Vehicle?
             float d = Vector2.Distance(other.location, location);
 
-            if ((d > 0) && (d < desiredSeperation)) 
+            if ((d > 0) && (d < desiredSeparation)) 
             {
                 // Any code here will be executed if the Vehicle is within desired seperation.
                 Vector2 diff = location - other.location; // A Vector2 pointing away from the other’s location.
