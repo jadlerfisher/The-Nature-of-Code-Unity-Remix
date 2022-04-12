@@ -128,10 +128,10 @@ public class Chapter7Fig2GameOfLife
                 neighbors -= board[x, y];
 
                 // Rules of Life
-                if ((board[x,y] == 1) && (neighbors < 2)) next[x,y] = 0;           // Loneliness
-                else if ((board[x,y] == 1) && (neighbors > 3)) next[x,y] = 0;           // Overpopulation
-                else if ((board[x,y] == 0) && (neighbors == 3)) next[x,y] = 1;           // Reproduction
-                else next[x,y] = board[x,y];  // Stasis
+                if ((board[x,y] == 1) && (neighbors < 2)) next[x,y] = 0;        // Loneliness
+                else if ((board[x,y] == 1) && (neighbors > 3)) next[x,y] = 0;   // Overpopulation
+                else if ((board[x,y] == 0) && (neighbors == 3)) next[x,y] = 1;  // Reproduction
+                else next[x,y] = board[x,y];                                    // Stasis
             }
         }
 
