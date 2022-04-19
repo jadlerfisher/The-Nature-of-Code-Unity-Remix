@@ -7,17 +7,18 @@ public class Chapter10Fig1 : MonoBehaviour
     //The Perceptron
     [SerializeField]
     Perceptron ptron;
+
     //2,000 training points
-    List<Trainer> training = new List<Trainer>();
+    List<Trainer> trainingPoints = new List<Trainer>();
     int count = 0;
-    public int trainers;
+    public int trainerCount;
 
     //Lines
     GameObject theLine;
     LineRenderer lR;
 
     // Variables to limit the mover within the screen space
-    private Vector2 minimumPos, maximumPos;
+    private Vector2 maximumPos;
 
     //Forumla for the line
     float f(float x)
@@ -28,9 +29,9 @@ public class Chapter10Fig1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Next we grab the minimum and maximum position for the screen
-        minimumPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
-        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        // Next we grab the maximum values of the screen
+        FindWindowLimits();
+
         //Draw the initial Line Position
         theLine = new GameObject();
         lR = theLine.AddComponent<LineRenderer>();
@@ -43,37 +44,36 @@ public class Chapter10Fig1 : MonoBehaviour
         ptron = new Perceptron(3);
 
         //Make training points
-        for (int i = 0; i < trainers; i++)
+        for (int i = 0; i < trainerCount; i++)
         {
             float x = Random.Range(-maximumPos.x, maximumPos.x);
             float y = Random.Range(-maximumPos.y, maximumPos.y);
 
-            //Is the correct anser 1 or -1?
+            //Is the correct answer 1 or -1?
             int answer = 1;
             if (y < f(x))
             {
                 answer = -1;
             }
 
-            training.Add(new Trainer(x, y, answer));
+            trainingPoints.Add(new Trainer(x, y, answer));
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        ptron.train(training[count].inputs, training[count].answer);
-        count = (count + 1) % training.Count;
+        ptron.Train(trainingPoints[count].inputs, trainingPoints[count].answer);
+        count = (count + 1) % trainingPoints.Count;
 
         for (int i = 0; i < count; i++)
         {
-            int guess = ptron.feedforward(training[i].inputs);
+            int guess = ptron.Feedforward(trainingPoints[i].inputs);
             //If the guess is greater than 0, paint the sphere black. Otherwise white.
             if (guess > 0)
             {
                 GameObject fill = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                fill.transform.position = new Vector2(training[i].inputs[0], training[i].inputs[1]);
+                fill.transform.position = new Vector2(trainingPoints[i].inputs[0], trainingPoints[i].inputs[1]);
                 Renderer r = fill.GetComponent<Renderer>();
                 r.material = new Material(Shader.Find("Diffuse"));
                 r.material.color = Color.black;
@@ -82,19 +82,31 @@ public class Chapter10Fig1 : MonoBehaviour
             else
             {
                 GameObject noFill = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                noFill.transform.position = new Vector2(training[i].inputs[0], training[i].inputs[1]);
+                noFill.transform.position = new Vector2(trainingPoints[i].inputs[0], trainingPoints[i].inputs[1]);
                 Renderer r = noFill.GetComponent<Renderer>();
                 r.material = new Material(Shader.Find("Diffuse"));
                 r.material.color = Color.white;
             }
 
-        // Draw the line based on the current weights
-        // Formula is weights[0]*x + weights[1]*y + weights[2] = 0
-        List<float> weights = ptron.getWeights();
-        lR.SetPosition(0, new Vector2(-maximumPos.x, (-weights[2] - weights[0] * -maximumPos.x) / weights[1]));
-        lR.SetPosition(1, new Vector2(maximumPos.x, (-weights[2] - weights[0] * maximumPos.x) / weights[1]));
+            // Draw the line based on the current weights
+            // Formula is weights[0]*x + weights[1]*y + weights[2] = 0
+            List<float> weights = ptron.GetWeights();
+            lR.SetPosition(0, new Vector2(-maximumPos.x, (-weights[2] - weights[0] * -maximumPos.x) / weights[1]));
+            lR.SetPosition(1, new Vector2(maximumPos.x, (-weights[2] - weights[0] * maximumPos.x) / weights[1]));
 
         }
+    }
+
+    private void FindWindowLimits()
+    {
+        // We want to start by setting the camera's projection to Orthographic mode
+        Camera.main.orthographic = true;
+
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        // Next we grab the maximum position for the screen
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
 
@@ -107,18 +119,15 @@ public class Perceptron
 
     public Perceptron(int n)
     {
-
         for(int i= 0; i < n; i++)
         {
             //Weights start off random
             weights.Add(Random.Range(-1f, 1f));
         }
-
-
     }
 
     //Return an output based on inputs
-    public int feedforward(List<float> inputs)
+    public int Feedforward(List<float> inputs)
     {
         float sum = 0f;
 
@@ -127,21 +136,20 @@ public class Perceptron
             sum += inputs[i] * weights[i];
         }
 
-        return activate(sum);
+        return Activate(sum);
     }
 
     //Output is a +1 or -1
-    int activate(float sum)
+    int Activate(float sum)
     {
         if (sum > 0) return 1;
         else return -1;
     }
 
-
     //Train the network against known data
-    public void train(List<float> inputs, int desired)
+    public void Train(List<float> inputs, int desired)
     {
-        int guess = feedforward(inputs);
+        int guess = Feedforward(inputs);
         float error = desired - guess;
         for (int i = 0; i < weights.Count; i++)
         {
@@ -149,14 +157,10 @@ public class Perceptron
         }
     }
 
-
-
-   public List<float> getWeights()
-    {
+   public List<float> GetWeights()
+   {
         return weights;
-    }
-
-
+   }
 }
 
 public class Trainer
