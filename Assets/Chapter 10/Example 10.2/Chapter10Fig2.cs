@@ -40,6 +40,7 @@ public class Chapter10Fig2 : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             makeTargets();
+            v.brain.NewWeights();
         }
     }
 
@@ -122,7 +123,6 @@ public class Perceptron10_2
         return sum;
     }
 
-
     //Train the network against known data
     public void train(List<Vector3> forces, Vector3 error)
     {
@@ -133,11 +133,19 @@ public class Perceptron10_2
             weights[i] = Mathf.Clamp(weights[i], 0f, 1f);
         }
     }
+
+    public void NewWeights()
+    {
+        for (int i = 0; i < weights.Count; i++)
+        {
+            weights[i] = (Random.Range(0f, 1f));
+        }
+    }
 }
 
 public class vehicleChapter10_2
 {
-    Perceptron10_2 brain;
+    public Perceptron10_2 brain;
 
     public float r;
     public float maxforce;
