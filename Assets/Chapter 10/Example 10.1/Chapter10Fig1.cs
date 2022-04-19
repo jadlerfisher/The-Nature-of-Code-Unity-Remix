@@ -4,24 +4,25 @@ using UnityEngine;
 
 public class Chapter10Fig1 : MonoBehaviour
 {
-    //The Perceptron
-    [SerializeField]
-    Perceptron ptron;
+    // Count of trainer points defined in inspector, example set to 200
+    [SerializeField] int trainerCount;
 
-    //2,000 training points
+    // list of training points instantiated based on serialized count integer
     List<Trainer> trainingPoints = new List<Trainer>();
     int count = 0;
-    public int trainerCount;
 
-    //Lines
+    // The Perceptron
+    Perceptron ptron;
+
+    // Lines
     GameObject theLine;
     LineRenderer lR;
 
     // Variables to limit the mover within the screen space
     private Vector2 maximumPos;
 
-    //Forumla for the line
-    float f(float x)
+    // Forumla for the line
+    float F(float x)
     {
         return 2 * x + 1;
     }
@@ -29,10 +30,10 @@ public class Chapter10Fig1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Next we grab the maximum values of the screen
+        // Next we grab the maximum values of the screen with camera x, y positioned to (0,0)
         FindWindowLimits();
 
-        //Draw the initial Line Position
+        // Draw the initial Line Position
         theLine = new GameObject();
         lR = theLine.AddComponent<LineRenderer>();
         lR.material = new Material(Shader.Find("Diffuse"));
@@ -40,10 +41,10 @@ public class Chapter10Fig1 : MonoBehaviour
         lR.SetPosition(0, new Vector2(-maximumPos.x, -maximumPos.y));
         lR.SetPosition(1, new Vector2(maximumPos.x, maximumPos.y));
 
-        //Create the Perceptron based on 3 weights points of perception
+        // Create the Perceptron based on 3 weights points of perception
         ptron = new Perceptron(3);
 
-        //Make training points
+        // Make training points based on count set in inspector
         for (int i = 0; i < trainerCount; i++)
         {
             float x = Random.Range(-maximumPos.x, maximumPos.x);
@@ -51,7 +52,7 @@ public class Chapter10Fig1 : MonoBehaviour
 
             //Is the correct answer 1 or -1?
             int answer = 1;
-            if (y < f(x))
+            if (y < F(x))
             {
                 answer = -1;
             }
@@ -69,7 +70,7 @@ public class Chapter10Fig1 : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             int guess = ptron.Feedforward(trainingPoints[i].inputs);
-            //If the guess is greater than 0, paint the sphere black. Otherwise white.
+            // If the guess is greater than 0, paint the sphere black. Otherwise white.
             if (guess > 0)
             {
                 GameObject fill = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -77,7 +78,6 @@ public class Chapter10Fig1 : MonoBehaviour
                 Renderer r = fill.GetComponent<Renderer>();
                 r.material = new Material(Shader.Find("Diffuse"));
                 r.material.color = Color.black;
-
             }
             else
             {
@@ -93,7 +93,6 @@ public class Chapter10Fig1 : MonoBehaviour
             List<float> weights = ptron.GetWeights();
             lR.SetPosition(0, new Vector2(-maximumPos.x, (-weights[2] - weights[0] * -maximumPos.x) / weights[1]));
             lR.SetPosition(1, new Vector2(maximumPos.x, (-weights[2] - weights[0] * maximumPos.x) / weights[1]));
-
         }
     }
 
@@ -113,10 +112,11 @@ public class Chapter10Fig1 : MonoBehaviour
 
 public class Perceptron
 {
-    //The Perceptron stores its weightsand Learning Constants
+    // The Perceptron stores its weightsand Learning Constants
     List<float> weights = new List<float>();
     float c = 0.1f;
 
+    // Perceptron constructor to pass in desired count of weights
     public Perceptron(int n)
     {
         for(int i= 0; i < n; i++)
@@ -126,7 +126,7 @@ public class Perceptron
         }
     }
 
-    //Return an output based on inputs
+    // Return an output based on inputs
     public int Feedforward(List<float> inputs)
     {
         float sum = 0f;
@@ -139,14 +139,14 @@ public class Perceptron
         return Activate(sum);
     }
 
-    //Output is a +1 or -1
+    // Output is a +1 or -1
     int Activate(float sum)
     {
         if (sum > 0) return 1;
         else return -1;
     }
 
-    //Train the network against known data
+    // Train the network against known data
     public void Train(List<float> inputs, int desired)
     {
         int guess = Feedforward(inputs);
@@ -165,7 +165,7 @@ public class Perceptron
 
 public class Trainer
 {
-    //A "Trainer" object stores the inputs and the correct answer
+    // A "Trainer" object stores the inputs and the correct answer
     public List<float> inputs = new List<float>();
     public int answer;
 
@@ -173,7 +173,7 @@ public class Trainer
     {
         inputs.Add(x);
         inputs.Add(y);
-        //Note that the Trainer has the bias built into its array
+        // Note that the Trainer has the bias built into its array
         inputs.Add(1);
 
         answer = a;
