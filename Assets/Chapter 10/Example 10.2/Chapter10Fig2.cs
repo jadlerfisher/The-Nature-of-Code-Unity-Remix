@@ -174,7 +174,7 @@ public class vehicleChapter10_2
         velocity = Vector3.zero;
         position = spawnLocation;
         maxspeed = 1f;
-        maxforce = .01f;
+        maxforce = .03f;
         desired = Vector3.zero;
 
         // Create primitive and remove collider
