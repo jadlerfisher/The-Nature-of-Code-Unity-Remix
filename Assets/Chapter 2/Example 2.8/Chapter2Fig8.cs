@@ -102,8 +102,8 @@ public class Mover2_8
         // the mass will be proportional to the volume.
         body.mass = (4f / 3f) * Mathf.PI * radius * radius * radius;
 
-        //Make sure the regular gravity is on
-        body.useGravity = true;
+        //Make sure the regular gravity is off
+        body.useGravity = false;
 
         //Turn off the angular drag as well
         body.angularDrag = 0f;
