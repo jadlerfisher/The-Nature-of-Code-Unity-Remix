@@ -8,6 +8,7 @@ public class Chapter3Fig4 : MonoBehaviour
     float theta = 45;
 
     private GameObject sphere;
+    private MeshRenderer sphereRenderer;
 
     //Create variables for rendering the line between two vectors
     private GameObject lineDrawing;
@@ -25,6 +26,10 @@ public class Chapter3Fig4 : MonoBehaviour
 
         // Make the sphere as a primitive sphere type.
         sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+        //We need to create a new material for WebGL
+        sphereRenderer = sphere.GetComponent<MeshRenderer>();
+        sphereRenderer.material = new Material(Shader.Find("Diffuse"));
 
         //Add the Unity Component "LineRenderer" to the GameObject lineDrawing. We will see a black line.
         lineRender = lineDrawing.AddComponent<LineRenderer>();
