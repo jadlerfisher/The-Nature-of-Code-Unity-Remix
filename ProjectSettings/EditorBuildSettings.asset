@@ -92,7 +92,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Chapter 2/Example 2.3/Chapter 2 Figure 3.unity
     guid: 2f25ef0efd3654041a33a12d6f52d710
-  - enabled: 0
+  - enabled: 1
     path: Assets/Chapter 2/Example 2.4/Chapter 2 Figure 4.unity
     guid: 6c7c2a0fb6ec4f547b13ccf3ae08b455
   - enabled: 0

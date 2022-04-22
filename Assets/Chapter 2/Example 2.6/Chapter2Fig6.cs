@@ -99,7 +99,7 @@ public class Mover2_6
 
         mover.AddComponent<Rigidbody>();
         body = mover.GetComponent<Rigidbody>();
-        body.useGravity = true;
+        body.useGravity = false;
 
         Renderer renderer = mover.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Diffuse"));
