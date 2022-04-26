@@ -15,30 +15,30 @@ public class Chapter10Fig3 : MonoBehaviour
         // Create the Network Object
         network = new Network(maximumPos.x / 2, maximumPos.y / 2);
 
-        // Create a bunch of neurons
+        // Create a set of neurons
         Neuron a = new Neuron(-20, 0);
         Neuron b = new Neuron(0, 7);
         Neuron c = new Neuron(0, -7);
         Neuron d = new Neuron(20, 0);
 
-        // Connect them
-        network.connect(a, b);
-        network.connect(a, c);
-        network.connect(b, d);
-        network.connect(c, d);
+        // Connect the neurons
+        network.Connect(a, b);
+        network.Connect(a, c);
+        network.Connect(b, d);
+        network.Connect(c, d);
 
         // Add them to the network
-        network.addNeuron(a);
-        network.addNeuron(b);
-        network.addNeuron(c);
-        network.addNeuron(d);
+        network.AddNeuron(a);
+        network.AddNeuron(b);
+        network.AddNeuron(c);
+        network.AddNeuron(d);
 
-        drawNetwork();
+        DrawNetwork();
     }
 
-    void drawNetwork()
+    void DrawNetwork()
     {
-        network.display();
+        network.Display();
     }
 
     private void FindWindowLimits()
@@ -52,7 +52,6 @@ public class Chapter10Fig3 : MonoBehaviour
         // Next we grab the maximum position for the screen
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
-
 }
 
 public class Neuron
@@ -69,13 +68,13 @@ public class Neuron
     }
 
     // Add a connection
-    public void addConnection(Connection c)
+    public void AddConnection(Connection c)
     {
         connections.Add(c);
     }
 
     // Draw the Neuron as a circle
-    public void display()
+    public void Display()
     {
         GameObject neuronGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         Renderer r = neuronGO.GetComponent<Renderer>();
@@ -85,7 +84,7 @@ public class Neuron
         // Draw all of its connections
         foreach (Connection c in connections)
         {
-            c.display();
+            c.Display();
         }
     }
 }
@@ -110,7 +109,7 @@ public class Connection
     }
 
     // Draw as a Line
-    public void display()
+    public void Display()
     {
         theLine = new GameObject();
         lR = theLine.AddComponent<LineRenderer>();
@@ -118,6 +117,7 @@ public class Connection
         lR.material.color = Color.black;
         lR.SetPosition(0, new Vector2(a.position.x, a.position.y));
         lR.SetPosition(1, new Vector2(b.position.x, b.position.y));
+        lR.widthMultiplier = weight;
     }
 }
 
@@ -134,24 +134,23 @@ public class Network
     }
 
     // We can add a Neuron
-    public void addNeuron(Neuron n)
+    public void AddNeuron(Neuron n)
     {
         neurons.Add(n);
     }
 
     // We can connect the two Neurons
-    public void connect(Neuron a, Neuron b)
+    public void Connect(Neuron a, Neuron b)
     {
         Connection c = new Connection(a, b, Random.Range(0f, 1f));
-        a.addConnection(c);
+        a.AddConnection(c);
     }
 
-    public void display()
+    public void Display()
     {
         foreach(Neuron n in neurons)
         {
-            n.display();
+            n.Display();
         }
     }
-
 }
