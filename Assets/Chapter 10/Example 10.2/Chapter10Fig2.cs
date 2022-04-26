@@ -6,7 +6,7 @@ public class Chapter10Fig2 : MonoBehaviour
 {
     [SerializeField] Material targetMat;
 
-    vehicleChapter10_2 v;
+    VehicleChapter10_2 v;
 
     List<Vector3> targets = new List<Vector3>();
     List<GameObject> targetGO = new List<GameObject>();
@@ -29,7 +29,7 @@ public class Chapter10Fig2 : MonoBehaviour
 
         MakeTargets();
 
-        v = new vehicleChapter10_2(targets.Count, RandomWithinBounds());
+        v = new VehicleChapter10_2(targets.Count, RandomWithinBounds());
     }
 
     void Update()
@@ -96,7 +96,7 @@ public class Chapter10Fig2 : MonoBehaviour
 
 public class Perceptron10_2
 {
-    //The Perceptron stores its weightsand Learning Constants
+    //The Perceptron stores its weights and Learning Constants
     List<float> weights = new List<float>();
     float c;
 
@@ -143,7 +143,7 @@ public class Perceptron10_2
     }
 }
 
-public class vehicleChapter10_2
+public class VehicleChapter10_2
 {
     public Perceptron10_2 brain;
 
@@ -161,7 +161,7 @@ public class vehicleChapter10_2
 
     Vector2 maximumPos;
 
-    public vehicleChapter10_2(int n, Vector2 spawnLocation)
+    public VehicleChapter10_2(int n, Vector2 spawnLocation)
     {
         // Next we grab the minimum and maximum position for the screen
         FindWindowLimits();
@@ -194,7 +194,6 @@ public class vehicleChapter10_2
         vehicleTransform = vehicleGO.GetComponent<Transform>();
     }
 
-
     public void Drive()
     {
         velocity += acceleration;
@@ -211,7 +210,6 @@ public class vehicleChapter10_2
         
         vehicleTransform.position = position;
     }
-
 
     void ApplyForce(Vector3 force)
     {
