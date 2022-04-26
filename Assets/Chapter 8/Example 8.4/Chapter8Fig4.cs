@@ -9,13 +9,13 @@ public class Chapter8Fig4 : MonoBehaviour
     void Start()
     {
         FindWindowLimits();
-        cantor(-maximumPos.x + 3, maximumPos.y - 2, (maximumPos.x - -maximumPos.x) - 6);
+        Cantor(-maximumPos.x + 3, maximumPos.y - 2, (maximumPos.x - -maximumPos.x) - 6);
     }
 
-    void cantor(float x, float y, float len)
+    void Cantor(float x, float y, float len)
     {
         // Create the first line
-        line(x, y, x + len, y);
+        Line(x, y, x + len, y);
 
         // Stop at 0.01 meters length!
         if (len >= 0.01f) 
@@ -23,13 +23,13 @@ public class Chapter8Fig4 : MonoBehaviour
             y -= 2;
 
             // Call the function recursively 
-            cantor(x, y, len / 3);
+            Cantor(x, y, len / 3);
             // We need two lines for each line above it
-            cantor(x + len * 2 / 3, y, len / 3); 
+            Cantor(x + len * 2 / 3, y, len / 3); 
         }
     }
 
-    private GameObject line(float x1, float y1, float x2, float y2) 
+    private GameObject Line(float x1, float y1, float x2, float y2) 
     {
         // Creates an object to attach a Line Renderer to
         GameObject obj = new GameObject();
@@ -58,7 +58,7 @@ public class Chapter8Fig4 : MonoBehaviour
         Camera.main.orthographic = true;
 
         // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
-        Camera.main.transform.position = new Vector3(0, 0, -5);
+        Camera.main.transform.position = new Vector3(0, 0, -10);
 
         // Next we grab the maximum position for the screen
         maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
