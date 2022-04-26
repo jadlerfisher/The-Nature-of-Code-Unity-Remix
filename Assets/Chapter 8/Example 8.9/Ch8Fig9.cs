@@ -16,8 +16,6 @@ public class Ch8Fig9 : MonoBehaviour
     // Number of generations
     private int count = 0;
 
-
-
     // Start is called before the first frame update
     void Start()
     {
