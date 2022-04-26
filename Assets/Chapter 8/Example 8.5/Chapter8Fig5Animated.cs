@@ -4,38 +4,48 @@ using UnityEngine;
 
 public class Chapter8Fig5Animated : MonoBehaviour
 {
-    Vector2 minPos, maxPos;
+    Vector2 maximumPos;
     List<Vector2> points;
     List<Vector2> desiredPoints;
     GameObject KochLine;
+    WaitForSeconds pause;
 
     int calls = 0;
+
     // Start is called before the first frame update
     void Start()
     {
-        findWindowLimits();
+        FindWindowLimits();
 
+        // We need a desired set to move towards in the curve
         points = new List<Vector2>();
-        desiredPoints = new List<Vector2>(); // We need a desired set to move towards in the curve
+        desiredPoints = new List<Vector2>(); 
 
-        Vector2 a = new Vector2(minPos.x, minPos.y + 1f);
-        Vector2 b = new Vector2(maxPos.x, minPos.y + 1f);
+        Vector2 a = new Vector2(-maximumPos.x, -maximumPos.y + 1f);
+        Vector2 b = new Vector2(maximumPos.x, -maximumPos.y + 1f);
 
         desiredPoints.Add(a);
         desiredPoints.Add(b);
 
-        points.Add(Vector2.zero); // for a nicer starting effect, we'll start the line at 0,0
+        // for a nicer starting effect, we'll start the line at 0,0
+        points.Add(Vector2.zero); 
         points.Add(Vector2.zero);
 
-        StartCoroutine(itterate()); // We can then start a Coroutine to do the generations over time
+        // Define the WaitForSeconds()
+        pause = new WaitForSeconds(5f);
+
+        // We can then start a Coroutine to do the generations over time
+        StartCoroutine(Iterate()); 
     }
 
-    private IEnumerator itterate() 
+    private IEnumerator Iterate() 
     {
-        while (calls < 6) // We have to limit the number of times we call generate() otherwise the LineRenderer will reach max points
+        // We have to limit the number of times we call generate() otherwise the LineRenderer will reach max points
+        while (calls < 6) 
         {
-            yield return new WaitForSeconds(5f); // After 5 seconds, the function will continue
-            generate();
+            // After 5 seconds, the function will continue
+            yield return pause; 
+            Generate();
             calls++;
         }
     }
@@ -44,7 +54,8 @@ public class Chapter8Fig5Animated : MonoBehaviour
     {
         if (KochLine != null) 
         {
-            Destroy(KochLine); // If the KochLine exsists, we're goint to replace it
+            // If the KochLine exsists, we're goint to replace it
+            Destroy(KochLine); 
         }
 
         for (int i = 0; i < desiredPoints.Count; i++) 
@@ -53,19 +64,20 @@ public class Chapter8Fig5Animated : MonoBehaviour
             Vector2 at = points[i];
 
             // For each point, we move the current point towards the desitred point by 30% every second.
-
-            points[i] += ((desired - at) / 1.3f) * Time.deltaTime; // Time.deltaTime will help convert the 'Per Frame' speed of the Update Function to a 'Per Second' one
+            // Time.deltaTime will help convert the 'Per Frame' speed of the Update Function to a 'Per Second' one
+            points[i] += ((desired - at) / 1.3f) * Time.deltaTime; 
         }
 
-        KochLine = line(points); // We then regenerate the line
+        KochLine = Line(points); // We then regenerate the line
     }
 
-    void generate()
+    void Generate()
     {
         List<Vector2> newPoints = new List<Vector2>();
         List<Vector2> cutPoints = new List<Vector2>();
 
-        for (int i = 0; i < desiredPoints.Count - 1; i++) // We're going to use 2 points each time to make a line
+        // We're going to use 2 points each time to make a line
+        for (int i = 0; i < desiredPoints.Count - 1; i++) 
         {
             // First we make sure to add the points to the real line so they can be animated
             Vector2 v = points[i + 1] - points[i];
@@ -75,8 +87,6 @@ public class Chapter8Fig5Animated : MonoBehaviour
             cutPoints.Add(points[i] + (v / 2)); // The 3rd is 1/2 of the way in
             cutPoints.Add(points[i] + ((v / 4) * 3)); // The third is 3/4ths
             cutPoints.Add(points[i] + v); // and the last is the same as before
-
-            // Next we do the math for the desired points
 
             // We then change V into the distance between the intended first and last points
             v = desiredPoints[i + 1] - desiredPoints[i];
@@ -97,13 +107,15 @@ public class Chapter8Fig5Animated : MonoBehaviour
             newPoints.Add(e);
         }
 
-        desiredPoints = newPoints; // Then we update both sets of points
+        // Then we update both sets of points
+        desiredPoints = newPoints; 
         points = cutPoints;
     }
 
-    private GameObject line(List<Vector2> linePoints)
+    private GameObject Line(List<Vector2> linePoints)
     {
-        if (linePoints.Count < 2) // We need 2 points to make a line
+        // We need 2 points to make a line
+        if (linePoints.Count < 2) 
         {
             return null;
         }
@@ -114,8 +126,7 @@ public class Chapter8Fig5Animated : MonoBehaviour
 
         line.material = new Material(Shader.Find("Sprites/Default"));
         line.startColor = line.endColor = Color.black;
-
-        line.startWidth = line.endWidth = 0.1f;
+        line.widthMultiplier = 0.1f;
 
         line.positionCount = linePoints.Count;
 
@@ -141,11 +152,15 @@ public class Chapter8Fig5Animated : MonoBehaviour
         return new Vector2(cos * tx - sin * ty, sin * tx + cos * ty);
     }
 
-    private void findWindowLimits()
+    private void FindWindowLimits()
     {
+        // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
-        Camera.main.orthographicSize = 10;
-        minPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
-        maxPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -5);
+
+        // Next we grab the maximum position for the screen
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
