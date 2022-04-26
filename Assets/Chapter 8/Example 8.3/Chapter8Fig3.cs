@@ -20,14 +20,12 @@ public class Chapter8Fig3 : MonoBehaviour
         var circle = new GameObject();
         circle.DrawCircle(radius, strokesize, xPos, zPos);
 
-        //Very important to make sure
         if (radius > minimumRadius)
         {            
             RecursiveCircle(radius / 2, xPos + radius, zPos);
             RecursiveCircle(radius / 2, xPos - radius, zPos);
             RecursiveCircle(radius / 2, xPos, zPos + radius);
             RecursiveCircle(radius / 2, xPos, zPos - radius);
-
         }
     }
 }
