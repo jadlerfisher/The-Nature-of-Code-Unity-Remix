@@ -5,19 +5,19 @@ using UnityEngine;
 public class Example8_7 : MonoBehaviour
 {
     // Get the material for the branch(Neccasary for WebGL).
-    public Material branchMaterial;
+    [SerializeField] Material branchMaterial;
 
     // Parameters for generating the tree fractal.
-    public float width = 0.05f;
-    public float startLength = 4;
+    [SerializeField] float width = 0.05f;
+    [SerializeField] float startLength = 4;
     [Range(0, 0.9f)]
-    public float childScale = 0.75f;
-    public float minChildAngle = -55;
-    public float maxChildAngle = 55;
-    public int minBranches = 1;
-    public int maxBranches = 4;
+    [SerializeField] float childScale = 0.75f;
+    [SerializeField] float minChildAngle = -55;
+    [SerializeField] float maxChildAngle = 55;
+    [SerializeField] int minBranches = 1;
+    [SerializeField] int maxBranches = 4;
     [Range(0, 2)]
-    public float minimumLength = 0.45f;
+    [SerializeField] float minimumLength = 0.45f;
 
     void Start()
     {
@@ -57,9 +57,11 @@ public class Example8_7 : MonoBehaviour
                 // Create a new child transform for this branch.
                 Transform newBranch = new GameObject().transform;
                 newBranch.parent = parentRoot;
+
                 // Set the position and rotation relative to the previous branch.
                 newBranch.localPosition = Vector2.up * length;
                 newBranch.localEulerAngles = new Vector3(0, 0, Random.Range(minChildAngle, maxChildAngle));
+
                 // Call this function again.
                 Branch(newBranch, length * childScale);
             }
