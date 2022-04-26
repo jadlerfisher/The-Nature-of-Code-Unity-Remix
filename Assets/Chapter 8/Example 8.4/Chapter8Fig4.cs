@@ -43,7 +43,7 @@ public class Chapter8Fig4 : MonoBehaviour
         // Set the color
         line.startColor = line.endColor = Color.black;
         // Set the width
-        line.startWidth = line.endWidth = 1f;
+        line.widthMultiplier = 1f;
 
         // Set the begining and end points of the line
         line.SetPosition(0, new Vector3(x1, y1, 0)); 
