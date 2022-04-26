@@ -14,10 +14,10 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class Chapter8Fig10 : MonoBehaviour
 {
-    public Material branchMaterial;
+    [SerializeField] Material branchMaterial;
 
     private Chapter8Fig10LSystem lSys;
-    private Vector2 screenSize;
+    private Vector2 maximumPos;
     private float len;
     private float theta;
     private LineRenderer lineRenderer;
@@ -39,16 +39,16 @@ public class Chapter8Fig10 : MonoBehaviour
         state = new Chapter8Fig10LSystemState();
         counter = 0;
 
-        setupCamera();        
+        FindWindowLimits();        
 
         // Start drawing lines by modifying the GO's location to be bottom center
-        transform.position = new Vector3(0f, -screenSize.y);
+        transform.position = new Vector3(0f, -maximumPos.y);
         
         Chapter8Fig10Rule[] ruleset = new Chapter8Fig10Rule[1];
         ruleset[0] = new Chapter8Fig10Rule('F', "FF+[+F-F-F]-[-F+F+F]");
         lSys = new Chapter8Fig10LSystem("F", ruleset);
 
-        len = screenSize.y / 6;
+        len = maximumPos.y / 6;
 
         // Degress of rotation
         theta = 45;
@@ -61,10 +61,10 @@ public class Chapter8Fig10 : MonoBehaviour
         savedStates.Push(state.Clone());
         lSys.Generate();
         state = savedStates.Pop();
-        drawLines();
+        DrawLines();
     }
 
-    private void drawLines()
+    private void DrawLines()
     {
         // Assiging values to our new state's values while instantiating
         state = new Chapter8Fig10LSystemState()
@@ -81,7 +81,7 @@ public class Chapter8Fig10 : MonoBehaviour
             char c = sentence[i];
             if (c == 'F' || c == 'G')
             {
-                line();
+                Line();
             }
             else if (c == '+')
             {
@@ -102,20 +102,20 @@ public class Chapter8Fig10 : MonoBehaviour
         }
     }
 
-    private void line()
+    private void Line()
     {
         var lineGO = new GameObject();
         lineGO.transform.position = Vector3.zero;
         lineGO.transform.parent = transform;
 
         lines.Add(lineGO);
-        LineRenderer newLine = setupLine(lineGO);
+        LineRenderer newLine = SetupLine(lineGO);
         newLine.SetPosition(0, new Vector3(state.X + transform.position.x, state.Y + transform.position.y, transform.position.z));
-        checkAngles();
+        CheckAngles();
         newLine.SetPosition(1, new Vector3(state.X + transform.position.x, state.Y + transform.position.y, transform.position.z));
     }
 
-    private void checkAngles()
+    private void CheckAngles()
     {
         if (state.Angle != 0)
         {
@@ -128,7 +128,7 @@ public class Chapter8Fig10 : MonoBehaviour
         }
     }
 
-    private LineRenderer setupLine(GameObject lineGO)
+    private LineRenderer SetupLine(GameObject lineGO)
     {
         var newLine = lineGO.AddComponent<LineRenderer>();
         newLine.useWorldSpace = true;
@@ -150,18 +150,22 @@ public class Chapter8Fig10 : MonoBehaviour
             {
                 lSys.Generate();
                 len *= 0.5f;
-                drawLines();
+                DrawLines();
                 counter++;
             }
         }
     }
 
-    private void setupCamera()
+    private void FindWindowLimits()
     {
+        // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
-        Camera.main.orthographicSize = 30;
-        // Get the size of the screen in meters or Unity units
-        screenSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        // Next we grab the maximum position for the screen
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
 
@@ -175,7 +179,7 @@ public class Chapter8Fig10LSystemState
 
     public Chapter8Fig10LSystemState Clone()
     {
-        // Memeberwise clone performs a shallow copy of an object and returns it. The nonstatic fields get transferred over to the new object.
+        // Memberwise clone performs a shallow copy of an object and returns it. The nonstatic fields get transferred over to the new object.
         // This returns a base object which we can cast into a system state object
         // Documentation: https://docs.microsoft.com/en-us/dotnet/api/system.object.memberwiseclone?view=netcore-3.1
         return (Chapter8Fig10LSystemState)MemberwiseClone();
@@ -217,7 +221,6 @@ public class Chapter8Fig10LSystem
         Sentence = nextGen.ToString();
         Generation++;
     }
-
 }
 
 public class Chapter8Fig10Rule
