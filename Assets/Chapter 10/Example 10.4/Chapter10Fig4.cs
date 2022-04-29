@@ -7,16 +7,15 @@ public class Chapter10Fig4 : MonoBehaviour
     Network10_4 network;
     Vector2 maximumPos;
 
-
     // Start is called before the first frame update
     void Start()
     {
-        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        FindWindowLimits();
 
-        //Create the Network Object
+        // Create the Network Object
         network = new Network10_4(maximumPos.x / 2, maximumPos.y / 2);
 
-        //Create a bunch of neurons
+        // Create a set of neurons
         Neuron10_4 a = new Neuron10_4(-23, 0);
         Neuron10_4 b = new Neuron10_4(-15, 0);
         Neuron10_4 c = new Neuron10_4(0, 7);
@@ -24,52 +23,64 @@ public class Chapter10Fig4 : MonoBehaviour
         Neuron10_4 e = new Neuron10_4(15, 0);
         Neuron10_4 f = new Neuron10_4(23, 0);
 
-        //Connect them
-        network.connect(a, b , 1f);
-        network.connect(b, c, Random.Range(0f, 1f));
-        network.connect(b, d, Random.Range(0f, 1f));
-        network.connect(c, e, Random.Range(0f, 1f));
-        network.connect(d, e, Random.Range(0f, 1f));
-        network.connect(e, f, 1f);
+        // Connect them
+        network.Connect(a, b , 1f);
+        network.Connect(b, c, Random.Range(0f, 1f));
+        network.Connect(b, d, Random.Range(0f, 1f));
+        network.Connect(c, e, Random.Range(0f, 1f));
+        network.Connect(d, e, Random.Range(0f, 1f));
+        network.Connect(e, f, 1f);
 
 
-        //Add them to the network
-        network.addNeuron(a);
-        network.addNeuron(b);
-        network.addNeuron(c);
-        network.addNeuron(d);
-        network.addNeuron(e);
-        network.addNeuron(f);
+        // Add them to the network
+        network.AddNeuron(a);
+        network.AddNeuron(b);
+        network.AddNeuron(c);
+        network.AddNeuron(d);
+        network.AddNeuron(e);
+        network.AddNeuron(f);
 
-        //Create the network visualization
-        network.display();
+        // Create the network visualization
+        network.Display();
     }
 
     // Update is called once per frame
     void Update()
     {
-        network.updateCognition();
+        network.UpdateCognition();
 
         if (Time.frameCount % 500 == 0)
         {
-            network.feedforward(Random.Range(0f, 1f));
+            network.FeedForward(Random.Range(0f, 1f));
         }
+    }
+
+    private void FindWindowLimits()
+    {
+        // We want to start by setting the camera's projection to Orthographic mode
+        Camera.main.orthographic = true;
+
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        // Next we grab the maximum position for the screen
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
 
 public class Neuron10_4
 {
-    //Neuron has a position
+    // Neuron has a position
     public Vector2 position;
     GameObject neuronGO;
 
-    //Neuron has a list of connections
+    // Neuron has a list of connections
     List<Connection10_4> connections = new List<Connection10_4>();
 
     // We can now track the inputs and Sum them
     float sum = 0;
 
-    //Scale the neuron size
+    // Scale the neuron size
     float r = 32;
 
     public Neuron10_4(float x, float y)
@@ -81,56 +92,53 @@ public class Neuron10_4
         neuronGO.transform.position = position;
     }
 
-    //Add a connection
-    public void addConnection(Connection10_4 c)
+    // Add a connection
+    public void AddConnection(Connection10_4 c)
     {
         connections.Add(c);
     }
 
     // Receive an input
-
-    public void feedforward(float input)
+    public void FeedForward(float input)
     {
-        //Accumulate it
+        // Accumulate it
         sum += input;
-        //Activate it?
+        // Activate it?
         if (sum > 1)
         {
             neuronGO.transform.localScale = new Vector3(3f, 3f, 3f);
-            fire();
+            Fire();
             sum = 0;
         }
         else
         {
             neuronGO.transform.localScale = new Vector3(1f, 1f, 1f);
         }
-
     }
 
-    public void fire()
+    public void Fire()
     {
         foreach(Connection10_4 c in connections)
         {
-            c.feedforward(sum);
+            c.FeedForward(sum);
         }
     }
-
 }
 
 public class Connection10_4
 {
-    //Connection from Neuron A to B
+    // Connection from Neuron A to B
     Neuron10_4 a;
     Neuron10_4 b;
 
-    //Connection has a weight
+    // Connection has a weight
     float weight;
 
-    //Variables to track the cognition
+    // Variables to track the cognition
     bool sending = false;
     Vector2 sender;
 
-    //Need to store the output for when it is time to pass it along
+    // Need to store the output for when it is time to pass it along
     float output = 0;
 
     GameObject theLine;
@@ -143,7 +151,7 @@ public class Connection10_4
         a = from;
         b = to;
 
-        //Create the cognate Game Object that will signify thinking
+        // Create the cognate Game Object that will signify thinking
         cognateGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         Renderer r = cognateGO.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
@@ -151,18 +159,17 @@ public class Connection10_4
         cognateGO.transform.position = from.position;
     }
 
-    public void feedforward(float val)
+    public void FeedForward(float val)
     {
-        //Compute output
+        // Compute output
         output = val * weight;
-        //Start animation
+        // Start animation
         sender = a.position;
-        //Turn on send
+        // Turn on send
         sending = true;
     }
 
-
-    public void cognition()
+    public void Cognition()
     {
         if (sending)
         {
@@ -170,24 +177,27 @@ public class Connection10_4
             Renderer r = cognateGO.GetComponent<Renderer>();
             r.material = new Material(Shader.Find("Diffuse"));
             r.material.color = Color.red;
+
             // Move our position a step closer to the target.
-            float step = 2.0f * Time.deltaTime;
+            float step = 3.0f * Time.deltaTime;
             sender = Vector2.MoveTowards(sender, b.position, step);
 
-            //How far we we from neuron b?
+            // How far we we from neuron b?
             float d = Vector2.SqrMagnitude(sender - b.position);
-            //If we are flose enough, stop sending
-            if (d < 1)
+
+            // If we are flose enough, stop sending
+            if (d <= 0f)
             {
-                //Pass along the output!
-                b.feedforward(output);
+                // Pass along the output!
+                b.FeedForward(output);
                 sending = false;
+                cognateGO.transform.position = sender;
             }
         }
     }
 
-    //Draw as a Line
-    public void display()
+    // Draw as a Line
+    public void Display()
     {
         theLine = new GameObject();
         lR = theLine.AddComponent<LineRenderer>();
@@ -195,6 +205,7 @@ public class Connection10_4
         lR.material.color = Color.black;
         lR.SetPosition(0, new Vector2(a.position.x, a.position.y));
         lR.SetPosition(1, new Vector2(b.position.x, b.position.y));
+        lR.widthMultiplier = weight;
 
         if (sending)
         {
@@ -205,9 +216,9 @@ public class Connection10_4
 
 public class Network10_4
 {
-    //The Network has a list of neurons
+    // The Network has a list of neurons
     List<Neuron10_4> neurons;
-    //The list of connections
+    // The list of connections
     List<Connection10_4> connections;
 
     Vector2 position;
@@ -219,41 +230,40 @@ public class Network10_4
         connections = new List<Connection10_4>();
     }
 
-    //We can add a Neuron
-    public void addNeuron(Neuron10_4 n)
+    // We can add a Neuron
+    public void AddNeuron(Neuron10_4 n)
     {
         neurons.Add(n);
     }
 
-    //We can connect the two Neurons
-    public void connect(Neuron10_4 a, Neuron10_4 b, float w)
+    // We can connect the two Neurons
+    public void Connect(Neuron10_4 a, Neuron10_4 b, float w)
     {
         Connection10_4 c = new Connection10_4(a, b, w);
-        a.addConnection(c);
+        a.AddConnection(c);
         //Also add the connection
         connections.Add(c);
     }
 
-    public void feedforward(float input)
+    public void FeedForward(float input)
     {
         Neuron10_4 start = neurons[0];
-        start.feedforward(input);
+        start.FeedForward(input);
     }
 
-    public void updateCognition()
+    public void UpdateCognition()
     {
         foreach(Connection10_4 c in connections)
         {
-            c.cognition();
+            c.Cognition();
         }
     }
 
-    public void display()
+    public void Display()
     {
         foreach(Connection10_4 c in connections)
         {
-            c.display();
+            c.Display();
         }
     }
-
 }

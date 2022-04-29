@@ -4,26 +4,35 @@ using UnityEngine;
 
 public class Chapter10Fig2 : MonoBehaviour
 {
+    [SerializeField] Material targetMat;
 
     vehicleChapter10_2 v;
-
-    Vector3 desired;
 
     List<Vector3> targets = new List<Vector3>();
     List<GameObject> targetGO = new List<GameObject>();
 
+    Vector3 maximumPos;
+
+    GameObject centerCube;
+
     // Start is called before the first frame update
     void Start()
     {
-        //desired = Vector3.zero;
+        // make color and alpha assignment into an extension method
+        centerCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        centerCube.transform.localScale = Vector3.one * 2;
+        centerCube.transform.position = Vector3.zero;
+        Renderer r = centerCube.GetComponent<Renderer>();
+        r.material = targetMat;
+
+        FindWindowLimits();
 
         makeTargets();
 
-        v = new vehicleChapter10_2(targets.Count, new Vector3(Random.Range(-Screen.width / 100, Screen.width / 100), Random.Range(-Screen.height / 100, Screen.height / 100), 0f));
+        v = new vehicleChapter10_2(targets.Count, RandomWithinBounds());
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         v.steer(targets);
         v.drive();
@@ -32,9 +41,7 @@ public class Chapter10Fig2 : MonoBehaviour
         {
             makeTargets();
         }
-
     }
-
 
 
     void makeTargets()
@@ -43,13 +50,13 @@ public class Chapter10Fig2 : MonoBehaviour
         {
             for (int i = 0; i < 8; i++)
             {
-                targets.Add(new Vector3(Random.Range(-Screen.width / 100, Screen.width / 100), Random.Range(-Screen.height / 100, Screen.height / 100), 0f));
+                targets.Add(RandomWithinBounds());
                 GameObject tGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 Renderer r = tGO.GetComponent<Renderer>();
-                r.material = new Material(Shader.Find("Diffuse"));
+                r.material = targetMat;
+                tGO.transform.localScale = Vector3.one * 2;
                 tGO.transform.position = targets[i];
                 targetGO.Add(tGO);
-
             }
 
         } else
@@ -58,7 +65,7 @@ public class Chapter10Fig2 : MonoBehaviour
 
             foreach(GameObject go in targetGO)
             {
-                GameObject.Destroy(go);
+                Destroy(go);
             }
 
             targetGO.Clear();
@@ -66,9 +73,25 @@ public class Chapter10Fig2 : MonoBehaviour
         }
     }
 
+    // Make FindWindowLimits and extension method
+    private void FindWindowLimits()
+    {
+        // We want to start by setting the camera's projection to Orthographic mode
+        Camera.main.orthographic = true;
+
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        // Next we grab the maximum position for the screen
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+    }
+
+    private Vector3 RandomWithinBounds()
+    {
+        return new Vector3(Random.Range(-maximumPos.x, maximumPos.x), Random.Range(-maximumPos.y, maximumPos.y), 0f);
+    }
+
 }
-
-
 
 public class Perceptron10_2
 {
@@ -134,35 +157,45 @@ public class vehicleChapter10_2
     {
 
         // Next we grab the minimum and maximum position for the screen
-        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        FindWindowLimits();
 
         brain = new Perceptron10_2(n, .1f);
         acceleration = Vector3.zero;
         velocity = Vector3.zero;
         position = spawnLocation;
-        maxspeed = 2f;
-        maxforce = 1f;
+        maxspeed = 4f;
+        maxforce = .001f;
+        desired = Vector3.zero;
 
         vehicleGO = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+
+        Collider col = vehicleGO.GetComponent<Collider>();
+        Object.Destroy(col);
+
         Renderer r = vehicleGO.GetComponent<Renderer>();
-        r.material = new Material(Shader.Find("Diffuse"));
-        r.material.color = Color.red;
+        Material mat = new Material(Shader.Find("Diffuse"));
+        mat.color = Color.red;
+        r.material = mat;
+
         vehicleGO.transform.position = position;
         vehicleGO.transform.localScale = new Vector3(.5f, .5f, .5f);
         vehicleBody = vehicleGO.AddComponent<Rigidbody>();
-        vehicleBody.mass = 100f;
+        vehicleBody.mass = 1f;
         vehicleBody.useGravity = false;
-
     }
 
 
     public void drive()
     {
+        velocity += acceleration;
+        velocity.x = Mathf.Clamp(velocity.x, -maxspeed, maxspeed);
+        velocity.y = Mathf.Clamp(velocity.y, -maxspeed, maxspeed);
 
         position.x = Mathf.Clamp(vehicleBody.position.x, -maximumPos.x, maximumPos.x);
         position.y = Mathf.Clamp(vehicleBody.position.y, -maximumPos.y, maximumPos.y);
-        position.z = Mathf.Clamp(vehicleBody.position.z, 0f, 0f);
-
+        position.z = 0f;
+        position += velocity * Time.deltaTime;
+        acceleration = Vector3.zero;
         vehicleBody.angularVelocity = Vector3.zero;
         //vehicleBody.velocity = velocity;
         vehicleBody.position = position;
@@ -171,19 +204,18 @@ public class vehicleChapter10_2
 
     void applyForce(Vector3 force)
     {
-        vehicleBody.AddForce(force);
+        acceleration += force;
     }
 
     Vector3 seek(Vector3 target)
     {
-        desired = target - vehicleBody.position;
+        Vector3 desired = target - vehicleBody.position;
         desired.Normalize();
         desired *= maxspeed;
-        Vector3 steer = desired - vehicleBody.velocity;
+        Vector3 steer = desired - velocity;
         steer.x = Mathf.Clamp(steer.x, -maxforce, maxforce);
         steer.y = Mathf.Clamp(steer.y, -maxforce, maxforce);
         steer.z = Mathf.Clamp(steer.z, -maxforce, maxforce);
-
         return steer;
     }
 
@@ -197,7 +229,6 @@ public class vehicleChapter10_2
         for (int i = 0; i < forces.Count; i++)
         {
             forces[i] = seek(targets[i]);
-
         }
 
         // That array of forces is the input to the brain
@@ -208,11 +239,18 @@ public class vehicleChapter10_2
         Vector3 error = desired - position;
         brain.train(forces, error);
 
-        forces.Clear();
+        //forces.Clear();
     }
 
+    private void FindWindowLimits()
+    {
+        // We want to start by setting the camera's projection to Orthographic mode
+        Camera.main.orthographic = true;
 
+        // For FindWindowLimits() to function correctly, the camera must be set to coordinates 0, 0, -10
+        Camera.main.transform.position = new Vector3(0, 0, -10);
 
-
-
+        // Next we grab the maximum position for the screen
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+    }
 }

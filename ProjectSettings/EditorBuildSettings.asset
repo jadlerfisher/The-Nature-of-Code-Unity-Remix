@@ -218,7 +218,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Chapter 10/Example 10.1/Chapter 10 Figure 1.unity
     guid: cc2a0ef1e60dd41018938cfe985e496a
-  - enabled: 0
+  - enabled: 1
     path: Assets/Chapter 10/Example 10.2/Chapter 10 Figure 2.unity
     guid: 4d7905fac63864a76a4493bd0c94ffef
   - enabled: 0

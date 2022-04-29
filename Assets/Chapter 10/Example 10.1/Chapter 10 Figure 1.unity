@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5022925ebea7f4ae99028da5d43e215f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainers: 200
+  trainerCount: 200
 --- !u!1 &623258443
 GameObject:
   m_ObjectHideFlags: 0
