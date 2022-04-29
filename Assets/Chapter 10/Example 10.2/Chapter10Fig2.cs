@@ -6,7 +6,7 @@ public class Chapter10Fig2 : MonoBehaviour
 {
     [SerializeField] Material targetMat;
 
-    vehicleChapter10_2 v;
+    VehicleChapter10_2 v;
 
     List<Vector3> targets = new List<Vector3>();
     List<GameObject> targetGO = new List<GameObject>();
@@ -27,24 +27,25 @@ public class Chapter10Fig2 : MonoBehaviour
 
         FindWindowLimits();
 
-        makeTargets();
+        MakeTargets();
 
-        v = new vehicleChapter10_2(targets.Count, RandomWithinBounds());
+        v = new VehicleChapter10_2(targets.Count, RandomWithinBounds());
     }
 
     void Update()
     {
-        v.steer(targets);
-        v.drive();
+        v.Steer(targets);
+        v.Drive();
 
         if (Input.GetMouseButtonDown(0))
         {
-            makeTargets();
+            MakeTargets();
+            v.brain.NewWeights();
         }
     }
 
 
-    void makeTargets()
+    void MakeTargets()
     {
         if (targets.Count <= 0)
         {
@@ -69,7 +70,7 @@ public class Chapter10Fig2 : MonoBehaviour
             }
 
             targetGO.Clear();
-            makeTargets();
+            MakeTargets();
         }
     }
 
@@ -95,7 +96,7 @@ public class Chapter10Fig2 : MonoBehaviour
 
 public class Perceptron10_2
 {
-    //The Perceptron stores its weightsand Learning Constants
+    //The Perceptron stores its weights and Learning Constants
     List<float> weights = new List<float>();
     float c;
 
@@ -110,7 +111,7 @@ public class Perceptron10_2
     }
 
     //Return an output based on inputs
-    public Vector3 feedforward(List<Vector3> forces)
+    public Vector3 Feedforward(Vector3[] forces)
     {
         Vector3 sum = Vector3.zero;
 
@@ -122,22 +123,29 @@ public class Perceptron10_2
         return sum;
     }
 
-
     //Train the network against known data
-    public void train(List<Vector3> forces, Vector3 error)
+    public void Train(Vector3[] forces, Vector3 error)
     {
         for (int i = 0; i < weights.Count; i++)
         {
             weights[i] += c * error.x * forces[i].x;
             weights[i] += c * error.y * forces[i].y;
-            weights[i] = Mathf.Clamp(weights[i], 0f, 1f);
+            weights[i] = Mathf.Clamp(weights[i], -1f, 1f);
+        }
+    }
+
+    public void NewWeights()
+    {
+        for (int i = 0; i < weights.Count; i++)
+        {
+            weights[i] = (Random.Range(0f, 1f));
         }
     }
 }
 
-public class vehicleChapter10_2
+public class VehicleChapter10_2
 {
-    Perceptron10_2 brain;
+    public Perceptron10_2 brain;
 
     public float r;
     public float maxforce;
@@ -149,97 +157,93 @@ public class vehicleChapter10_2
     Vector3 desired;
 
     GameObject vehicleGO;
-    Rigidbody vehicleBody;
+    Transform vehicleTransform;
 
     Vector2 maximumPos;
 
-    public vehicleChapter10_2(int n, Vector2 spawnLocation)
+    public VehicleChapter10_2(int n, Vector2 spawnLocation)
     {
-
         // Next we grab the minimum and maximum position for the screen
         FindWindowLimits();
 
-        brain = new Perceptron10_2(n, .1f);
+        // Instantiate a new Perceptron as the vehicle brain, (targetcount, learningConstant)
+        brain = new Perceptron10_2(n, .01f);
+
+        // Assign starting values
         acceleration = Vector3.zero;
         velocity = Vector3.zero;
         position = spawnLocation;
-        maxspeed = 4f;
-        maxforce = .001f;
+        maxspeed = 1f;
+        maxforce = .05f;
         desired = Vector3.zero;
 
+        // Create primitive and remove collider
         vehicleGO = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-
+        vehicleGO.transform.position = position;
+        vehicleGO.transform.localScale = new Vector3(.5f, .5f, .5f);
         Collider col = vehicleGO.GetComponent<Collider>();
         Object.Destroy(col);
 
+        // Set material color
         Renderer r = vehicleGO.GetComponent<Renderer>();
         Material mat = new Material(Shader.Find("Diffuse"));
         mat.color = Color.red;
         r.material = mat;
 
-        vehicleGO.transform.position = position;
-        vehicleGO.transform.localScale = new Vector3(.5f, .5f, .5f);
-        vehicleBody = vehicleGO.AddComponent<Rigidbody>();
-        vehicleBody.mass = 1f;
-        vehicleBody.useGravity = false;
+        // Get RigidBody of the GameObject
+        vehicleTransform = vehicleGO.GetComponent<Transform>();
     }
 
-
-    public void drive()
+    public void Drive()
     {
         velocity += acceleration;
-        velocity.x = Mathf.Clamp(velocity.x, -maxspeed, maxspeed);
-        velocity.y = Mathf.Clamp(velocity.y, -maxspeed, maxspeed);
+        Vector3.ClampMagnitude(velocity, maxspeed);
 
-        position.x = Mathf.Clamp(vehicleBody.position.x, -maximumPos.x, maximumPos.x);
-        position.y = Mathf.Clamp(vehicleBody.position.y, -maximumPos.y, maximumPos.y);
+        position.x = Mathf.Clamp(vehicleTransform.position.x, -maximumPos.x, maximumPos.x);
+        position.y = Mathf.Clamp(vehicleTransform.position.y, -maximumPos.y, maximumPos.y);
         position.z = 0f;
+
         position += velocity * Time.deltaTime;
         acceleration = Vector3.zero;
-        vehicleBody.angularVelocity = Vector3.zero;
-        //vehicleBody.velocity = velocity;
-        vehicleBody.position = position;
+
+        vehicleTransform.rotation = Quaternion.identity;
+        
+        vehicleTransform.position = position;
     }
 
-
-    void applyForce(Vector3 force)
+    void ApplyForce(Vector3 force)
     {
         acceleration += force;
     }
 
-    Vector3 seek(Vector3 target)
+    Vector3 Seek(Vector3 target)
     {
-        Vector3 desired = target - vehicleBody.position;
+        Vector3 desired = target - vehicleTransform.position;
         desired.Normalize();
         desired *= maxspeed;
         Vector3 steer = desired - velocity;
-        steer.x = Mathf.Clamp(steer.x, -maxforce, maxforce);
-        steer.y = Mathf.Clamp(steer.y, -maxforce, maxforce);
-        steer.z = Mathf.Clamp(steer.z, -maxforce, maxforce);
+        steer = Vector3.ClampMagnitude(steer, maxforce);
         return steer;
     }
 
-    public void steer(List<Vector3> targets)
+    public void Steer(List<Vector3> targets)
     {
         // Make an array of forces
-        List<Vector3> forces = new List<Vector3>();
-        forces.AddRange(targets);
+        Vector3[] forces = new Vector3[targets.Count];
 
         // Steer towards all targets
-        for (int i = 0; i < forces.Count; i++)
+        for (int i = 0; i < forces.Length; i++)
         {
-            forces[i] = seek(targets[i]);
+            forces[i] = Seek(targets[i]);
         }
 
         // That array of forces is the input to the brain
-        Vector3 result = brain.feedforward(forces);
-        applyForce(result);
+        Vector3 result = brain.Feedforward(forces);
+        ApplyForce(result);
 
         // Train the brain according to the error
         Vector3 error = desired - position;
-        brain.train(forces, error);
-
-        //forces.Clear();
+        brain.Train(forces, error);
     }
 
     private void FindWindowLimits()
