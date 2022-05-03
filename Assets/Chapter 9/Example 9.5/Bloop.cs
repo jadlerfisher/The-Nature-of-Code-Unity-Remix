@@ -54,6 +54,12 @@ public class Bloop : MonoBehaviour
             Destroy(gameObject);
         }
 
+        BloopColor();
+        CheckEdges();
+    }
+
+    void BloopColor()
+    {
         // This blob of code makes the spheres fade from red, to blue, to green, to white as it gains more health
         float healthRed;
         if (health < 500)
@@ -70,7 +76,7 @@ public class Bloop : MonoBehaviour
         float healthBlue;
         if (health < 1000)
             healthBlue = ExtensionMethods.Map(health, 500, 1000, 0, 255);
-        else if(health < 2000)
+        else if (health < 2000)
             healthBlue = ExtensionMethods.Map(health, 1000, 1500, 255, 0);
         else
             healthBlue = ExtensionMethods.Map(health, 2000, 2500, 0, 255);
@@ -85,8 +91,6 @@ public class Bloop : MonoBehaviour
         else if (healthGreen < 0)
             healthGreen = 0;
         color.SetColor("_Color", new Color(healthRed, healthGreen, healthBlue));
-
-        CheckEdges();
     }
 
     void CheckEdges()
@@ -147,7 +151,6 @@ public class Bloop : MonoBehaviour
             return null;
         }
     }
-
     public bool Dead()
     { // We can use this to tell us if the bloop is dead or alive
         if (health < 0)
@@ -171,7 +174,7 @@ public class Bloop : MonoBehaviour
         Camera.main.orthographic = true;
 
         // Set the desired camera size
-        Camera.main.orthographicSize = 10;
+        Camera.main.orthographicSize = 5;
 
         // Set position of the camera to ensure 0,0 x,y
         Camera.main.transform.position = new Vector3(0, 0, -10);

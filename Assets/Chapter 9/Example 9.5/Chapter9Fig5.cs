@@ -54,7 +54,7 @@ public class Chapter9Fig5 : MonoBehaviour
         Camera.main.orthographic = true;
 
         // Set the desired camera size
-        Camera.main.orthographicSize = 10;
+        Camera.main.orthographicSize = 5;
 
         // Set position of the camera to ensure 0,0 x,y
         Camera.main.transform.position = new Vector3(0, 0, -10);
