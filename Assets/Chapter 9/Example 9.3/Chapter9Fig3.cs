@@ -19,18 +19,19 @@ public class Chapter9Fig3 : MonoBehaviour
 {
     [Header("Percentage chance of random thruster in children")]
     [Range(0f, 1f)]
-    public float mutationRate;
+    [SerializeField] float mutationRate;
 
     [Header("How many Rockets per generation")]
-    public int populationSize;
+    [SerializeField] int populationSize;
 
     [Header("How long each generation lives, in update cycles")]
-    public float lifetime;
+    [SerializeField] float lifetime;
 
     [Header("Text Object used to display simulation information")]
     public UnityEngine.UI.Text infoText;
 
-    public GameObject rocketPrefab;
+    [Header("Rocket prefab to instantiate")]
+    [SerializeField] GameObject rocketPrefab;
 
     private Chapter9Fig3Population population; // Population
     private int lifeCycle; // Time for cycle of generation
@@ -38,23 +39,23 @@ public class Chapter9Fig3 : MonoBehaviour
     private Chapter9Fig3Obstacle target; // Target 
     private List<Chapter9Fig3Obstacle> obstacles; // A list to keep track of all the obstacles!
 
-    private Vector2 screenSize; // Size of the screen in meters or UnityUnits
+    private Vector2 maximumPos; // Size of the screen in meters or UnityUnits
 
     // Start is called before the first frame update
     void Start()
     {
         // Sets main cam to orthographic, sets size to 10
-        setupCamera();
+        FindWindowLimits();
 
         // Initialize variables
         lifeCycle = 0;
         recordTime = lifetime;
 
         // Top middle of the screen
-        target = new Chapter9Fig3Obstacle(0, screenSize.y - 2f, 4f, 2f);        
+        target = new Chapter9Fig3Obstacle(0, maximumPos.y - 2f, 4f, 2f);        
 
         // Create a population with a mutation rate, and population max
-        population = new Chapter9Fig3Population(rocketPrefab, screenSize, mutationRate, populationSize, lifetime, target);
+        population = new Chapter9Fig3Population(rocketPrefab, maximumPos, mutationRate, populationSize, lifetime, target);
 
         // Create the obstacle course
         obstacles = new List<Chapter9Fig3Obstacle>();
@@ -89,13 +90,17 @@ public class Chapter9Fig3 : MonoBehaviour
         infoText.text = $"Generation #: {population.Generations}\n" +
             $"Cycles left: {lifetime - lifeCycle}\n" +
             $"Record cycles: {recordTime}";
-    }   
-
-    private void setupCamera()
+    }
+    private void FindWindowLimits()
     {
+        // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
+
+        // Set the desired camera size
         Camera.main.orthographicSize = 10;
-        screenSize = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
+
+        // Next we grab the maximum position for the screen
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
 
@@ -116,10 +121,10 @@ public class Chapter9Fig3Obstacle
         Position = new Vector2(x, y);
         w = _w;
         h = _h;
-        spawnObstacle();
+        SpawnObstacle();
     }
 
-    private void spawnObstacle()
+    private void SpawnObstacle()
     {
         // Obstacle representation
         GameObject g = GameObject.CreatePrimitive(PrimitiveType.Quad);
@@ -169,13 +174,13 @@ public class Chapter9Fig3Population
     {
         rocketObject = rocketObj;
         mutationRate = mutation;
+        screenSize = screen;
+        target = obTarget;
         population = new Chapter9Fig3Rocket[numberOfRockets];
         matingPool = new List<Chapter9Fig3Rocket>();
         Generations = 0;
-        screenSize = screen;
-        target = obTarget;
 
-        // Making a new set of creatures
+        // Making a new set of rockets
         for (int i = 0; i < population.Length; i++)
         {
             Vector2 position = new Vector2(0, -screenSize.y);
@@ -185,7 +190,7 @@ public class Chapter9Fig3Population
 
     public void Live(List<Chapter9Fig3Obstacle> os)
     {
-        // For every creature
+        // For every rocket
         for (int i = 0; i < population.Length; i++)
         {
             // If it finishes, mark it as done!
@@ -222,7 +227,7 @@ public class Chapter9Fig3Population
         matingPool.Clear();        
 
         // Calculate total fitness of whole population
-        float maxfitness = getMaxFitness();
+        float maxfitness = GetMaxFitness();
 
         // Calculate fitness for each member of the population (scaled to value between 0 and 1)
         // Based on fitness, each member will get added to the mating pool a certain number of times
@@ -275,7 +280,7 @@ public class Chapter9Fig3Population
     }
 
     // Find highest fitness for the population
-    private float getMaxFitness()
+    private float GetMaxFitness()
     {
         float record = 0f;
         for (int i = 0; i < population.Length; i++)
@@ -338,7 +343,7 @@ public class Chapter9Fig3Rocket
         finishTime = 0;             // We're going to count how long it takes to reach target
         recordDist = 10000;         // Some high number that will be beat instantly
         HitObstacle = false;
-        g = GameObject.Instantiate(rocketObj, position, Quaternion.identity);        
+        g = Object.Instantiate(rocketObj, position, Quaternion.identity);        
     }
 
     // Fitness function
@@ -371,18 +376,18 @@ public class Chapter9Fig3Rocket
     {
         if (!HitObstacle && !HitTarget)
         {
-            applyForce(DNA.Genes[geneCounter]);
+            ApplyForce(DNA.Genes[geneCounter]);
             geneCounter = (geneCounter + 1) % DNA.Genes.Length;
-            update();
+            UpdateMovement();
 
             // If I hit an edge or an obstacle
-            obstacles(os);
+            Obstacles(os);
         }
 
         // Draw me!
         if (!HitObstacle)
         {
-            display();
+            Display();
         }
         else
         {
@@ -411,7 +416,7 @@ public class Chapter9Fig3Rocket
     }
 
     // Did I hit an obstacle?
-    private void obstacles(List<Chapter9Fig3Obstacle> os)
+    private void Obstacles(List<Chapter9Fig3Obstacle> os)
     {
         // Goes through each object in our os list. During each one, we can use obs to manipulate the one we're on.
         foreach (Chapter9Fig3Obstacle obs in os)
@@ -423,19 +428,19 @@ public class Chapter9Fig3Rocket
         }
     }
 
-    private void applyForce(Vector2 f)
+    private void ApplyForce(Vector2 f)
     {
         acceleration += f;
     }
 
-    private void update()
+    private void UpdateMovement()
     {
         velocity += acceleration;
         position += velocity;
         acceleration *= 0;
     }
 
-    private void display()
+    private void Display()
     {
         // Gives us our angle of rotation based on our current velocity
         float theta = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
