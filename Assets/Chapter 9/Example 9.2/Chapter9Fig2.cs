@@ -19,38 +19,39 @@ public class Chapter9Fig2 : MonoBehaviour
 {
     [Header("Percentage chance of random thruster in children")]
     [Range(0f, 1f)]
-    public float mutationRate;
+    [SerializeField] float mutationRate;
 
     [Header("How many Rockets per generation")]
-    public int populationSize;
+    [SerializeField] int populationSize;
 
     [Header("How long each generation lives, in update cycles")]
-    public float lifetime;
+    [SerializeField] float lifetime;
 
     [Header("Text Object used to display simulation information")]
-    public UnityEngine.UI.Text infoText;
+    [SerializeField] UnityEngine.UI.Text infoText;
 
-    public GameObject rocketPrefab;
+    [Header("Rocket prefab to instantiate")]
+    [SerializeField] GameObject rocketPrefab;
 
     private Chapter9Fig2Population population; // Population
     private int lifeCounter; // Timer for cycle of generation
     private Vector2 targetPosition; // Target position
-    private Vector2 screenSize; // Size of the screen in meters or UnityUnits
+    private Vector2 maximumPos; // Size of the screen in meters or UnityUnits
 
     // Start is called before the first frame update
     void Start()
     {
         // Sets main cam to orthographic, sets size to 10
-        setupCamera();
+        FindWindowLimits();
 
         // Initialize variables
         lifeCounter = 0;
 
         // Top middle of the screen
-        targetPosition = new Vector2(0, screenSize.y - 2f);
+        targetPosition = new Vector2(0, maximumPos.y - 2f);
 
         // Create a population with a mutation rate, and population max
-        population = new Chapter9Fig2Population(rocketPrefab, screenSize, mutationRate, populationSize, lifetime, targetPosition);
+        population = new Chapter9Fig2Population(rocketPrefab, maximumPos, mutationRate, populationSize, lifetime, targetPosition);
         
         drawTargetPosition();
     }    
@@ -87,11 +88,16 @@ public class Chapter9Fig2 : MonoBehaviour
         r.material = new Material(Shader.Find("Diffuse"));
         target.transform.position = targetPosition;
     }
-    private void setupCamera()
+    private void FindWindowLimits()
     {
+        // We want to start by setting the camera's projection to Orthographic mode
         Camera.main.orthographic = true;
+
+        // Set the desired camera size
         Camera.main.orthographicSize = 10;
-        screenSize = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
+
+        // Next we grab the maximum position for the screen
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
 
@@ -115,11 +121,12 @@ public class Chapter9Fig2Population
     {
         rocketObject = rocketObj;
         mutationRate = mutation;
+        screenSize = screen;
+        targetPosition = targetPos;
         population = new Chapter9Fig2Rocket[numberOfRockets];
         matingPool = new List<Chapter9Fig2Rocket>();
         Generations = 0;
-        screenSize = screen;
-        targetPosition = targetPos;
+        
 
         // Making a new set of creatures
         for (int i = 0; i < population.Length; i++)
@@ -154,7 +161,7 @@ public class Chapter9Fig2Population
         matingPool.Clear();        
 
         // Calculate total fitness of whole population
-        float maxfitness = getMaxFitness();
+        float maxfitness = GetMaxFitness();
 
         // Calculate fitness for each member of the population (scaled to value between 0 and 1)
         // Based on fitness, each member will get added to the mating pool a certain number of times
@@ -207,7 +214,7 @@ public class Chapter9Fig2Population
     }
 
     // Find highest fitness for the population
-    private float getMaxFitness()
+    private float GetMaxFitness()
     {
         float record = 0f;
         for (int i = 0; i < population.Length; i++)
@@ -258,7 +265,7 @@ public class Chapter9Fig2Rocket
         velocity = Vector2.zero;
         position = l;
         DNA = _dna;
-        g = GameObject.Instantiate(rocketObj, position, Quaternion.identity);
+        g = Object.Instantiate(rocketObj, position, Quaternion.identity);
     }    
 
     // Fitness function
@@ -271,23 +278,22 @@ public class Chapter9Fig2Rocket
 
     // Run in relation to all the obstacles
     // If I'm stuck, don't bother updating or checking for intersection
-
     public void Run()
     {
-        checkTarget(); // Check to see if we've reached the target
+        CheckTarget(); // Check to see if we've reached the target
         if (!hitTarget)
         {
-            applyForce(DNA.Genes[geneCounter]);
+            ApplyForce(DNA.Genes[geneCounter]);
             geneCounter = (geneCounter + 1) % DNA.Genes.Length;
-            update();
+            UpdateMovement();
         }
 
-        display();
+        Display();
     }
 
 
     // Did I make it to the target?
-    private void checkTarget()
+    private void CheckTarget()
     {
         float d = Vector2.Distance(position, targetPosition);
         if (d < 1)
@@ -296,19 +302,19 @@ public class Chapter9Fig2Rocket
         }
     }
 
-    private void applyForce(Vector2 f)
+    private void ApplyForce(Vector2 f)
     {
         acceleration += f;
     }
 
-    private void update()
+    private void UpdateMovement()
     {
         velocity += acceleration;
         position += velocity;
         acceleration *= 0;
     }
 
-    private void display()
+    private void Display()
     {
         // Gives us our angle of rotation based on our current velocity
         float theta = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
