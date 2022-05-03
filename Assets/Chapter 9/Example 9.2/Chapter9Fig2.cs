@@ -53,7 +53,7 @@ public class Chapter9Fig2 : MonoBehaviour
         // Create a population with a mutation rate, and population max
         population = new Chapter9Fig2Population(rocketPrefab, maximumPos, mutationRate, populationSize, lifetime, targetPosition);
         
-        drawTargetPosition();
+        DrawTargetPosition();
     }    
 
     // Update is called once per frame
@@ -80,7 +80,7 @@ public class Chapter9Fig2 : MonoBehaviour
         infoText.text = $"Generation #: {population.Generations}\nCycles left: {lifetime - lifeCounter}";
     }   
 
-    private void drawTargetPosition()
+    private void DrawTargetPosition()
     {
         GameObject target = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         Object.Destroy(target.GetComponent<Collider>());
