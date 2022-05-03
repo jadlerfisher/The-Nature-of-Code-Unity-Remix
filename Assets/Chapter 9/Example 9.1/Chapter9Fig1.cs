@@ -6,23 +6,27 @@ using TMPro;
 public class Chapter9Fig1 : MonoBehaviour
 {
     [SerializeField] float mutationRate;
-    int totalPopulation = 150;
-
-    DNA[] population;
-    List<DNA> matingPool;
     [SerializeField] string target;
     [SerializeField] int totalIterations;
     [SerializeField] float timeBetweenGenerations;
-    private int currentIteration = 0;
+    [SerializeField] TextMeshProUGUI display;
+    [SerializeField] TextMeshProUGUI display1;
 
-    [SerializeField] private TextMeshProUGUI display;
-    [SerializeField] private TextMeshProUGUI display1;
+    DNA[] population;
+    List<DNA> matingPool;
+
+    WaitForSeconds delay;
+
+    int totalPopulation = 150;
+    int currentIteration = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         target = "to be or not to be";
         mutationRate = 0.01f;
+
+        delay = new WaitForSeconds(timeBetweenGenerations);
 
         InitializePopulation();   //STEP 1
 
@@ -61,7 +65,6 @@ public class Chapter9Fig1 : MonoBehaviour
 
     void Reproduction()
     {
-
         for (int i = 0; i < population.Length; i++)
         {
             int a = (int)Random.Range(0, matingPool.Count);
@@ -85,7 +88,7 @@ public class Chapter9Fig1 : MonoBehaviour
         string s = "";
         for (int i = 0; i < population.Length; i++)
         {
-            s += population[i].getPhrase() + "     ";
+            s += population[i].GetPhrase() + "     ";
         }
         display.text = s;
         display1.text = "Generation: " + currentIteration;
@@ -93,9 +96,11 @@ public class Chapter9Fig1 : MonoBehaviour
         if (currentIteration < totalIterations)
         {
             currentIteration++;
-            yield return new WaitForSeconds(timeBetweenGenerations);
+            yield return delay;
             StartCoroutine(nameof(NewGeneration));
         }
+
+        yield break;
     }
 }
 
@@ -131,7 +136,7 @@ class DNA
     public DNA Crossover(DNA partner)
     {
         DNA child = new DNA(target);
-        int midpoint = (int)Random.Range(0, genes.Length);
+        int midpoint = Random.Range(0, genes.Length);
 
         for (int i = 0; i < genes.Length; i++)
         {
@@ -144,7 +149,6 @@ class DNA
                 child.genes[i] = partner.genes[i];
             }
         }
-
         return child;
     }
 
@@ -159,7 +163,7 @@ class DNA
         }
     }
 
-    public string getPhrase()
+    public string GetPhrase()
     {
         return new string(genes);
     }

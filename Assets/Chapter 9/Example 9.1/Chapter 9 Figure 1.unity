@@ -309,7 +309,7 @@ MonoBehaviour:
   mutationRate: 0.01
   target: '"to be or not to be"'
   totalIterations: 1000
-  timeBetweenGenerations: 0.5
+  timeBetweenGenerations: 0.1
   display: {fileID: 1179959359}
   display1: {fileID: 154531599}
 --- !u!4 &617032612
