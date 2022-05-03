@@ -188,19 +188,19 @@ public class Chapter9Fig2Population
             population[i].Death();
 
             // Spin the wheel of fourtune to pick two new parents
-            int m = Random.Range(0, matingPool.Count);
-            int d = Random.Range(0, matingPool.Count);
+            int a = Random.Range(0, matingPool.Count);
+            int b = Random.Range(0, matingPool.Count);
 
             // Pick two parents
-            Chapter9Fig2Rocket mom = matingPool[m];
-            Chapter9Fig2Rocket dad = matingPool[d];
+            Chapter9Fig2Rocket partnerA = matingPool[a];
+            Chapter9Fig2Rocket partnerB = matingPool[b];
 
             // Get their genes
-            Chapter9Fig2DNA momGenes = mom.DNA;
-            Chapter9Fig2DNA dadGenes = dad.DNA;
+            Chapter9Fig2DNA partnerAGenes = partnerA.DNA;
+            Chapter9Fig2DNA partnerBGenes = partnerB.DNA;
 
             // Mate their genes
-            Chapter9Fig2DNA child = momGenes.Crossover(dadGenes);
+            Chapter9Fig2DNA child = partnerAGenes.Crossover(partnerBGenes);
 
             // Mutate their genes
             child.Mutate(mutationRate);
