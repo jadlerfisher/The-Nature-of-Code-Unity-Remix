@@ -253,20 +253,20 @@ public class Chapter9Fig3Population
             // Destroy all rockets in population
             population[i].Death();
 
-            // Spin the wheel of fourtune to pick two new parents
-            int m = Random.Range(0, matingPool.Count);
-            int d = Random.Range(0, matingPool.Count);
+            // Spin the wheel of fortune to pick two new parents
+            int a = Random.Range(0, matingPool.Count);
+            int b = Random.Range(0, matingPool.Count);
 
             // Pick two parents
-            Chapter9Fig3Rocket mom = matingPool[m];
-            Chapter9Fig3Rocket dad = matingPool[d];
+            Chapter9Fig3Rocket partnerA = matingPool[a];
+            Chapter9Fig3Rocket partnerB = matingPool[b];
 
             // Get their genes
-            Chapter9Fig3DNA momGenes = mom.DNA;
-            Chapter9Fig3DNA dadGenes = dad.DNA;
+            Chapter9Fig3DNA partnerAGenes = partnerA.DNA;
+            Chapter9Fig3DNA partnerBGenes = partnerB.DNA;
 
             // Mate their genes
-            Chapter9Fig3DNA child = momGenes.Crossover(dadGenes);
+            Chapter9Fig3DNA child = partnerAGenes.Crossover(partnerBGenes);
 
             // Mutate their genes
             child.Mutate(mutationRate);
