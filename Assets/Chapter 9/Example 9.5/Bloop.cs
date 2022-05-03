@@ -15,18 +15,18 @@ public class Bloop : MonoBehaviour
 
     float xoff, yoff; // Some variables for Perlin noise calculations
 
-    private Vector2 minPos, maxPos;
+    private Vector2 maximumPos;
     Material color;
 
     void Start()
     {
-        findWindowLimits();
-        setDNA(new DNAbloop());
+        FindWindowLimits();
+        SetDNA(new DNAbloop());
 
         xoff = Random.Range(-1f, 1f); // Create a seed for the random motion
         yoff = Random.Range(-1f, 1f);
 
-        transform.position = new Vector2(Random.Range(minPos.x, maxPos.x), Random.Range(minPos.y, maxPos.y)); // Set a random location for the bloop
+        transform.position = new Vector2(Random.Range(-maximumPos.x, maximumPos.x), Random.Range(-maximumPos.y, maximumPos.y)); // Set a random location for the bloop
 
         rb = gameObject.AddComponent<Rigidbody>(); // Add a RigidBody for physics
         rb.useGravity = false; // and turn off gravity since we wont need it
@@ -47,13 +47,19 @@ public class Bloop : MonoBehaviour
         yoff += 0.01f;
         rb.velocity = velocity; // Set the bloop's velocity
 
-        health -= 10 * Time.deltaTime; // Death is always looming! (We multiply by Time.delta time to not rely on framrate which may change!)
+        health -= 10 * Time.deltaTime; // Death is always looming! (We multiply by Time.delta time to not rely on framerate which may change!)
 
         if (Dead()) 
         {
             Destroy(gameObject);
         }
 
+        BloopColor();
+        CheckEdges();
+    }
+
+    void BloopColor()
+    {
         // This blob of code makes the spheres fade from red, to blue, to green, to white as it gains more health
         float healthRed;
         if (health < 500)
@@ -66,10 +72,11 @@ public class Bloop : MonoBehaviour
             healthRed = 255;
         else if (healthRed < 0)
             healthRed = 0;
+
         float healthBlue;
         if (health < 1000)
             healthBlue = ExtensionMethods.Map(health, 500, 1000, 0, 255);
-        else if(health < 2000)
+        else if (health < 2000)
             healthBlue = ExtensionMethods.Map(health, 1000, 1500, 255, 0);
         else
             healthBlue = ExtensionMethods.Map(health, 2000, 2500, 0, 255);
@@ -77,37 +84,39 @@ public class Bloop : MonoBehaviour
             healthBlue = 255;
         else if (healthBlue < 0)
             healthBlue = 0;
-        float healthGreen = ExtensionMethods.Map(health, 1000, 1500, 0, 255);
 
+        float healthGreen = ExtensionMethods.Map(health, 1000, 1500, 0, 255);
         if (healthGreen > 255)
             healthGreen = 255;
         else if (healthGreen < 0)
             healthGreen = 0;
         color.SetColor("_Color", new Color(healthRed, healthGreen, healthBlue));
+    }
 
+    void CheckEdges()
+    {
         // Enable screen wrapping
         Vector2 pos = transform.position;
-        if (pos.x < minPos.x)
+        if (pos.x < -maximumPos.x)
         {
-            pos.x = maxPos.x;
-        } 
-        if (pos.x > maxPos.x) 
-        {
-            pos.x = minPos.x;
+            pos.x = maximumPos.x;
         }
-        if (pos.y < minPos.y)
+        if (pos.x > maximumPos.x)
         {
-            pos.y = maxPos.y;
+            pos.x = -maximumPos.x;
         }
-        if (pos.y > maxPos.y)
+        if (pos.y < -maximumPos.y)
         {
-            pos.y = minPos.y;
+            pos.y = maximumPos.y;
+        }
+        if (pos.y > maximumPos.y)
+        {
+            pos.y = -maximumPos.y;
         }
         transform.position = pos;
     }
 
     // This will be called everytime the bloop touches anything
-
     private void OnTriggerEnter(Collider other)
     {
         // First we need to check if the other thing is food!
@@ -118,20 +127,20 @@ public class Bloop : MonoBehaviour
             // Let's pick it up and give ourself some health
             health += 100;
             Destroy(other.gameObject); // The food is no longer avaliable for other bloops!
-            reproduce();
+            Reproduce();
         }
     }
 
-    GameObject reproduce() // This function will return a new bloop, the child.
+    GameObject Reproduce() // This function will return a new bloop, the child.
     {
         if (Random.Range(0f, 1f) < 0.20) // a 20% chance of executine the code. i.e. a 20% chance of reproducing
         {
-            DNAbloop childDNA = dna.copy(); // make a copy of the DNA
-            childDNA.mutate(0.001f); // 0.1% mutation rate
+            DNAbloop childDNA = dna.Copy(); // make a copy of the DNA
+            childDNA.Mmutate(0.001f); // 0.1% mutation rate
 
             GameObject bloopObj = GameObject.CreatePrimitive(PrimitiveType.Sphere); // Make an object
             Bloop bloop = bloopObj.AddComponent<Bloop>(); // Turn it into a bloop!
-            bloop.setDNA(childDNA);
+            bloop.SetDNA(childDNA);
 
             bloopObj.transform.position = transform.position; // Set to the same location as parent
 
@@ -142,7 +151,6 @@ public class Bloop : MonoBehaviour
             return null;
         }
     }
-
     public bool Dead()
     { // We can use this to tell us if the bloop is dead or alive
         if (health < 0)
@@ -151,7 +159,7 @@ public class Bloop : MonoBehaviour
             return false;
     }
 
-    public void setDNA(DNAbloop newDNA)
+    public void SetDNA(DNAbloop newDNA)
     {
         dna = newDNA;
         maxSpeed = ExtensionMethods.Map(dna.genes[0], 0, 1, 10, 0); // MaxSpeed an Size are now mapped to values according to the DNA
@@ -160,10 +168,19 @@ public class Bloop : MonoBehaviour
         gameObject.transform.localScale *= size;
     }
 
-    private void findWindowLimits()
+    private void FindWindowLimits()
     {
-        minPos = Camera.main.ScreenToWorldPoint(Vector2.zero);
-        maxPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        // We want to start by setting the camera's projection to Orthographic mode
+        Camera.main.orthographic = true;
+
+        // Set the desired camera size
+        Camera.main.orthographicSize = 5;
+
+        // Set position of the camera to ensure 0,0 x,y
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        // Next we grab the maximum position for the screen
+        maximumPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }
 
@@ -190,7 +207,7 @@ public class DNAbloop
         genes = genes_;
     }
 
-    public void mutate(float rate) 
+    public void Mmutate(float rate) 
     {
         for(int i = 0; i < genes.Length; i++) 
         {
@@ -198,7 +215,7 @@ public class DNAbloop
         }
     }
 
-    public DNAbloop copy() 
+    public DNAbloop Copy() 
     {
         float[] newgenes = new float[genes.Length];
         newgenes = (float[])genes.Clone();
