@@ -7,8 +7,8 @@ using UnityEngine.EventSystems;
 public class Face9_4 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     // Get components from the scene:
-    public RectTransform faceEdge, mouth, leftEye, rightEye;
-    public Text fitnessText;
+    [SerializeField] RectTransform faceEdge, mouth, leftEye, rightEye;
+    [SerializeField] public Text fitnessText;
 
     public float fitness = 1;
     public DNA9_4 DNA;
@@ -46,9 +46,11 @@ public class Face9_4 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         float mouthRight = Mathf.Lerp(mouthLeft, 1, DNA.genes[11]);
         float mouthBottom = DNA.genes[12];
         float mouthTop = Mathf.Lerp(mouthBottom, 1, DNA.genes[13]);
+
         // Restrict the mouth to the lower half of the face.
         mouthBottom *= 0.5f;
         mouthTop *= 0.5f;
+
         // Apply the corners of the mouth to the UI:
         mouth.anchorMin = new Vector2(mouthLeft, mouthBottom);
         mouth.anchorMax = new Vector2(mouthRight, mouthTop);
@@ -58,19 +60,21 @@ public class Face9_4 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         float eyeRight = Mathf.Lerp(eyeLeft, 1, DNA.genes[15]);
         float eyeBottom = DNA.genes[16];
         float eyeTop = Mathf.Lerp(eyeBottom, 1, DNA.genes[17]);
+
         // Restrict the eye to the upper left quadrant of the face.
         eyeBottom = Mathf.Lerp(0.5f, 1, eyeBottom);
         eyeTop = Mathf.Lerp(0.5f, 1, eyeTop);
         eyeLeft *= 0.5f;
         eyeRight *= 0.5f;
+
         // Apply the corners of the eye to the left eye:
         leftEye.anchorMin = new Vector2(eyeLeft, eyeBottom);
         leftEye.anchorMax = new Vector2(eyeRight, eyeTop);
+
         // Apply the corners of the eye to the right eye(mirrored about the y axis):
         rightEye.anchorMin = new Vector2(1 - eyeRight, eyeBottom);
         rightEye.anchorMax = new Vector2(1 - eyeLeft, eyeTop);
     }
-
 
     // Define the behavior to increase the fitness value every frame:
     private IEnumerator IncreaseFitness()
@@ -82,13 +86,16 @@ public class Face9_4 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             yield return null;
         }
     }
+
     // Enabled and disable the fitness increaser.
     private IEnumerator increaser;
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         increaser = IncreaseFitness();
         StartCoroutine(increaser);
     }
+
     public void OnPointerExit(PointerEventData eventData)
     {
         StopCoroutine(increaser);

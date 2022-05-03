@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class Example9_4 : MonoBehaviour
 {
     // Retrieve the faces from the scene.
-    public Face9_4[] population;
-    public Button evolveButton;
-    public Text generationText;
+    [SerializeField] Face9_4[] population;
+    [SerializeField] Button evolveButton;
+    [SerializeField] Text generationText;
     // Example parameters:
     public float mutationRate = 0.1f;
 
@@ -56,9 +56,10 @@ public class Example9_4 : MonoBehaviour
     private DNA9_4 Reproduction(List<DNA9_4> pool)
     {
         // Choose a random mother and father to reproduce.
-        DNA9_4 mother = pool[Random.Range(0, pool.Count)];
-        DNA9_4 father = pool[Random.Range(0, pool.Count)];
-        DNA9_4 child = mother.Crossover(father);
+        DNA9_4 partnerA = pool[Random.Range(0, pool.Count)];
+        DNA9_4 partnerB = pool[Random.Range(0, pool.Count)];
+        DNA9_4 child = partnerA.Crossover(partnerB);
+
         // Add some mutation to the child.
         child.Mutate(mutationRate);
         return child;
