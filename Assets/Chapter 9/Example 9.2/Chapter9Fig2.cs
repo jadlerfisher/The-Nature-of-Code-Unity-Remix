@@ -187,7 +187,7 @@ public class Chapter9Fig2Population
             // Destroy all rockets in population
             population[i].Death();
 
-            // Spin the wheel of fourtune to pick two new parents
+            // Spin the wheel of fortune to pick two new parents
             int a = Random.Range(0, matingPool.Count);
             int b = Random.Range(0, matingPool.Count);
 
