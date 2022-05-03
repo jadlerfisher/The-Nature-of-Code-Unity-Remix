@@ -10,8 +10,8 @@ public class Face9_4 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] RectTransform faceEdge, mouth, leftEye, rightEye;
     [SerializeField] public Text fitnessText;
 
-    public float fitness = 1;
-    public DNA9_4 DNA;
+    [System.NonSerialized] public float fitness = 1;
+    [System.NonSerialized] public DNA9_4 DNA;
     private Image faceEdgeImage, mouthImage, leftEyeImage, rightEyeImage;
 
     private void Start()
