@@ -45,30 +45,30 @@ public class IntroMover
 
     public void Step()
     {
-        location = mover.transform.position;
+        Vector3 delta = new Vector3();
         // Each frame choose a new Random number 0,1,2,3
         // If the number is equal to one of those values, take a step
         // Random.Range() is MaxExclusive while using integer values, possible values 0,1,2,3
         int choice = Random.Range(0, 4);
         if (choice == 0)
         {
-            location.x++;
+            delta.x++;
 
         }
         else if (choice == 1)
         {
-            location.x--;
+            delta.x--;
         }
         else if (choice == 2)
         {
-            location.y++;
+            delta.y++;
         }
         else if (choice == 3)
         {
-            location.y--;
+            delta.y--;
         }
 
-        mover.transform.position += location * Time.deltaTime;
+        mover.transform.position += delta * Time.deltaTime;
     }
 
     public void CheckEdges()
